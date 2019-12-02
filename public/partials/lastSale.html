@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Last Sold Items</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.panel-heading -->
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Receipt Id</th>
+            <!-- <th>Barcodes</th> -->
+            <th>Price</th>
+            <th>Total Qty</th>
+            <th>Total Discount</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="sale in sales | filter:query ">
+            <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteSale(sale)">Delete</td>
+            <td>{{sale._id}}</td>
+            <!-- <td>{{sale.soldItems}} </td> -->
+            <td>Rs {{sale.totalPrice}}</td>
+            <td>{{sale.totalQty}}</td>
+            <td>Rs {{sale.totalDiscount}}</td>
+            <td>{{sale.date}}</td>
+            <td>{{sale.time}}</td>
+        </tr>
+    </tbody>
+</table>

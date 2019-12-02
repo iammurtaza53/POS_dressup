@@ -1,0 +1,205 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Assignment 1 : Database Append Or Overwrite</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+
+                <div class="row">
+
+                    <p>For overwriting or appending Database's, I have made Single Web Page in Html and Javascript. You
+                        can clearly see in UI that it ask user to input a source and destination name's of database's ,
+                        and then It overwrite or append tables from source to destination database.
+                        By clicking submit button the backgroud script come's into action and it creates new tables
+                        provided by user in to destination database, whether it is append or overwrite. For overwriting
+                        it deletes all the tables first.</p>
+                    <h2>Success Condition:</h2>
+                    <ol>
+                        <li>Both database should exist.</li>
+                        <li>Every table should exist.</li>
+                    </ol>
+                    <h2>Error Condition:</h2>
+                    <ol>
+                        <li>Source or destination database doesnot exist or ant table provided by user doesnot exist so
+                            it will give error</li>
+                        <li>If user doesnot mapped the table correctly or order of data type of both table not match.
+                        </li>
+                    </ol>
+                </div>
+                <div class="row">
+                    <!--  <strong>Choose Supplier <select class="col-md-4 col-md-offset-4" ng-model="selectedSupplier.categoryId" ng-options="category.categoryId as category.name for category in chooseSupplier" ng-change="callIt(selectedSupplier.categoryId)"></select></strong>
+                               </br> -->
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Append
+                        </label>
+                        <label>
+                            <input type="checkbox"> Overwrite
+                        </label>
+                    </div>
+
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Database Name"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Database Name"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 1"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 1"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 2"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 2"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 3"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 3"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 4"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 4"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 5"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 5"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 6"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 6"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 7"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 7"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 8"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 8"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 9"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 9"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Source Table Name 10"
+                        ng-model='catName'>
+                    <input type="text" class="form-control" aria-label="..." placeholder="Destination Table Name 10"
+                        ng-model='catName'>
+
+                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
+
+
+                </div>
+                <!-- /.table-responsive -->
+                <div class='row' ng-show="whenTable">
+
+                    <div print-section>
+                        <center><img src="/img/img1.png" alt="DressUP" style="width:25%"></center>
+                        <center>
+                            <div style="margin:0">
+                                <p style="margin:0"><strong>MUSTAFA HAKIMUDDIN</strong></p>
+                                <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                                <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg) SD-I,Block-G <br>Barkat-e-Hyderi
+                                        North Nazimabad,Karachi</strong></p>
+                            </div>
+                        </center>
+                        <hr />
+                        <h3 align="center">Sale's Report Receipt</h3>
+                        <br />
+
+                        <p align="left" ng-model="date">Date: {{date}} </p>
+
+                        <hr />
+                        <br />
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Barcode</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Qty.</th>
+                                    <th>Category</th>
+                                    <th>Wholesale</th>
+                                    <th>Retail</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='s in sale'>
+
+                                    <td>{{s._id}}</td>
+                                    <td>{{s.itemName}}</td>
+                                    <td>{{s.itemDesc}}</td>
+                                    <td>{{s.itemQty}}</td>
+                                    <td>{{s.itemCategory}}</td>
+                                    <td>Rs {{s.itemWholesale}}</td>
+                                    <td>Rs {{s.itemRetail}}</td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td ng-model="totalit">Total Items: {{totalit}}</td>
+                                    <td></td>
+                                    <td ng-model="whole">Total Wholesale: Rs {{whole}}</td>
+
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td ng-model="myProfit">Gross Profit: Rs {{myProfit}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td ng-model="mysale">Total Retail: Rs {{mysale}}</td>
+                                </tr>
+
+
+
+
+
+                            </tbody>
+                        </table>
+                        </br>
+                        <hr />
+
+                        <p align="center">**************** Supplier's Report ****************</p>
+
+
+
+
+
+
+
+
+                    </div>
+                    <a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+
+<!-- /#wrapper -->

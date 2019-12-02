@@ -1,0 +1,309 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Data Entry</h1>
+    </div>
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Category and New Supplier
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+
+                <form>
+                    <!-- <div class="row"> -->
+                    <input type="text" class="form-control" aria-label="..." placeholder="Category Name"
+                        ng-model='catName'>
+                    <button type="button" ng-click="addCateogry()" class="btn btn-sm btn-success"
+                        style="margin-top: 3px;">Add Category</button>
+                    <!-- </div> -->
+                    </br>
+                    </br>
+                    <!-- <div class="row"> -->
+                    <input type="text" class="form-control" aria-label="..." placeholder="Supplier Name"
+                        ng-model='supName'>
+                    <button type="button" ng-click="addSupp()" class="btn btn-sm btn-success"
+                        style="margin-top: 3px;">Add Supplier</button>
+                    <!-- </di   v> -->
+                </form>
+                <!-- /.table-responsive -->
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="row" style="padding-left: 23px;">
+        <button type="button" ng-click="newEntry()" class="btn btn-lg btn-success">New Entry</button>
+        <button type="button" ng-click="OldEntry()" class="btn btn-lg btn-success">Old Entry</button>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" ng-show="oldEntry">
+    <div class="col-lg-12" ng-show="oldEntry">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Update Data Entry
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <button style="float: left;" ng-click="Reload()"
+                        class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                    <br />
+                    <center><em>Note: Please Refresh When you add new Category or Supplier.</em></center>
+                    <br />
+                </div>
+                <br />
+                <strong>Enter Barcode:</strong><input type="text" ng-model="barcodeCheck" class="form-control"
+                    aria-label="..." ng-keypress="checkStock($event)">
+
+
+                <div class='row'>
+                    <hr />
+                    <br />
+
+                    <table class="table table-bordered table-hover table-striped " ng-show="stockShow">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Wholesale Price</th>
+                                <th>Retail Price</th>
+                                <th>Total Price</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-model='sale'>
+                                <td>{{sale.itemName}}</td>
+                                <td>{{sale.itemDesc}}</td>
+                                <td>{{sale.itemQty}}</td>
+                                <td>{{sale.itemCategory}}</td>
+                                <td>Rs {{sale.itemWholesale}}</td>
+                                <td>Rs {{sale.itemRetail}}</td>
+                                <td ng-model="totalLeft">Rs {{totalLeft}}</td>
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <input ng-show="stockShow" type="number" class="form-control" aria-label="..." min="1"
+                    placeholder="Add Quantity in Stock" ng-model='myQty'>
+                <br />
+                <button type="button" ng-click="generateOld()" ng-show="stockShow"
+                    class="btn btn-lg btn-success">Generate Barcode</button>
+
+                <!-- /.table-responsive -->
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+<!-- /.col-lg-12 -->
+<div class="row" ng-show="NewEntry">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Data Entry
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <button ng-click="Reload()" class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                    <br />
+                    <center><em>Note: Please Refresh When you add new Category or Supplier.</em></center>
+                    </br>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <form>
+
+                        <input type="text" class="form-control" aria-label="..." placeholder="Item Name"
+                            ng-model='itemName'>
+                        </br>
+                        <textarea class="form-control" aria-label="..." placeholder="Item Description"
+                            ng-model='itemDesc'></textarea>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="Qty"
+                            ng-model='itemQty'>
+                        </br>
+                        Choose Category<select class="form-control" ng-model="selectedCategories.categoryId"
+                            ng-options="category.categoryId as category.name for category in chooseCategories"></select>
+                        Choose Supplier <select class="form-control" ng-model="selectedSupplier.categoryId"
+                            ng-options="category.categoryId as category.name for category in chooseSupplier"></select>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="WholeSale Price"
+                            ng-model='itemWholesale'>
+                        </br>
+                        <input type="text" class="form-control" aria-label="..." min="1" placeholder="Available Sizes"
+                            ng-model='type'>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="This Size"
+                            ng-model='size'>
+                        </br>
+                        <input type="text" class="form-control" aria-label="..." min="1" placeholder="Supplier Code"
+                            ng-model='code'>
+                        </br>
+
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="Retail Price"
+                            ng-model='itemRetail'>
+                        </br>
+                        <!-- <input type="number" class="form-control" aria-label="..." min="1" placeholder="Max Discount on item"
+                            ng-model='itemDiscount'>
+                        </br> -->
+                        <!-- Add item Discount to customer-->
+                        <button type="button"
+                            ng-click="generateBarcode(selectedCategories.categoryId,selectedSupplier.categoryId)"
+                            class="btn btn-lg btn-success">Generate Barcode</button>
+
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<barcode style="display: none;" food="food"></barcode>
+<!-- <modal hidden title="Generate Barcode" visible="showModal
+    style="display:none;  width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
+
+    <barcode style="display: none;" food="food"></barcode>
+
+    <div print-section ng-repeat="s in sa track by $index">
+        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
+    </div>
+
+
+</modal> -->
+
+
+<!-- <div class="modal fade" id="myModal" role="dialog" visible="showOld">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="page-break-before: always;text-align:center; margin-top: -25px;">
+                    <div style="width: 50%;float:left">
+                        <div style="font-size: 25px;">
+                            <p><strong>zango rango</strong></p>
+                            <p><strong>Rs: 260 -LEE</strong></p>
+                            <p><strong><img align="middle"
+                                        src="data:image/png;base64,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"></strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="float:right;width: 50%">
+                        <div style="font-size: 25px;">
+                            <p><strong>zango rango</strong></p>
+                            <p><strong>Rs: 260 -LEE</strong></p>
+                            <p><strong><img align="middle"
+                                        src="data:image/png;base64,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"></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<!-- <modal title="Generate Barcode" visible="showOld"
+    style="width: 100%; height:auto; overflow:visible;float: none !important; ">
+    <div class="row">
+        <div class="col-md-6" style="margin:0; padding:0;" print-section ng-repeat="s in sa track by $index" >
+            <div  ng-bind-html="s.text" >
+            </div>
+            <div  ng-if="bark" style="page-break-before: always;">
+            </div>
+
+        </div>
+    </div>
+</modal> -->
+
+
+<!-- <modal title="Generate Barcode" visible="showOld"
+    style="width: 100%; height:auto; overflow:visible;float: none !important; position: relative;">
+
+    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
+        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
+    </div>
+
+</modal> -->
+
+<!-- these modal has no front blank page-->
+<!-- <modal title="Generate Barcode" visible="showModal"
+    style="width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
+
+    <barcode style="display: none;" food="food"></barcode>
+
+    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
+        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
+    </div>
+
+
+</modal> -->
+
+<!-- <modal title="Generate Barcode" visible="showOld"
+    style="width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
+
+
+
+    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
+        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
+    </div>
+
+
+</modal> -->
+
+<!-- /#wrapper -->
+
+<!-- <div print-section style="height: auto; text-align: center">
+    <div style="float:left;width: 50%;">
+        <div>
+            <p><strong>zango rango</strong></p>
+            <p><strong>Rs: 260 -LEE</strong></p>
+            <p><strong><img align="middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOYAAABkCAYAAACSEkxoAAAG1ElEQVR4Xu2dMS81QRiF55a0So1o6CSiE79DIWoNEj+ACK1EglaFwk9Qi04kSv+BWnm/zO7dtTvfXe/MzjvuXB6l3ZldZ98z57xn9ttvMBwOh4YfEACBrBAYQMysngc3AwIFAhCTQgCBDBGAmBk+FG4JBCAmNQACGSLwI8QcDAatP73Km6rfu/mTe341WDrPnTd0XHW+dL9/fV4tnHyfp8sb37rpyjWl+nLn76qHlHyGmMYY3wKRHlDf433HaRFkUguNL+4QM9ESICmQ9IBCC2faCn3a7ldrQZCeu6R4sePdcu9yctLzSUEbFBPFrOsqtNClBVdaUEOv5y4IseMhJj1muTcl4CAVcuhxaaVPddx33lhixY6HmBATYjZYoBXeQMxIEy0phQRwLkrhqwS//X7pMdO/xUqPSY9JjzlCgPBn9N68r6X57Qo0bUqMYqKYLRMtWV5eMCjhSo0DxISYEPObNFeLIKGOROu6vgutG3H4Oi1pH5RUllSWVJZUNihCJfwh/CH8IfwZ3wNJlibUak1bmDJt94uVpcekx6TH/M8C0mMGueLuk3nBoMRGwiHUGWgp16SuKzklKbyJHU/4Q/gDMQl/gmSO8Ifwh/CH8Ifwp7lspn4RIFWopGWhY61o7HisLFYWK4uVxcqmUgrmbW8TxIZZsYoXOx7FRDFRTBQTxUTZSmVLhQM9Ji8Y8IJBBMEg5ngCubi4+7juCwwSjkFS6Hky2yVsl7BdwnYJ2yVsl3xZ7NjwJnY84Q/hD+EP4Y+niS1Pw8piZbGyWFmsLFYWK+sjnSgmioliopgoJoqJYqKYzkoobYxLx6X9rL7H+46b1P1qXTc2VY0dTypLKksqSyrrI5T1OfSY9Jj0mPSY9Jj0mPSYPtKJYqKYKCaKiWKimCgmikkq26qB0BSzb1rsOy70ftw0OHY8qSypLKksqayPUJLKjrOUWvtz1Ty+K7qvwuQyrxZOvvi4Fc0Hn4M43n2y9G0Y6QHlUpDTRqBU9wsx+YJBrx4pVUEyLx/jsgXZ9YV4JR0r257hD1wFxSwfmYRDqDPQUq5JXVdySvwXCZpUHzOXVJDSAwotHJSNj3F9p2x882fEKIiJYjbXa63wRlrQJcV1NcT9Mr7vl/JT6BpWljd/6roKLXRpwZWcTuj1XOseOx5iso9Jj9lgAYopayyKiWKimCMEsLLDdjghWRLJErnHCX8Ifwh/ZFUWtwkg5qCFooSH7/FUC5TWNo3v3+GWmJYVpsekx6THpMf0kLCvU+gx6THpMekxSwS6muwui0SP2c/qYmX5T4W+lWlpv0vqNSAmxGwWGD1mkCvuPhlilthIOIQuQFohzKSuKy3I0ps7seMJfwh/ICbhT5DMEf4Q/hD+EP4Q/jSXTd+XpPuGOH3HSRZZOu573VgrGjseK4uVxcpiZbGyvit2aOjBvHzBoLndF8S0wJPpMekx6THpMekx6TH54LOPeKKYKCaKiWKimCgmioliOiuhFPNLxwl/CH8If8YsK777VhCIfyj9HYH4St6IXNI7ohLh2NbgJfbmOs1L7D5m2OMciFmCJOEQugBNynprXVdakHmJ3YNcMadIBSk9oNCCxcpiZbGyHoyFmChmCisqLeiS4rqly1fy+EpeURO8xO6X8roEosf0UEOfU1BMFBPF9GHK1zk/8uZP2C1xNgiAAMSkBkAgQwQgZoYPhVsCAYhJDYBAhghAzAwfCrcEAhCTGgCBDBGAmBk+FG4JBCCmYg28vb2Zzc1N8/r6ak5OTszh4WE9++npqTk6OjIrKyvm/v7eLC0tFcc+Pj7M1taWeXh4MDs7O+b8/NzMzMwUx3Kfr/rj7N+2uLhY/B386CAAMXVwrAlmybi6umoODg7MxsZGUax3d3fm8fGxIN3Ly4uxhWx/Nzs72zrP/t7+2DkqwuY6X5OUdsG5vb2FmEq1ZKeBmEpgWnU7Pj42V1dXZm5urkXGs7OzWlGahFteXja7u7vFOKugT09PNWnf39+znq9aVObn5wsEUUylQhpNAzGV8LSkurm5qa1oRbLr6+uCbNvb22Z9fd18fn7WKrm2ttYinyX3/v6+ubi4MJaYOc9XWXELH1ZWqYga00BMJUybdtX2iBUxLy8vzd7eXmFPXWIuLCzUCmlVtknM5+fn2v7mOB/EVCqcjmkgphK+KCbhj1IpFdNATCU0/1qPaRWeVFapeMZMAzGVsM09RdW+vyZs9JhKRUSPqQ+knTH3fUft+0Mx09QRVjYdrswMAlEIYGWj4GMwCKRBAGKmwZVZQSAKAYgZBR+DQSANAhAzDa7MCgJRCEDMKPgYDAJpEICYaXBlVhCIQuAfc+m6TPmw2AoAAAAASUVORK5CYII="></strong>
+            </p>
+        </div>
+    </div>
+    <div style="float:right;width: 50%;">
+        <div>
+            <p><strong>zango rango</strong></p>
+            <p><strong>Rs: 260 -LEE</strong></p>
+            <p><strong><img align="middle" src="data:image/png;base64,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"></strong>
+            </p>
+        </div>
+    </div>
+</div> -->
+

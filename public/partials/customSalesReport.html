@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Weekly Sale's Report</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <b>Start Date: </b> <input class="form-control" ng-change="changeMin(startDate)" type="date" ng-model="startDate">
+    </div>
+    <div class="col-lg-3">
+        <b>End Date: </b> <input class="form-control" ng-model="endDate" id="listingDateClose" type="date"
+            ng-change="call(startDate,endDate)" />
+    </div>
+</div>
+
+<div class='row' ng-show="whenTable">
+
+    <div print-section>
+        <center><img src="/img/img1.png" alt="DressUP" style="width:25%"></center>
+        <center>
+            <div style="margin:0">
+                <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg.) SD-I, Block-G <br>Barkat-e-Hyderi North
+                        Nazimabad, Karachi</strong></p>
+            </div>
+        </center>
+        <hr>
+        <h3 align="center">Sale's Report Receipt</h3>
+        <br />
+
+        <p align="left" ng-model="mdate"><b>Date:</b> {{mdate}} </p>
+
+        <hr />
+        <br />
+        <table class="table table-hover ">
+            <thead>
+                <tr>
+                    <th>Receipt Id</th>
+                    <th>Qty.</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Total Price</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='s in sale'>
+
+                    <td>{{s._id}}</td>
+                    <td>{{s.totalQty}}</td>
+                    <td>{{s.time}}</td>
+                    <td>{{s.date}}</td>
+                    <td>Rs {{s.totalPrice}}</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+
+                    <td ng-model="totalit"><b>Total Items:</b> {{totalit}}</td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td ng-model="myProfit"><b>Gross Profit:</b> Rs {{myProfit}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td ng-model="mysale"><b>Total Sale:</b> Rs {{mysale}}</td>
+                </tr>
+            </tbody>
+        </table>
+        </br>
+        <hr />
+        <p align="center"><b>**************** Monthly Report ****************</b></p>
+        <p align="center"><b>Thank You For Shopping!!</b></p>
+        <p align="center">Developed By:<strong> 5Cube</strong></p>
+        <p align="center"><b>WWW.5cube.io</b></p>
+    </div>
+    <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
+</div>
