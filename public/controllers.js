@@ -1256,7 +1256,6 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
     $scope.Reload = function () {
       $route.reload();
     }
-
     var wholesaleArray = [];
     var mySum = 0;
 
@@ -1913,6 +1912,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
 
       }
     }
+    
     $scope.print = function () {
       window.print()
 

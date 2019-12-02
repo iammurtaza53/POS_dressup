@@ -35,8 +35,9 @@
 
 @media print
 {
-    .non-printable { display: none; }
-    .printable { display: block; }
+  .non-printable { display: none; }
+  .printable { display: block; }
+  .body {color:black;}
 }
 
 

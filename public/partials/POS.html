@@ -30,7 +30,7 @@
 <br />
 <br>
 <button ng-click="returnItem()" class="btn btn-sm btn-danger  col-md-2" style="float:left">Return</button>
-<button ng-click="sync()" class="btn btn-sm btn-danger col-md-2" style="float:right">Sync</button></div>
+<!-- <button ng-click="sync()" class="btn btn-sm btn-danger col-md-2" style="float:right">Sync</button></div> -->
 <div class='row'>
 
     <p align="center" ng-model="date"><strong>Date: </strong>{{date}} </p>
@@ -434,8 +434,9 @@
     
     <center>
            
-    <center><a onclick="print()" class="btn btn-lg btn-success">Print</a>
-        </center>
+    <!-- <center><a onclick="print()" class="btn btn-lg btn-success">Print</a></center> -->
+    <center><a ng-click="print()" class="btn btn-lg btn-success">Print</a></center>
+
         
 
 </modal>
