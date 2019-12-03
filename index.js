@@ -324,27 +324,24 @@ app.post('/addBill', function (req, res) {
   mod.findOne({ idBalance: idBalance }, {}, function (er, docu) {
     if (docu !== null) {
       mod.updateOne({ idBalance: idBalance }, { $inc: { balance: +req.body.balance } }, function (err, docs) {
-        if (err) res.send(false);
+        if (err) {console.log(err);res.send(false);}
         else { 
           if (req.body.bool === 0) {  
-            
             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
               var bal = docu.balance + req.body.balance;
               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier, matchId: req.body.matchId };
-              mod.collection.insertMany(billed, function (err1, doc1) {
-                if (doc1) res.send(false); 
+              mod.collection.insertOne(billed, function (err1, doc1) {
+                if (doc1) res.send(true); 
                 else {
-                  res.send(true);
+                  res.send(false);
                 }
-
               });
-
             });
           }
           else {
             var bal = docu.balance + req.body.balance;
             var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier };
-            mod.collection.insertMany(Notbilled, function (err1, doc1) {
+            mod.collection.insertOne(Notbilled, function (err1, doc1) {
               if (err1) {
                 res.send(false);
               }
@@ -358,23 +355,20 @@ app.post('/addBill', function (req, res) {
       });
     }
     else {
+      console.log('line 361');
       var obj = { idBalance: idBalance, balance: req.body.balance };
       mod.collection.insertOne(obj, function (err1, doc1) {
         if (err1) res.send(false);
         else {
           if (req.body.bool === 0) {
             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
-
               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier, matchId: req.body.matchId };
-
               mod.collection.insertOne(billed, function (err1, doc1) {
                 if (err1) res.send(false);
                 else {
                   res.send(true);
                 }
-
               });
-
             });
           }
           else {
@@ -382,14 +376,11 @@ app.post('/addBill', function (req, res) {
             mod.collection.insertOne(Notbilled, function (err1, doc1) {
               if (err1) res.send(false);
               else {
-                
                 res.send(true);
               }
-
             });
           }
         }
-
       });
     }
   });
@@ -622,7 +613,7 @@ app.post('/returnSale', function (req, res) {
   }
   var obj = { date: req.body.date, time: req.body.time, soldItems: mysold, totalQty: req.body.totalQty, totalPrice: req.body.sale, totalDiscount: req.body.discount, profit: req.body.profit };
   var my = true;
-  collect.insertMany(obj, function (err1, doc1) {
+  collect.collection.insertOne(obj, function (err1, doc1) {
     if (err1) res.send(false);
     else {
       for (var i = 0; i < req.body.sold.length;) {
@@ -665,7 +656,7 @@ app.post('/sendSale', function (req, res) {
   }
   var obj = { date: req.body.date, time: req.body.time, soldItems: mysold, totalQty: req.body.totalQty, totalPrice: req.body.sale, totalDiscount: req.body.discount, profit: req.body.profit, salesman: req.body.salesman };
   var my = true;
-  collect.insertMany(obj, function (err1, doc1) {
+  collect.collection.insertOne(obj, function (err1, doc1) {
     if (err1) {
       res.send(false);
     }
@@ -807,8 +798,8 @@ app.post('/Salesman', function (req, res) {
       res.send(docs1);
     }
     else {
-      var obj = [{ name: req.body.Name, fname: req.body.Fname, address: req.body.Address, phone: req.body.Phone, CNIC: req.body.CNIC }];
-      sal.collection.insertMany(obj, function (err, doc) { //insert new supplier
+      var obj = { name: req.body.Name, fname: req.body.Fname, address: req.body.Address, phone: req.body.Phone, CNIC: req.body.CNIC };
+      sal.collection.insertOne(obj, function (err, doc) { //insert new supplier
         if (err) {
           res.send(false); //check return to salesman() to show alert
         }
@@ -881,8 +872,8 @@ app.post('/startday', function (req, res) {
     if (find) {
       res.send(find);
     } else {
-      var obj = [{ date: req.body.date, start: req.body.amount }];
-      day.collection.insertMany(obj, function (err, doc) { //insert strat day casheir money
+      var obj = { date: req.body.date, start: req.body.amount };
+      day.collection.insertOne(obj, function (err, doc) { //insert strat day casheir money
         if (doc) {
           res.send(true);
         } else {

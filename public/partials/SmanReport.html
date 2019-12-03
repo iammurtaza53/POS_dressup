@@ -14,8 +14,7 @@
                 </div>
                 <br>
                 <strong>Choose Salesman </strong></p><select class="form-control" ng-model="selectedSalesman.salesmanId"
-                    ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman"
-                    ng-change="openMonth()"></select></strong>
+                    ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman" ng-change="openMonth()"></select></strong>
                 </br>
                 <br />
                 <select class="form-control" ng-model="selectedMonth.monthId" ng-show="whenmonth"
