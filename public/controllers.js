@@ -856,8 +856,10 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
         var obj = { date: $scope.mdate, amount: $scope.todaycash };
         //console.log($scope.todaycash);
         myService.startday(obj).success(function (res) {
-          if (res) {
-            alert(res.start + ' Cash is added');
+          if (res.start!=null) {
+            alert('Already started your day');
+          }else if(res==true){
+            alert($scope.todaycash + ' Cash is added');
           }
         });
       }
@@ -877,6 +879,8 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
           if (res) {
             alert($scope.todayexpense + " cash is taken!!");
             money = res.sub;
+          }else{
+            alert("Haven't Entered start day ");
           }
         });
       }
