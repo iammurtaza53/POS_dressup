@@ -20,7 +20,7 @@ const connection = mongoose.connect(dburl, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-mongoose.connection.on('connected', function(){
+mongoose.connection.on('connected', function () {
   console.log("Server connected")
 })
 mongoose.connection.on('error', err => console.log('MongoDB connection error: ${err}'));
@@ -37,7 +37,7 @@ var product = mongoose.model('ItemCollection', // new item collection
   new Schema({
     _id: String, barcode: Number, itemName: String, itemDesc: String, itemQty: Number,
     itemWholesale: Number, itemRetail: Number, itemCategory: String, itemSupplier: String,
-    type:String,size:Number,code:String
+    type: String, size: Number, code: String
   }),
   'ItemCollection');
 
@@ -69,6 +69,9 @@ var expense = mongoose.model('expense',
   new Schema({ _id: String, date: String, dayexpense: [Number], start: Number }),
   'expense');
 
+mongoose.model('eLedger',
+  new Schema({ _id: String, date: String, time: String, expenseTitle: String, expense: Number }),
+  'eLedger');
 //make collection Model
 //collection function to pass and search for the collection
 
@@ -324,14 +327,14 @@ app.post('/addBill', function (req, res) {
   mod.findOne({ idBalance: idBalance }, {}, function (er, docu) {
     if (docu !== null) {
       mod.updateOne({ idBalance: idBalance }, { $inc: { balance: +req.body.balance } }, function (err, docs) {
-        if (err) {console.log(err);res.send(false);}
-        else { 
-          if (req.body.bool === 0) {  
+        if (err) { console.log(err); res.send(false); }
+        else {
+          if (req.body.bool === 0) {
             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
               var bal = docu.balance + req.body.balance;
               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier, matchId: req.body.matchId };
               mod.collection.insertOne(billed, function (err1, doc1) {
-                if (doc1) res.send(true); 
+                if (doc1) res.send(true);
                 else {
                   res.send(false);
                 }
@@ -447,16 +450,16 @@ app.post('/addItem', function (req, res) {
       res.send(docs1);
     } else {
       var addBarcode = mongoose.model('saveBarcode');
-      addBarcode.collection.updateOne({}, {$inc:{ barcode: +1}}, {upsert: true}, function (err, doc21) {
+      addBarcode.collection.updateOne({}, { $inc: { barcode: +1 } }, { upsert: true }, function (err, doc21) {
         if (err) {
           res.send(false);
         }
         else {
-          addBarcode.collection.findOne({}, function(err, count) {
+          addBarcode.collection.findOne({}, function (err, count) {
             if (err) {
               res.send(false)
             } else {
-              var obj = { barcode: count.barcode, itemName: req.body.itemName, itemDesc: req.body.itemDesc, itemQty: req.body.itemQty, itemWholesale: req.body.itemWholesale, itemRetail: req.body.itemRetail, itemCategory: req.body.itemCategory, itemSupplier: req.body.itemSupplier , type: req.body.type, size:req.body.size,code:req.body.code,};
+              var obj = { barcode: count.barcode, itemName: req.body.itemName, itemDesc: req.body.itemDesc, itemQty: req.body.itemQty, itemWholesale: req.body.itemWholesale, itemRetail: req.body.itemRetail, itemCategory: req.body.itemCategory, itemSupplier: req.body.itemSupplier, type: req.body.type, size: req.body.size, code: req.body.code, };
               item.collection.insertOne(obj, function (err, doc) {
                 if (err) {
                   res.send(false);
@@ -468,7 +471,7 @@ app.post('/addItem', function (req, res) {
               });
             }
           })
-       
+
         }
       });
     }
@@ -902,24 +905,42 @@ app.post('/dayExpense', function (req, res) {
   });
 });
 
-app.post('/weeklyReport',async  function (req, res) {
+app.post('/weeklyReport', async function (req, res) {
   var collection = mongoose.model('saleCollection');
   var collect = [];
   var i;
   for (i = 0; i < req.body.array.length; i++) {
-    await  collection.find({ date: req.body.array[i] }).then(resp => {
-      if(resp.length != 0){
+    await collection.find({ date: req.body.array[i] }).then(resp => {
+      if (resp.length != 0) {
         collect = collect.concat(resp);
       }
     })
-    
+
   }
   res.send(collect);
-  
+
 });
 
+app.post('/expenseLedger', function (req, res) {
+  var eDetail = mongoose.model('eLedger')
+  var obj2 ={date:req.body.date, time:req.body.time, expenseTitle:req.body.eTitle, expense:req.body.expense}
+  eDetail.collection.insertOne(obj2,function(err,doc){
+    if(doc){
+      res.send(true);
+    }
+  });
+});
 
-
+app.post('/dailyexpense', function (req, res){
+  var eDetail = mongoose.model('eLedger');
+  eDetail.find({date:req.body.date},function(err, doc){
+    if(doc!=null){
+      res.send(doc);
+    }else{
+      res.send(false);
+    }
+  });
+});
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),

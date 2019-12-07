@@ -29,17 +29,19 @@
             </div> -->
 <br />
 <br>
-<button ng-click="returnItem()" class="btn btn-sm btn-danger  col-md-2" style="float:left">Return</button>
+
 <!-- <button ng-click="sync()" class="btn btn-sm btn-danger col-md-2" style="float:right">Sync</button></div> -->
 <div class='row'>
-
-    <p align="center" ng-model="date"><strong>Date: </strong>{{date}} </p>
-    <p align="center" ng-model="mytime"><strong>Time:
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{mytime}} </p>
-
-
+    <div class="col-md-5">
+        <button ng-click="returnItem()" class="btn btn-sm btn-danger" style="float:left; width:40%">Return</button>
+    </div>
+    <div class="col-md-5">
+        <p ng-model="date"><strong>Date: </strong>{{date}} </p>
+        <p ng-model="mytime"><strong>Time:
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{mytime}} </p>
+    </div>
 </div>
-<div class="row">
+<div class="row" >
     <table class="table table-bordered table-hover table-striped" col-resizeable>
         <thead>
             <tr>
@@ -55,7 +57,7 @@
         <tbody>
             <tr>
                 <td width="10%">
-                    <input type="text" class="form-control" ng-model="row1.id" ng-keydown="changedKey($event,row1,1)">{{row1.id}}
+                    <input type="text" tabindex="1" class="form-control" ng-model="row1.id" ng-keydown="changedKey($event,row1,1)">{{row1.id}}
                 </td>
                 <td>{{row1.itemName}}</td>
                 <td>{{row1.itemDesc}}</td>
@@ -68,20 +70,21 @@
                 <!--Discount for per item -->
 
                  <td width="20%" height="50%" rowspan="20">
-                    <p><strong>Discount Rs: </strong></p><input class="form-control" ng-model="discount" type="number"
+                    <p><strong>Discount Rs: </strong></p><input class="form-control" tabindex="21" ng-model="discount" type="number"
                             ng-keydown="addDiscount($event,discount)"></input>
                         </br>
                         </br>
                             
                     <!-- Discount by Rupees -->
 
-                    <p><strong>Discount %: </strong></p><input class="form-control"  ng-model="discountpercent" type="number"
+                    <p><strong>Discount %: </strong></p><input class="form-control" tabindex="21" ng-model="discountpercent" type="number"
                         ng-keydown="addDiscountpercent($event,discountpercent)"></input>
                         <!-- <p><strong>Discount %: </strong></p><select class="form-control" ng-model="disco" ng-options="percent as percent.name for percent in PERCENT"
                         ng-change="addDiscountpercent(disco)"></select> -->
                         <br/>
-                    <p><strong>Salsesman: </strong></p><select class="form-control" ng-model="selectedSalesman.salesmanId"
-                            ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman"></select>
+                    <p><strong>Salesman: </strong></p><select class="form-control" tabindex="22" ng-model="selectedSalesman.salesmanId"
+                            ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman" 
+                            ng-change=choosefunction()></select>
                     </br>
 
                     <p ng-model="totalQty"><strong>Total Items: </strong>{{totalQty}}</p>
@@ -93,7 +96,7 @@
                         ng-click="refreshCash()"> <span class="glyphicon glyphicon-refresh"
                             aria-hidden="true"></span></button>
                     </strong></p>
-                        <input class="form-control"  ng-model="cash" type="number"
+                        <input class="form-control" tabindex="23" ng-model="cash" type="number"
                         ng-keydown="addCash($event,cash)"></input>
                 
                     </div>
@@ -113,7 +116,7 @@
 
             </tr>
             <tr>
-                <td width="10%"> <input type="text" class="form-control" ng-model="row2.id"
+                <td width="10%"> <input type="text" tabindex="2" class="form-control" ng-model="row2.id"
                         ng-keydown="changedKey($event,row2,2)">{{row2.id}}</td>
                 <td>{{row2.itemName}}</td>
                 <td>{{row2.itemDesc}}</td>
@@ -125,7 +128,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row3.id"
+                <td width="10%"> <input tabindex="3" type="text" class="form-control" ng-model="row3.id"
                         ng-keydown="changedKey($event,row3,3)">{{row3.id}}</td>
                 <td>{{row3.itemName}}</td>
                 <td>{{row3.itemDesc}}</td>
@@ -137,7 +140,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row4.id"
+                <td width="10%"> <input tabindex="4" type="text" class="form-control" ng-model="row4.id"
                         ng-keydown="changedKey($event,row4,4)">{{row4.id}}</td>
                 <td>{{row4.itemName}}</td>
                 <td>{{row4.itemDesc}}</td>
@@ -149,7 +152,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row5.id"
+                <td width="10%"> <input type="text" tabindex="5" class="form-control" ng-model="row5.id"
                         ng-keydown="changedKey($event,row5,5)">{{row5.id}}</td>
                 <td>{{row5.itemName}}</td>
                 <td>{{row5.itemDesc}}</td>
@@ -161,7 +164,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row6.id"
+                <td width="10%"> <input type="text" tabindex="6" class="form-control" ng-model="row6.id"
                         ng-keydown="changedKey($event,row6,6)">{{row6.id}}</td>
                 <td>{{row6.itemName}}</td>
                 <td>{{row6.itemDesc}}</td>
@@ -173,7 +176,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row7.id"
+                <td width="10%"> <input type="text" tabindex="7" class="form-control" ng-model="row7.id"
                         ng-keydown="changedKey($event,row7,7)">{{row7.id}}</td>
                 <td>{{row7.itemName}}</td>
                 <td>{{row7.itemDesc}}</td>
@@ -184,7 +187,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row8.id"
+                <td width="10%"> <input type="text" tabindex="8"class="form-control" ng-model="row8.id"
                         ng-keydown="changedKey($event,row8,8)">{{row8.id}}</td>
                 <td>{{row8.itemName}}</td>
                 <td>{{row8.itemDesc}}</td>
@@ -197,7 +200,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row9.id"
+                <td width="10%"> <input type="text" tabindex="9" class="form-control" ng-model="row9.id"
                         ng-keydown="changedKey($event,row9,9)">{{row9.id}}</td>
                 <td>{{row9.itemName}}</td>
                 <td>{{row9.itemDesc}}</td>
@@ -210,7 +213,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row10.id"
+                <td width="10%"> <input type="text" tabindex="10" class="form-control" ng-model="row10.id"
                         ng-keydown="changedKey($event,row10,10)">{{row10.id}}</td>
                 <td>{{row10.itemName}}</td>
                 <td>{{row10.itemDesc}}</td>
@@ -220,7 +223,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row11.id"
+                <td width="10%"> <input type="text" tabindex="11" class="form-control" ng-model="row11.id"
                         ng-keydown="changedKey($event,row11,11)">{{row11.id}}</td>
                 <td>{{row11.itemName}}</td>
                 <td>{{row11.itemDesc}}</td>
@@ -232,7 +235,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row12.id"
+                <td width="10%"> <input type="text" tabindex="12" class="form-control" ng-model="row12.id"
                         ng-keydown="changedKey($event,row12,12)">{{row12.id}}</td>
                 <td>{{row12.itemName}}</td>
                 <td>{{row12.itemDesc}}</td>
@@ -243,7 +246,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row13.id"
+                <td width="10%"> <input type="text" tabindex="13" class="form-control" ng-model="row13.id"
                         ng-keydown="changedKey($event,row13,13)">{{row13.id}}</td>
                 <td>{{row13.itemName}}</td>
                 <td>{{row13.itemDesc}}</td>
@@ -254,7 +257,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row14.id"
+                <td width="10%"> <input type="text" tabindex="14" class="form-control" ng-model="row14.id"
                         ng-keydown="changedKey($event,row14,14)">{{row14.id}}</td>
                 <td>{{row14.itemName}}</td>
                 <td>{{row14.itemDesc}}</td>
@@ -266,7 +269,7 @@
 
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row15.id"
+                <td width="10%"> <input type="text" tabindex="15" class="form-control" ng-model="row15.id"
                         ng-keydown="changedKey($event,row15,15)">{{row15.id}}</td>
                 <td>{{row15.itemName}}</td>
                 <td>{{row15.itemDesc}}</td>
@@ -276,7 +279,7 @@
 
             </tr>
             <tr>
-                <td width="10%"> <input type="text" class="form-control"  ng-model="row16.id"
+                <td width="10%"> <input type="text" tabindex="16" class="form-control"  ng-model="row16.id"
                         ng-keydown="changedKey($event,row16,16)">{{row16.id}}</td>
                 <td>{{row17.itemName}}</td>
                 <td>{{row17.itemDesc}}</td>
@@ -288,7 +291,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text"  class="form-control" ng-model="row17.id"
+                <td width="10%"> <input type="text"  tabindex="17" class="form-control" ng-model="row17.id"
                         ng-keydown="changedKey($event,row17,17)">{{row17.id}}</td>
                 <td>{{row17.itemName}}</td>
                 <td>{{row17.itemDesc}}</td>
@@ -301,7 +304,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text"  class="form-control" ng-model="row18.id"
+                <td width="10%"> <input type="text"  tabindex="18" class="form-control" ng-model="row18.id"
                         ng-keydown="changedKey($event,row18,18)">{{row18.id}}</td>
                 <td>{{row18.itemName}}</td>
                 <td>{{row18.itemDesc}}</td>
@@ -313,7 +316,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row19.id"
+                <td width="10%"> <input type="text" tabindex="19" class="form-control" ng-model="row19.id"
                         ng-keydown="changedKey($event,row19,19)">{{row19.id}}</td>
                 <td>{{row19.itemName}}</td>
                 <td>{{row19.itemDesc}}</td>
@@ -324,7 +327,7 @@
             </tr>
             <tr>
 
-                <td width="10%"> <input type="text" class="form-control" ng-model="row20.id"
+                <td width="10%"> <input type="text" tabindex="20" class="form-control" ng-model="row20.id"
                         ng-keydown="changedKey($event,row20,20)">{{row20.id}}</td>
                 <td>{{row20.itemName}}</td>
                 <td>{{row20.itemDesc}}</td>

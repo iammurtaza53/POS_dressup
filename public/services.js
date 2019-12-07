@@ -320,7 +320,29 @@ angular.module('myApp.services', []).
             return $http(req);
         }
 
-        
+        ergastAPI.expenseLedger = function (abc) {
+
+            var req = {
+                method: 'POST',
+                url: urls + '/expenseLedger',
+                //  url: 'http://burhanisystem.herokuapp.com/expenseLedger',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.dailyexpense = function (abc) {
+
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/dailyexpense',
+                url: urls + '/dailyexpense',
+
+                data: abc
+            };
+            return $http(req);
+        }
 
         return ergastAPI;
     });

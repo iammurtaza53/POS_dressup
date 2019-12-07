@@ -7,7 +7,7 @@
 <!-- /.panel-heading -->
 <div class="panel-body" style="padding-top:0">
     <div class='row'>
-        <div print-section>
+        <div print-section id="dontWanttoPrint">
             <center><img src="/img/img1.png" alt="DressUP" style="width:25%"></center>
             <center>
                 <div style="margin:0">
@@ -23,7 +23,7 @@
             <button style="float: right;" ng-click="Reload()"
                 class="btn btn-sm btn-info col-md-2 hidden-print ">Refresh</button>
             <br>
-            <hr>
+            <hr style="margin-bottom:0%">
             <br />
             <div class='col-lg-2'>
                 <input class="form-control hidden-print" ng-model="todaycash" placeholder="start day"
@@ -34,13 +34,17 @@
                     <h4 ng-model="cash"><b>Cash:</b>Rs {{cash}}</h4>
                 </center>
             </div>
-            <div class=" col-md-offset-10">
-                <input class="form-control hidden-print " ng-model="todayexpense" placeholder="expense"
-                    ng-keydown="dayexpense($event)">
+            <div class="col-md-offset-10">
+                <input style="width:80% "class="form-control hidden-print " ng-model="expenseTitle" placeholder="expense title">
+                
+                <input style="width:80%; display:inline" class=" form-control hidden-print " ng-model="todayexpense" placeholder="expense"
+                    ng-keydown="dayexpense($event,expenseTitle)">
+                <button style="display:inline" class=" hidden-print btn btn-xs btn-danger" ng-click="showExpenseLedger()"> <span
+                        class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></button>
             </div>
 
             <hr>
-            <table class="table table-hover ">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Receipt Id</th>
@@ -88,9 +92,6 @@
                         <td></td>
                         <td ng-model="mysale"><b>Total Sale:</b> Rs {{mysale}}</td>
                     </tr>
-
-
-
                 </tbody>
             </table>
             </br>
@@ -101,6 +102,36 @@
             <p align="center">Developed By:<strong> 5Cube</strong></p>
             <p align="center"><b>WWW.5cube.io</b></p>
         </div>
-        <center><a onClick="window.print()" class="btn btn-lg btn-success">Print</a></center>
+        <center><a ng-click="printfun()" class="btn btn-lg btn-success">Print</a></center>
     </div>
 </div>
+
+<modal title="Expense Receipt" visible="expenseReport">
+    <div print-section>
+        <h4>Expense Report</h4>
+        <input class="form-control hidden-print" placeholder="Enter Date" ng-change="showexpense(eDate)" type="date"
+            ng-model="eDate">
+        <div ng-show="showthis">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>expenseTitle</th>
+                        <th>expense</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='expense in expenses'>
+
+                        <td>{{expense.time}}</td>
+                        <td>{{expense.expenseTitle}}</td>
+                        <td>{{expense.expense}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+            <p ng-model="texpense" class=" col-md-offset-8"><strong>Total Expense: </strong>{{texpense}}</p>
+            <center><a ng-click="print()" class=" hidden-print btn btn-lg btn-success">Print</a></center>
+        </div>
+    </div>
+</modal>

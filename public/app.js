@@ -125,3 +125,4 @@ app.directive('barcode', function () {
     }
   }
 });
+

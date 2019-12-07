@@ -735,6 +735,7 @@ app.controller("monthlyReport", function ($scope, myService, $routeParams, $loca
     $rootScope.loggedIn = false;
     $location.path('login')
   }
+
   $scope.whenTable = false;
   var da = new Date();
   $scope.mdate = da.toDateString();
@@ -804,6 +805,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
   }
   var da = new Date();
   $scope.mdate = da.toDateString();
+  var time = da.toLocaleTimeString();
   var qty = 0;
   var whole = 0;
   var retail = 0;
@@ -856,9 +858,9 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
         var obj = { date: $scope.mdate, amount: $scope.todaycash };
         //console.log($scope.todaycash);
         myService.startday(obj).success(function (res) {
-          if (res.start!=null) {
+          if (res.start != null) {
             alert('Already started your day');
-          }else if(res==true){
+          } else if (res == true) {
             alert($scope.todaycash + ' Cash is added');
           }
         });
@@ -870,24 +872,56 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
     $route.reload();
   }
 
-  $scope.dayexpense = function ($event) {
+  $scope.dayexpense = function ($event,title) {
     var keyCode = $event.which || $event.keyCode;
     if (keyCode === 13) {
       if ($scope.todayexpense !== '') {
         var obj = { date: $scope.mdate, todayexpense: $scope.todayexpense }
         myService.dayExpense(obj).success(function (res) {
           if (res) {
-            alert($scope.todayexpense + " cash is taken!!");
             money = res.sub;
-          }else{
+          } else {
             alert("Haven't Entered start day ");
+          }
+        });
+        var obj2 ={date:$scope.mdate, time:time, eTitle:title, expense:$scope.todayexpense}
+        myService.expenseLedger(obj2).success(function (res){
+          if(res){
+            alert($scope.todayexpense + " cash is taken for "+ title);
           }
         });
       }
     }
   }
+  
+  $scope.showexpense =function (eDate){
+    $scope.texpense =0;
+    var obj = {date:eDate.toDateString()}
+    myService.dailyexpense(obj).success(function (res){
+      if(res){
+        console.log('controller 902')
+        for(i in res){
+          $scope.texpense += res[i].expense;
+        }
+        $scope.expenses = res;
+      }else{
+        alert('no expense this day');
+      }
+    });
+    $scope.showthis = true;
+  }
 
+  $scope.showExpenseLedger = function(){
+    $scope.expenseReport = true;
+  }
 
+  $scope.print = function () { //print only expanse model/ledger
+    $('#dontWanttoPrint').addClass("hidden-print")
+    window.print()
+  }
+  $scope.printfun = function(){ // print dailysales ledeger
+    window.print()
+  }
 });
 
 app.controller('addSalesman', function ($scope, myService, $routeParams, $location, $rootScope, $route) {
@@ -1087,6 +1121,8 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
     $rootScope.loggedIn = false;
     $location.path('login')
   }
+
+  var d = false;
   var array = [];
   getSman();
   $scope.showModal = false;
@@ -1113,7 +1149,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   $scope.date = da.toDateString();
   var row;
 
-  var orginalsale = 0;
+
   $rootScope.location = $location.path();
 
   $scope.Showed = function () {
@@ -1128,11 +1164,10 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   var price = [];
   var sum = 0;
   var sold = [];
+
   $scope.showReturnModal = false;
   $scope.returnItem = function () {
-
     if (($scope.cash === orginalsale) && ($scope.cash !== '')) {
-
       var myid = [];
       var name = [];
       var desc = [];
@@ -1196,66 +1231,76 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   }
 
   $scope.checkOut = function (id) {
-    if (($scope.cash >= orginalsale) && ($scope.cash !== '')) {
-      var myid = [];
-      var name = [];
-      var desc = [];
-      var retail = [];
-      var totalWhole = 0;
-      var totalRe = 0;
-      var undefined;
-      if ($scope.discount == undefined) { $scope.discount = 0; }
-      for (var i = 0; i < wholesaleArray.length; i++) {
-        totalWhole = totalWhole + wholesaleArray[i];
-      }
-      for (var i = 0; i < retailArray.length; i++) {
-        totalRe = totalRe + retailArray[i];
-      }
-      orginalsale = totalRe - discountedAmount;
-      var profit = orginalsale - totalWhole;
-      $scope.SmanChoose = $scope.chooseSalesman[id].name;
-      var obj = { date: $scope.date, time: $scope.mytime, sold: sold, sale: orginalsale, totalQty: $scope.totalQty, discount: $scope.discount, profit: profit, salesman: $scope.chooseSalesman[id].name };
-      myService.sendSale(obj).success(function (res) {
-        if (res == false) {
+    console.log(typeof $scope.cash);
+    if (($scope.cash !== '')) {
+      if (select) {
+        var myid = [];
+        var name = [];
+        var desc = [];
+        var retail = [];
+        var totalWhole = 0;
+        var totalRe = 0;
+        var undefined;
+        if ($scope.discount == undefined) { $scope.discount = 0; }
+        if ($scope.cash < orginalsale) {
+          var getDiscount = orginalsale - $scope.cash;
+          discountedAmount += getDiscount;
+          $scope.discount = discountedAmount;
         }
-        else {
-          for (var i in sold) {
-            myid.push('0000' + sold[i].barcode);
-            name.push(sold[i].itemName);
-            desc.push(sold[i].itemDesc);
-            retail.push(sold[i].itemRetail);
+        for (var i = 0; i < wholesaleArray.length; i++) {
+          totalWhole = totalWhole + wholesaleArray[i];
+        }
+        for (var i = 0; i < retailArray.length; i++) {
+          totalRe = totalRe + retailArray[i];
+        }
+        orginalsale = totalRe - discountedAmount;
+        var profit = orginalsale - totalWhole;
+        $scope.SmanChoose = $scope.chooseSalesman[id].name;
+        var obj = { date: $scope.date, time: $scope.mytime, sold: sold, sale: orginalsale, totalQty: $scope.totalQty, discount: $scope.discount, profit: profit, salesman: $scope.chooseSalesman[id].name };
+        myService.sendSale(obj).success(function (res) {
+          if (res == false) {
+          }
+          else {
+            for (var i in sold) {
+              myid.push('0000' + sold[i].barcode);
+              name.push(sold[i].itemName);
+              desc.push(sold[i].itemDesc);
+              retail.push(sold[i].itemRetail);
+
+            }
+            var myData = myid.map(function (value, index) {
+              return {
+                id: value,
+                name: name[index],
+                desc: desc[index],
+                retail: retail[index]
+              }
+            });
+            $scope.mdate = obj.date;
+            $scope.sold = myData;
+            $scope.mysale = orginalsale;
+
+            $scope.totalit = $scope.totalQty;
+            $scope.mydiscount = $scope.discount;
+
+            $scope.mtime = obj.time;
+            $scope.showModal = !$scope.showModal;
+            $scope.slipId = res;
+
+            $scope.return = $scope.cash - $scope.mysale;
 
           }
-          var myData = myid.map(function (value, index) {
-            return {
-              id: value,
-              name: name[index],
-              desc: desc[index],
-              retail: retail[index]
-            }
-          });
-          $scope.mdate = obj.date;
-          $scope.sold = myData;
-          $scope.mysale = orginalsale;
+        });
+      }
+      else {
+        // alert('Please input Valid Amount');
+        alert('Salesman is not selected');
 
-          $scope.totalit = $scope.totalQty;
-          $scope.mydiscount = $scope.discount;
-
-          $scope.mtime = obj.time;
-          $scope.showModal = !$scope.showModal;
-          $scope.slipId = res;
-
-          $scope.return = $scope.cash - $scope.mysale;
-
-        }
-      });
-    }
-    else {
-      // alert('Please input Valid Amount');
-      alert('inValid Amount');
-
+      }
     }
   }
+
+
   $scope.Reload = function () {
     $route.reload();
   }
@@ -1263,11 +1308,14 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   var mySum = 0;
 
   $scope.addCash = function ($event, amount) {
+    console.log('addcash');
     var temp;
     var ano;
     var totalRe = 0;
+    var done = false;
     var keyCode = $event.which || $event.keyCode;
-    if (keyCode === 13) {
+    if (keyCode === 8) { if (amount === null) { done = true; } else done = false; }
+    if (keyCode === 13 || done) {
       for (var i = 0; i < retailArray.length; i++) {
         totalRe = totalRe + retailArray[i];
       }
@@ -1303,7 +1351,6 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
             totalRe = totalRe + retailArray[i];
           }
           sum = totalRe;
-
           $scope.priceSum = totalRe;
           //console.log(sum, temp, totalRe);
         }
@@ -1318,6 +1365,8 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   /* make Select Query fro AddDiscount*/
   /** Add Discount by % */
   $scope.addDiscountpercent = function ($event, amount) {
+
+    var that = document.activeElement; //this is used to get focus function
     var temp;
     sum = mynew;
     var done = false;
@@ -1347,13 +1396,18 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         alert('Please Do Some Sale');
       }
     }
+    if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+      $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
+    }
   }
   var discountedAmount = 0;
 
   /* dISCOUNT  by rupees function */
   $scope.addDiscount = function ($event, amount) {
+
     var temp;
     sum = mynew;
+    var that = document.activeElement; //this is used to get focus function
     var done = false;
     var keyCode = $event.which || $event.keyCode;
     if (keyCode === 8) { if (amount === null) { done = true; } else done = false; }
@@ -1375,6 +1429,9 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
       }
       else {
         alert('Please Do Some Sale');
+      }
+      if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+        $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
       }
     }
   }
@@ -1404,6 +1461,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   $scope.changedKey = function ($event, row, id) {
     var done = false;
     //console.log(id);
+    var that = document.activeElement; //this is used to get focus function
     var keyCode = $event.which || $event.keyCode;
     if (row) {
       if (keyCode === 8) {  //this condtion allow user to remove item by backspace
@@ -1793,6 +1851,9 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
           }
 
         }
+        if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+          $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
+        }
       }
     }
   }
@@ -1934,6 +1995,14 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         $scope.chooseSalesman = array;
       }
     });
+  }
+
+  var select = false; //this is the variable to check if the salesman is choosed or not
+  $scope.choosefunction = function () { // this function is check if the salesman is chosed to give the alert
+  var that = document.activeElement; //this is used to get focus function
+    select = true;
+    $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
+
   }
 
 });
