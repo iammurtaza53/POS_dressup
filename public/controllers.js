@@ -1231,8 +1231,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   }
 
   $scope.checkOut = function (id) {
-    console.log(typeof $scope.cash);
-    if (($scope.cash !== '')) {
+    if (($scope.cash>=orginalsale)&&($scope.cash !== '')) {
       if (select) {
         var myid = [];
         var name = [];
@@ -1242,11 +1241,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         var totalRe = 0;
         var undefined;
         if ($scope.discount == undefined) { $scope.discount = 0; }
-        if ($scope.cash < orginalsale) {
-          var getDiscount = orginalsale - $scope.cash;
-          discountedAmount += getDiscount;
-          $scope.discount = discountedAmount;
-        }
+        
         for (var i = 0; i < wholesaleArray.length; i++) {
           totalWhole = totalWhole + wholesaleArray[i];
         }
@@ -1297,6 +1292,8 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         alert('Salesman is not selected');
 
       }
+    }else{
+      alert('inValid amount');
     }
   }
 
@@ -1316,6 +1313,13 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
     var keyCode = $event.which || $event.keyCode;
     if (keyCode === 8) { if (amount === null) { done = true; } else done = false; }
     if (keyCode === 13 || done) {
+
+      if($scope.soldIn !=undefined && $scope.soldIn!=""){
+        var getDiscount = $scope.cash - $scope.soldIn;
+        discountedAmount += getDiscount;
+        $scope.discount = discountedAmount;
+      }
+
       for (var i = 0; i < retailArray.length; i++) {
         totalRe = totalRe + retailArray[i];
       }
