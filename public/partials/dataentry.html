@@ -41,9 +41,13 @@
 </div>
 
 <div class="row">
-    <div class="row" style="padding-left: 23px;">
+    <div class="col-md-6" style="padding-left: 23px;">
         <button type="button" ng-click="newEntry()" class="btn btn-lg btn-success">New Entry</button>
         <button type="button" ng-click="OldEntry()" class="btn btn-lg btn-success">Old Entry</button>
+    </div>
+    <div class="col-md-offset-10">
+            <button type="button" ng-click="deleteshow()" class="btn btn-lg btn-danger">Delete Entry</button>
+
     </div>
 </div>
 <br />
@@ -186,8 +190,100 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+
+<div class="row" ng-show="deletepage">
+    <div class="col-lg-12" ng-show="deletepage">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Delete Data Entry
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <button style="float: left;" ng-click="Reload()"
+                        class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                        <br>
+                </div>
+                <br />
+                <strong>Enter Barcode:</strong><input type="text" ng-model="barcodeCheck" class="form-control"
+                    aria-label="..." ng-keypress="checkStock($event)">
+
+
+                <div class='row'>
+                    <hr />
+                    <br />
+
+                    <table class="table table-bordered table-hover table-striped " ng-show="stockShow">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Wholesale Price</th>
+                                <th>Retail Price</th>
+                                <th>Total Price</th>
+                                <td>Delete</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-model='sale'>
+                                <td>{{sale.itemName}}</td>
+                                <td>{{sale.itemDesc}}</td>
+                                <td>{{sale.itemQty}}</td>
+                                <td>{{sale.itemCategory}}</td>
+                                <td>Rs {{sale.itemWholesale}}</td>
+                                <td>Rs {{sale.itemRetail}}</td>
+                                <td ng-model="totalLeft">Rs {{totalLeft}}</td>
+                                <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteProduct(sale)">Delete</td>
+
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <input ng-show="stockShow" type="number" class="form-control" aria-label="..." min="1"
+                    placeholder="Delete Quantity from Stock" ng-model='delQty'>
+                <br />
+                <button type="button" ng-click="deleteItems()" ng-show="stockShow"
+                    class="btn btn-lg btn-danger">Delete Items</button>
+
+                <!-- /.table-responsive -->
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+
 <!-- /.row -->
 <barcode style="display: none;" food="food"></barcode>
+
+
+<!-- <modal title="Generate Barcode" visible="showOld"
+    style="width: 100%; height:auto; overflow:visible; float: none !important; position:relative; ">
+
+    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index ">
+        <div style="page-break-after:always" ng-bind-html="s.text"></div>
+    </div>
+
+
+</modal> -->
+
+
+
+
+
+
+
+
+
 
 <!-- <modal hidden title="Generate Barcode" visible="showModal
     style="display:none;  width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
@@ -307,4 +403,6 @@
         </div>
     </div>
 </div> -->
+
+
 

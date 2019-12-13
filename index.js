@@ -358,7 +358,6 @@ app.post('/addBill', function (req, res) {
       });
     }
     else {
-      console.log('line 361');
       var obj = { idBalance: idBalance, balance: req.body.balance };
       mod.collection.insertOne(obj, function (err1, doc1) {
         if (err1) res.send(false);
@@ -923,24 +922,69 @@ app.post('/weeklyReport', async function (req, res) {
 
 app.post('/expenseLedger', function (req, res) {
   var eDetail = mongoose.model('eLedger')
-  var obj2 ={date:req.body.date, time:req.body.time, expenseTitle:req.body.eTitle, expense:req.body.expense}
-  eDetail.collection.insertOne(obj2,function(err,doc){
-    if(doc){
+  var obj2 = { date: req.body.date, time: req.body.time, expenseTitle: req.body.eTitle, expense: req.body.expense }
+  eDetail.collection.insertOne(obj2, function (err, doc) {
+    if (doc) {
       res.send(true);
     }
   });
 });
 
-app.post('/dailyexpense', function (req, res){
+app.post('/dailyexpense', function (req, res) {
   var eDetail = mongoose.model('eLedger');
-  eDetail.find({date:req.body.date},function(err, doc){
-    if(doc!=null){
+  eDetail.find({ date: req.body.date }, function (err, doc) {
+    if (doc != null) {
       res.send(doc);
+    } else {
+      res.send(false);
+    }
+  });
+});
+
+app.post('/deleteItems', function (req, res) {
+  var mycollect = mongoose.model('ItemCollection');
+  mycollect.findOne({ barcode: req.body.barcode }, function (finderr, find) {
+    if (find.itemQty >= req.body.qty) {
+      mycollect.updateOne({ barcode: req.body.barcode }, { $inc: { itemQty: -req.body.qty } }, function (errr, docs1) {
+        if (docs1) {
+          res.send(docs1);
+        } else {
+          res.send(false);
+        }
+      });
     }else{
       res.send(false);
     }
   });
 });
+
+app.post('/deleteProduct', function (req, res) {
+
+  var mycollect = mongoose.model('ItemCollection');
+
+  mycollect.findOneAndDelete({ barcode: req.body.barcode }, function (err, doc) {
+    if (err) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
+app.post('/getProduct', function (req, res) {
+
+  var collection = mongoose.model('ItemCollection');
+
+  collection.findOne({ barcode: req.body.barcode }, {}, function (e, docs) {
+    if (docs) {
+      res.send(docs);
+    }
+    else {
+      res.send(false);
+    }
+  });
+});
+
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),

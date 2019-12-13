@@ -14,6 +14,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
 
   $scope.NewEntry = false;
   $scope.oldEntry = false;
+  $scope.deletepage = false;
   $rootScope.logout = function () {
     $rootScope.menu = false;
     $rootScope.posUser = false;
@@ -30,8 +31,8 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
   getCat();
   getSup();
   $scope.stockShow = false;
-  $scope.checkStock = function ($event) {
 
+  $scope.checkStock = function ($event) {
     var keyCode = $event.which || $event.keyCode;
     if (keyCode === 13) {
 
@@ -51,13 +52,18 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
       });
     }
   };
+
   $scope.newEntry = function () {
     $scope.oldEntry = false;
     $scope.NewEntry = true;
+    $scope.deletepage = false;
   }
+
   $scope.OldEntry = function () {
     $scope.NewEntry = false;
     $scope.oldEntry = true;
+    $scope.deletepage = false;
+
   }
 
   $scope.showDiscount = function () {
@@ -78,6 +84,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
       }
     });
   }
+
   $scope.addSupp = function () {
     var abc = { supplierName: $scope.supName };
     //console.log('adding', abc);
@@ -91,14 +98,12 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         alert('Category already Added!');
       }
     });
-
-
-
-
   }
+
   $scope.Reload = function () {
     $route.reload();
   }
+
   function getCat() {
     myService.getCategory().success(function (res) {
       if (res) {
@@ -161,6 +166,51 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
     return convert;
   }
 
+  $scope.deleteItems = function (sale) {
+    $scope.deletepage = true;
+    var obj = { barcode:  $scope.sale.barcode, qty: $scope.delQty }
+    myService.deleteItems(obj).success(function (res) {
+      if (res) {
+        alert('Items Deleted')
+        getItem($scope.sale.barcode);
+      }
+    });
+  }
+
+  function getItem(sale){
+    var abc = {barcode: sale}
+    myService.getProduct(abc).success(function (res) {
+      console.log(res);
+      if (res) {
+        $scope.stockShow = true;
+        var total = res.itemQty * res.itemWholesale;
+        $scope.totalLeft = total;
+        $scope.sale = res;
+      }
+    });
+  } 
+
+
+  $scope.deleteshow = function () {
+    $scope.deletepage = true;
+    $scope.oldEntry = false;
+    $scope.NewEntry = false;
+    $scope.barcodeCheck="";
+    $scope.stockShow=false;
+  }
+
+  $scope.deleteProduct = function (sale) {
+    //console.log(id);
+    myService.deleteProduct(sale).success(function (res) {
+      if (res) {
+        //console.log(res);
+        $scope.stockShow =false;
+      } else {
+        alert("can't delete sale item");
+      }
+    });
+  }
+
   $scope.generateOld = function () {
     $scope.showOld = !$scope.showOld;
     $("#myModal").modal()
@@ -185,6 +235,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         } else if ($scope.barcodeCheck <= 100000) {
           zeroAppend += "0"
         }
+
         barcode.valueSet(zeroAppend + $scope.barcodeCheck);
         barcode.setMargins(5, 5, 5, 5);
         barcode.setBarWidth(2);
@@ -194,49 +245,64 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         var barcodeImage = document.getElementById('barcodeImage');
         barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
-        //console.log($scope.sale.itemWholesale);
         var convert = cipher($scope.sale.itemWholesale);
         var name = $scope.sale.itemName
         if ($scope.sale.itemName && $scope.sale.itemName.length > 25) {
           name = name.substring(0, 25);
         }
-        var MYS = '<div print-section style="font-size:16px; FONT-FAMILY: MONOSPACE; letter-spacing: 1px; position:absolute; top:26px;"><div style="display:inline; float:left; margin-left:25px; min-height:150px;"><p style="margin:0; padding:0;"><strong style="font-size:19px;" >Dress Up</strong><br><strong>'
-          + $scope.sale.type
-          + '</strong><br><strong>' + $scope.sale.code + '</strong><br/><strong>' + convert + '</strong><p style="font-size:18px; margin:0; padding:0;"><strong>RS: '
-          + $scope.sale.itemRetail + '</p></strong></div>'
-          + '<div style="display:inline; float:right;"><img id="barcodeImage" width="100%" height="100%" src="'
-          + barcodeImage.src + '"><strong style="padding:0 0 0 1px;">'
-          + $scope.sale.size + '</strong></div><div style="text-align:left;"><p style=" margin:0; padding:0 0 0 1px;"><strong>'
-          + name + '</strong></p></div></div>';
+
+        //+'<div class="row">'
+        var MYS = '<div  style=" width:50% ;float:left ">'
+          + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
+          + '<div><span style="font-size:20px;">Dress Up</span></div>'
+          + '<div><span>' + $scope.sale.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:18px;">' + $scope.sale.size + '</span></div>'
+          + '<div>' + $scope.sale.code + '</div><div>' + convert + '</div>'
+          + '</div> </div>'
+          + '<div style="width:50% ;float:right;margin-top:5px">'
+          + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+          + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
+          + '<div style="font-size:20px;">' + name + '</div> </div>'
+          + '<div><span style="font-size:20px;">Rs: ' + $scope.sale.itemRetail + '</span></div>'
+          + '</div>';
+
+          /**Tahir bhai */
+          // var MYS = '<div  style=" width:50% ;float:left ">'
+          // + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
+          // + '<div><span style="font-size:20px;">Dress Up</span></div>'
+          // + '<div><span>' + $scope.sale.type + '</div>'
+          // + '<div>' + $scope.sale.code + '</div><div>' + convert + '</div>'
+          // + '</div> </div>'
+          // + '<div style="width:50% ;float:right;margin-top:5px">'
+          // + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+          // + '<div> <div style="font-size:18px;">' + $scope.sale.size + '</div>'
+          // + '<div style="font-size:20px;">' + name + '</div> </div>'
+          // + '<div><span style="font-size:20px;">Rs: ' + $scope.sale.itemRetail + '</span></div>'
+          // + '</div>';
+
         var arrays = [];
         var myVal = { text: MYS };
         for (var i = 1; i <= $scope.myQty; i++) {
           arrays.push(myVal);
         }
-        //console.log(arrays);
+        console.log($scope.myQty);
+        console.log(arrays);
         $scope.sa = arrays;
-        //console.log($scope.sa);
-
-
         $timeout(function () {
-          $scope.showModal = false;
-          //$window.print();
+          $scope.showOld = false;
           var mywindow = window.open('', 'PRINT', 'height=400,width=600');
           mywindow.document.write('<html><head>');
+          mywindow.document.write('<style>');
+          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 1px;}');
+          mywindow.document.write('</style>');
           mywindow.document.write('</head><body>');
-          mywindow.document.write('<div style="margin:0; padding:0">');
-          for (var i = 0; i < $scope.sa.length; i++) {
-            if (i % 2 == 0)
-              mywindow.document.write('<div style="margin:0; padding-top:23px; padding-left:0px; padding-bottom:0; padding-right:0;width:50%; float: left;">');
-            else
-              mywindow.document.write('<div style="margin:0; padding-top:23px; padding-left:0px; padding-bottom:0; padding-right:0; width:50%; float: right;">');
-            mywindow.document.write($scope.sa[i].text);
+          for (var i = 0; i < arrays.length; i++) {
+            mywindow.document.write('<div class="nameClass" style="clear:both;">');
+            mywindow.document.write(arrays[i].text);
             mywindow.document.write('</div>');
           }
-          mywindow.document.write('</div>');
           mywindow.document.write('</body></html>');
           mywindow.print();
-          mywindow.close();
+           mywindow.close();
         }, 1000);
       }
     });
@@ -260,8 +326,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
   }
 
   $rootScope.location = $location.path();
-  $scope.printFunc = function () {
-  }
+
 
   $scope.generateBarcode = function (id, id2) {
     //console.log('print in generate');
@@ -302,20 +367,38 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         var barcodeImage = document.getElementById('barcodeImage');
         barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
-        //console.log($scope.itemWholesale);
         var convert = cipher($scope.itemWholesale);
         var name = $scope.itemName
         if ($scope.itemName && $scope.itemName.length > 25) {
           name = name.substring(0, 25);
         }
-        var MYS = '<div print-section style="font-size:16px; FONT-FAMILY: MONOSPACE; letter-spacing: 1px; position:absolute; top:26px;"><div style="display:inline; float:left; margin-left:25px; min-height:150px;"><p style="margin:0; padding:0;"><strong style="font-size:19px;" >Dress Up</strong><br><strong>'
-          + $scope.type
-          + '</strong><br><strong>' + $scope.code + '</strong><br/><strong>' + convert + '</strong><p style="font-size:18px; margin:0; padding:0;"><strong>RS: '
-          + $scope.itemRetail + '</p></strong></div>'
-          + '<div style="display:inline; float:right;"><img id="barcodeImage" width="100%" height="100%" src="'
-          + barcodeImage.src + '"><strong style="padding:0 0 0 1px;">'
-          + $scope.size + '</strong></div><div style="text-align:left;"><p style=" margin:0; padding:0 0 0 1px;"><strong>'
-          + name + '</strong></p></div></div>';
+        var MYS = '<div  style=" width:50% ;float:left ">'
+          + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
+          + '<div><span style="font-size:20px;">Dress Up</span></div>'
+          + '<div><span>' + $scope.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:18px;">' + $scope.size + '</span></div>'
+          + '<div>' + $scope.code + '</div><div>' + convert + '</div>'
+          + '</div> </div>'
+          + '<div style="width:50% ;float:right;margin-top:5px">'
+          + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+          + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
+          + '<div style="font-size:20px;">' + name + '</div> </div>'
+          + '<div><span style="font-size:20px;">Rs: ' + $scope.itemRetail + '</span></div>'
+          + '</div>';
+
+          /**Tahir bhai */
+        // var MYS = '<div  style=" width:50% ;float:left">'
+        //   + '<div style="font-size:16px; margin-left:100px;line-height: 37px;">'
+        //   + '<div><span style="font-size:20px;">Dress Up</span></div>'
+        //   + '<div><span>' + $scope.type + '</span></div>'
+        //   + '<div>' + $scope.code + '</div><div>' + convert + '</div>'
+        //   + '</div> </div>'
+        //   + '<div style="width:50% ;float:right;margin-top:5px">'
+        //   + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+        //   + '<div> <div style="font-size:18px;">' + $scope.size + '</div>'
+        //   + '<div style="font-size:20px;">' + name + '</div> </div>'
+        //   + '<div><span style="font-size:20px;">Rs: ' + $scope.itemRetail + '</span></div>'
+        //   + '</div>';
+
         var arrays = [];
         var myVal = { text: MYS };
         //console.log($scope.itemQty);
@@ -328,23 +411,21 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
 
         $timeout(function () {
           $scope.showOld = false;
-          //$window.print();
           var mywindow = window.open('', 'PRINT', 'height=400,width=600');
           mywindow.document.write('<html><head>');
+          mywindow.document.write('<style>');
+          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 1px;}');
+          mywindow.document.write('</style>');
           mywindow.document.write('</head><body>');
-          mywindow.document.write('<div style="margin:0; padding:0">');
-          for (var i = 0; i < $scope.sa.length; i++) {
-            if (i % 2 == 0)
-              mywindow.document.write('<div style="margin:0; padding-top:23px; padding-left:0px; padding-bottom:0; padding-right:0;width:50%; float: left;">');
-            else
-              mywindow.document.write('<div style="margin:0; padding-top:23px; padding-left:0px; padding-bottom:0; padding-right:0; width:50%; float: right;">');
-            mywindow.document.write($scope.sa[i].text);
+          for (var i = 0; i < arrays.length; i++) {
+            mywindow.document.write('<div class="nameClass" style="clear:both;">');
+            mywindow.document.write(arrays[i].text);
             mywindow.document.write('</div>');
           }
-          mywindow.document.write('</div>');
           mywindow.document.write('</body></html>');
           mywindow.print();
           mywindow.close();
+          //  $window.print();
         }, 1000);
       }
 
@@ -446,6 +527,7 @@ app.controller("supplierDetail", function ($scope, myService, $routeParams, $loc
 
 
 });
+
 app.controller("loginUser", function ($scope, myService, $routeParams, $location, $rootScope, $window) {
   $rootScope.location = $location.path();
 
@@ -530,6 +612,7 @@ app.controller("myStock", function ($scope, myService, $routeParams, $location, 
 
 
 });
+
 app.controller("supplierLedger", function ($scope, myService, $routeParams, $location, $rootScope) {
 
 
@@ -688,7 +771,6 @@ app.controller("newBill", function ($scope, myService, $routeParams, $location, 
 
 });
 
-
 app.controller("lastSale", function ($scope, myService, $routeParams, $location, $rootScope, $route) {
 
   $rootScope.logout = function () {
@@ -720,8 +802,6 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
   }
 
 });
-
-
 
 app.controller("monthlyReport", function ($scope, myService, $routeParams, $location, $rootScope) {
 
@@ -864,6 +944,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
             alert($scope.todaycash + ' Cash is added');
           }
         });
+        $route.reload();
       }
     }
   }
@@ -872,7 +953,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
     $route.reload();
   }
 
-  $scope.dayexpense = function ($event,title) {
+  $scope.dayexpense = function ($event, title) {
     var keyCode = $event.which || $event.keyCode;
     if (keyCode === 13) {
       if ($scope.todayexpense !== '') {
@@ -884,34 +965,35 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
             alert("Haven't Entered start day ");
           }
         });
-        var obj2 ={date:$scope.mdate, time:time, eTitle:title, expense:$scope.todayexpense}
-        myService.expenseLedger(obj2).success(function (res){
-          if(res){
-            alert($scope.todayexpense + " cash is taken for "+ title);
+        var obj2 = { date: $scope.mdate, time: time, eTitle: title, expense: $scope.todayexpense }
+        myService.expenseLedger(obj2).success(function (res) {
+          if (res) {
+            alert($scope.todayexpense + " cash is taken for " + title);
           }
         });
+        $route.reload();
       }
     }
   }
-  
-  $scope.showexpense =function (eDate){
-    $scope.texpense =0;
-    var obj = {date:eDate.toDateString()}
-    myService.dailyexpense(obj).success(function (res){
-      if(res){
+
+  $scope.showexpense = function (eDate) {
+    $scope.texpense = 0;
+    var obj = { date: eDate.toDateString() }
+    myService.dailyexpense(obj).success(function (res) {
+      if (res) {
         console.log('controller 902')
-        for(i in res){
+        for (i in res) {
           $scope.texpense += res[i].expense;
         }
         $scope.expenses = res;
-      }else{
+      } else {
         alert('no expense this day');
       }
     });
     $scope.showthis = true;
   }
 
-  $scope.showExpenseLedger = function(){
+  $scope.showExpenseLedger = function () {
     $scope.expenseReport = true;
   }
 
@@ -919,7 +1001,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
     $('#dontWanttoPrint').addClass("hidden-print")
     window.print()
   }
-  $scope.printfun = function(){ // print dailysales ledeger
+  $scope.printfun = function () { // print dailysales ledeger
     window.print()
   }
 });
@@ -1231,7 +1313,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
   }
 
   $scope.checkOut = function (id) {
-    if (($scope.cash>=orginalsale)&&($scope.cash !== '')) {
+    if (($scope.cash >= orginalsale) && ($scope.cash !== '')) {
       if (select) {
         var myid = [];
         var name = [];
@@ -1241,7 +1323,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         var totalRe = 0;
         var undefined;
         if ($scope.discount == undefined) { $scope.discount = 0; }
-        
+
         for (var i = 0; i < wholesaleArray.length; i++) {
           totalWhole = totalWhole + wholesaleArray[i];
         }
@@ -1292,12 +1374,19 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         alert('Salesman is not selected');
 
       }
-    }else{
+    } else {
       alert('inValid amount');
     }
   }
 
+  $scope.goto = function ($event) {
+    var that = document.activeElement; //this is used to get focus function
+    var keyCode = $event.which || $event.keyCode;
+    if (keyCode === 13) {
+      $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
 
+    }
+  }
   $scope.Reload = function () {
     $route.reload();
   }
@@ -1314,8 +1403,8 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
     if (keyCode === 8) { if (amount === null) { done = true; } else done = false; }
     if (keyCode === 13 || done) {
 
-      if($scope.soldIn !=undefined && $scope.soldIn!=""){
-        var getDiscount = $scope.cash - $scope.soldIn;
+      if ($scope.soldIn != undefined && $scope.soldIn != "") { // this gives soldIn price here
+        var getDiscount = $scope.priceSum - $scope.soldIn;
         discountedAmount += getDiscount;
         $scope.discount = discountedAmount;
       }
@@ -1400,7 +1489,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
         alert('Please Do Some Sale');
       }
     }
-    if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+    if (keyCode === 13) { //this condition also implied cos backspace keycode* is also entring
       $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
     }
   }
@@ -1434,7 +1523,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
       else {
         alert('Please Do Some Sale');
       }
-      if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+      if (keyCode === 13) { //this condition also implied cos backspace keycode* is also entring
         $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
       }
     }
@@ -1855,7 +1944,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
           }
 
         }
-        if(keyCode===13){ //this condition also implied cos backspace keycode* is also entring
+        if (keyCode === 13) { //this condition also implied cos backspace keycode* is also entring
           $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
         }
       }
@@ -2003,7 +2092,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
 
   var select = false; //this is the variable to check if the salesman is choosed or not
   $scope.choosefunction = function () { // this function is check if the salesman is chosed to give the alert
-  var that = document.activeElement; //this is used to get focus function
+    var that = document.activeElement; //this is used to get focus function
     select = true;
     $('[tabIndex=' + (+that.tabIndex + 1) + ']')[0].focus(); // changed the key focus to Next tabIndex
 

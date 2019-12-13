@@ -344,5 +344,39 @@ angular.module('myApp.services', []).
             return $http(req);
         }
 
+        ergastAPI.deleteItems = function (abc) {
+
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/deleteItems',
+                url: urls + '/deleteItems',
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.deleteProduct = function (abc) {
+
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/deleteProduct',
+                url: urls + '/deleteProduct',
+                data: abc
+            };
+            return $http(req);
+        }
+        ergastAPI.getProduct = function (abc) {
+
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/getProduct',
+                url: urls + '/getProduct',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+
         return ergastAPI;
     });

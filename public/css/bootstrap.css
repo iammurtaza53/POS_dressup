@@ -199,6 +199,7 @@ th {
     -webkit-box-shadow: none !important;
             box-shadow: none !important;
   }
+   
   a,
   a:visited {
     text-decoration: underline;
@@ -6532,6 +6533,7 @@ button.close {
 @media (min-width: 1200px) {
   .hidden-lg {
     display: none !important;
+    
   }
 }
 .visible-print {
@@ -6580,5 +6582,57 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+.div1
+{
+  text-align:center; 
+  padding-top:50px; 
+  width:80%; margin:0 auto;
+}
+.maxH
+{
+  min-height:150px;
+}
+.pbleft{
+  float:left;
+}
+.pbright
+{
+  float:right;
+}
+.pcontent
+{
+  font-weight:bold; 
+  font-family:MONOSPACE; 
+  letter-spacing: 1px; 
+  margin:0; 
+  padding:0;
+}
+.f20
+{
+  font-size:20px;
+}
+
+.f16
+{
+  font-size:16px;
+}
+.f18
+{
+  font-size:18px;
+}
+.barImg
+{
+  max-width:100%; 
+  height:60px;
+}
+.nameClass{ font-weight:bold; font-family:MONOSPACE; letter-spacing: 1px;}
+
+.pageBreak
+{
+  page-break-after:always;
+}
+.halfWidth{
+  width:50%
 }
 /*# sourceMappingURL=bootstrap.css.map */
