@@ -210,6 +210,8 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
       }
     });
   }
+  $scope.barcodeCheck=38;
+  $scope.myQty=20;
 
   $scope.generateOld = function () {
     $scope.showOld = !$scope.showOld;
@@ -252,29 +254,54 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         }
 
         //+'<div class="row">'
-        var MYS = '<div  style=" width:50% ;float:left ">'
-          + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
-          + '<div><span style="font-size:20px;">Dress Up</span></div>'
-          + '<div><span>' + $scope.sale.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:18px;">' + $scope.sale.size + '</span></div>'
-          + '<div>' + $scope.sale.code + '</div><div>' + convert + '</div>'
+        var dressUpFontSize = 120;
+        var criticalFontSize = 100;
+        var uselessFontSize = 100;
+
+        /**HAssan */
+        var MYS = '<div style=" width:50% ;float:left">'
+          + '<div style="padding-left:10%;line-height:150px;">'
+          + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
+          + '<div><span>' + $scope.sale.type + '</span>'
+          + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + $scope.sale.size + '</span></div>'
+          + '<div>' + $scope.sale.code + '</div>'
+          + '<div>' + convert + '</div>'
           + '</div> </div>'
-          + '<div style="width:50% ;float:right;margin-top:5px">'
-          + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+
+          + '<div style="width:50% ;float:right;">'
+          + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
           + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
-          + '<div style="font-size:20px;">' + name + '</div> </div>'
-          + '<div><span style="font-size:20px;">Rs: ' + $scope.sale.itemRetail + '</span></div>'
+          + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
+          + '<div><span>Rs: ' + $scope.sale.itemRetail + '</span></div>  </div>'
           + '</div>';
+
+
+
+        // var MYS = '<div style="max-width: 33.333333%;position: relative; width: 30%; padding-right: 15px; padding-left: 15px;">'
+        //   + '<div style="line-height:100px;">'
+        //   + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
+        //   + '<div><span>' + $scope.sale.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:' + criticalFontSize + 'px;">' + $scope.sale.size + '</span></div>'
+        //   + '<div>' + $scope.sale.code + '</div>'
+        //   + '<div>' + convert + '</div>'
+        //   + '</div> </div>'
+
+        //   + '<div style=" max-width: 66.666667%;position: relative; width: 70%; padding-right: 15px; padding-left: 15px;">'
+        //   + '<div><img id="barcodeImage" class="barImg" src="' + barcodeImage.src + '" /></div>'
+        //   + '<div style="font-size:' + criticalFontSize + 'px;"> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
+        //   + '<div>' + name + '</div> </div>'
+        //   + '<div><span>Rs: ' + $scope.sale.itemRetail + '</span></div>'
+        //   + '</div>';
 
           /**Tahir bhai */
           // var MYS = '<div  style=" width:50% ;float:left ">'
           // + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
           // + '<div><span style="font-size:20px;">Dress Up</span></div>'
-          // + '<div><span>' + $scope.sale.type + '</div>'
+          // + '<div><span>' + $scope.sale.type + '</span><span style="float:right;font-size:18px;">' + $scope.sale.size + '</span></div>'
           // + '<div>' + $scope.sale.code + '</div><div>' + convert + '</div>'
           // + '</div> </div>'
           // + '<div style="width:50% ;float:right;margin-top:5px">'
           // + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
-          // + '<div> <div style="font-size:18px;">' + $scope.sale.size + '</div>'
+          // + '<div>'
           // + '<div style="font-size:20px;">' + name + '</div> </div>'
           // + '<div><span style="font-size:20px;">Rs: ' + $scope.sale.itemRetail + '</span></div>'
           // + '</div>';
@@ -289,14 +316,14 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         $scope.sa = arrays;
         $timeout(function () {
           $scope.showOld = false;
-          var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+          var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
           mywindow.document.write('<html><head>');
           mywindow.document.write('<style>');
-          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 1px;}');
+          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
           mywindow.document.write('</style>');
-          mywindow.document.write('</head><body>');
+          mywindow.document.write('</head><body style="margin:0; padding: 0;">');
           for (var i = 0; i < arrays.length; i++) {
-            mywindow.document.write('<div class="nameClass" style="clear:both;">');
+            mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:40px;height:900px; font-size: ' + uselessFontSize + 'px;">');
             mywindow.document.write(arrays[i].text);
             mywindow.document.write('</div>');
           }
@@ -307,6 +334,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
       }
     });
   }
+
 
   var array1 = [];
   function getSup() {
@@ -372,18 +400,27 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         if ($scope.itemName && $scope.itemName.length > 25) {
           name = name.substring(0, 25);
         }
-        var MYS = '<div  style=" width:50% ;float:left ">'
-          + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
-          + '<div><span style="font-size:20px;">Dress Up</span></div>'
-          + '<div><span>' + $scope.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:18px;">' + $scope.size + '</span></div>'
-          + '<div>' + $scope.code + '</div><div>' + convert + '</div>'
+
+        var dressUpFontSize = 120;
+        var criticalFontSize = 100;
+        var uselessFontSize = 100;
+
+        var MYS = '<div style=" width:50% ;float:left">'
+          + '<div style="padding-left:10%;line-height:150px;">'
+          + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
+          + '<div><span>' + $scope.type + '</span>'
+          + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + $scope.size + '</span></div>'
+          + '<div>' + $scope.code + '</div>'
+          + '<div>' + convert + '</div>'
           + '</div> </div>'
-          + '<div style="width:50% ;float:right;margin-top:5px">'
-          + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
+
+          + '<div style="width:50% ;float:right;">'
+          + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
           + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
-          + '<div style="font-size:20px;">' + name + '</div> </div>'
-          + '<div><span style="font-size:20px;">Rs: ' + $scope.itemRetail + '</span></div>'
+          + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
+          + '<div><span>Rs: ' + $scope.itemRetail + '</span></div>  </div>'
           + '</div>';
+
 
           /**Tahir bhai */
         // var MYS = '<div  style=" width:50% ;float:left">'
@@ -411,28 +448,26 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
 
         $timeout(function () {
           $scope.showOld = false;
-          var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+          var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
           mywindow.document.write('<html><head>');
           mywindow.document.write('<style>');
-          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 1px;}');
+          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
           mywindow.document.write('</style>');
-          mywindow.document.write('</head><body>');
+          mywindow.document.write('</head><body style="margin:0; padding: 0;">');
           for (var i = 0; i < arrays.length; i++) {
-            mywindow.document.write('<div class="nameClass" style="clear:both;">');
+            mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:40px;height:900px; font-size: ' + uselessFontSize + 'px;">');
             mywindow.document.write(arrays[i].text);
             mywindow.document.write('</div>');
           }
           mywindow.document.write('</body></html>');
           mywindow.print();
           mywindow.close();
-          //  $window.print();
         }, 1000);
       }
 
     });
 
   }
-
 
 });
 
@@ -588,7 +623,7 @@ app.controller("myStock", function ($scope, myService, $routeParams, $location, 
     $location.path('login');
 
   }
-  $scope.stockShow = false;
+  $scope.stockShow = true;
   $scope.checkStock = function ($event) {
 
     var keyCode = $event.which || $event.keyCode;

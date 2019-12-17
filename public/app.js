@@ -118,9 +118,9 @@ app.directive('barcode', function () {
 
         var width = barcode.getMinWidth();
 
-        barcode.setSize(width, 100);
+        barcode.setSize(width, 800);
 
-        $scope.src = barcode.exportToBase64(width, 100, 0);
+        $scope.src = barcode.exportToBase64(width, 800, 0);
       }, true);
     }
   }
