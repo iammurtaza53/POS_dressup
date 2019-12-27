@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 
 <head>
     <meta charset="utf-8">
@@ -9,22 +9,23 @@
     <meta name="author" content="">
 
     <title>Point Of Sale</title>
-
+    <link rel="shortcut icon" href="lang-logo.png">
     <!-- Bootstrap Core CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- MetisMenu CSS -->
     <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <link href="bower_components/angular-print/angularPrint.css" rel="stylesheet">
-    
-   
+
+
     <!-- Timeline CSS -->
     <link href="dist/css/timeline.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="dist/css/sb-admin-2.css" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="css/bootstrap.css" rel="stylesheet"> -->
+    <link href="css/bootstrap3.min.css" rel="stylesheet" id="bootstrap-css">
 
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 
 
     <!-- Custom Fonts -->
@@ -35,7 +36,10 @@
             }
 
             /* body, */
-            body {color:black;}
+            body {
+                color: black;
+            }
+
             html,
             #wrapper {
                 width: 100%;
@@ -48,21 +52,25 @@
             .page-break {
                 display: block;
                 page-break-before: always;
-                
+
             }
-            html, body {
+
+            html,
+            body {
                 min-height: auto;
                 overflow: hidden;
-    }
+            }
 
-            body{color:black;}
+            body {
+                color: black;
+            }
+
             html,
             #wrapper {
                 width: 100%;
                 height: 100%;
                 overflow: visible;
             }
-
         }
     </style>
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -76,155 +84,170 @@
 
 </head>
 
-<body ng-app="myApp">
+<body >
+
+
+
+    <!------ Include the above in your HEAD tag ---------->
+
     <div id="wrapper">
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <nav class="navbar navbar-default navbar-fixed-top"  style="margin-bottom: 0" ng-show="loggedOut">
+            <!-- <div class="container-fluid"> -->
+            <div class="navbar-header" role="navigation">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" ng-href="#/pos">Dress Up</a>
-
-            </div>
-            <!-- /.navbar-header -->
-
-            <ul class="nav navbar-top-links navbar-right">
-
-                <span class="navbar-brand" align="right">Developed By: 5Cube
-                
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                <div class="navbar-brand">
+                    <a id="menu-toggle" href="#" style="color:darkgray"
+                        class="glyphicon glyphicon-align-justify btn-menu toggle">
+                        <!-- <i class="fa fa-bars"></i> -->
                     </a>
-                    <ul class="dropdown-menu dropdown-user" ng-show="loggedIn">
+                    <a href="#/pos">DressUp</a>
+                </div>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <span class="navbar-brand" align="right">Developed By: 5Cube</span>
+                <span class="navbar-brand" style="padding:0 ;padding-left: 10px; padding-right: 30px;" >
+                    <li class="dropdown">
+                        <a class="dropdown-toggle row" data-toggle="dropdown" href="#">
+                            <span class="fa fa-user solo"></span> <span class="fa fa-caret-down solo"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
 
-                        <li class="divider"></li>
+                            <li class="divider"></li>
 
-                        <li><a ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li></span>
+                            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                </span>
                 <!-- /.dropdown -->
             </ul>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a ng-href="#/pos"><i class="fa fa-table fa-fw"></i> POS</a>
-                        </li>
-                        <li>
-                            <a ng-href="#/lastSale"><i class="fa fa-table fa-fw"></i> Last Sold Items</a>
-                        </li>
-                        <li>
-                            <a><i class="fa fa-edit fa-fw"></i> New Entry<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a ng-href="#/dataEntry"> New Item Entry</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/newBill">Add NewBill & Payment</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a><i class="fa fa-sitemap fa-fw"></i> Stock Management<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a ng-href="#/Stock">Check Item Stock</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/supplierDetail">Supplier's Details</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/supplierLedger">Supplier's Ledger</a>
-                                </li>
-
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a><i class="fa fa-sitemap fa-fw"></i> Reports<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a ng-href="#/dailyReport">Daily Sale's Report</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/customSalesReport">Weekly Sale's Report</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/salesReport">Monthly Sale's Report</a>
-                                </li>
-
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a><i class="fa fa-male fa fw"></i> Salesman<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a ng-href="#/addSalesman"> Add New Saleman</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/SmanReport">Salesman's Report</a>
-                                </li>
-                            </ul>
-                        
-
-                    </ul>
-                    <!-- <ul class="nav" id="side-menu">
-                        <li>
-                            <a><i class="fa fa-sitemap fa-fw"></i> Stock Management<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a ng-href="#/Stock">Check Item Stock</a>
-                                </li>
-                                <li>
-                                    <a ng-href="#/supplierDetail">Supplier's Details</a>
-                                </li>
-
-                            </ul>
-                            
-                        </li>
-
-                        
-
-                    </ul> -->
-                    <ul class="nav" id="side-menu" >
-
-
-
-                        
-                        <li>
-                            <a ng-href="#/userGuide"><i class="fa fa-edit fa-fw"></i> User Guide</a>
-                        </li>
-
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
+            <!-- </div> -->
         </nav>
-        <div id="page-wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" role="navigation" ng-show="loggedOut">
+            <nav id="spy">
+                <ul class="sidebar-nav navbar-default nav navbar-collapse" style="width:100%; font-weight: bold;" id="side-menu">
+                    <li class="sidebar-brand">
+                        <a ng-href="#/pos"><span class="fa fa-table solo">POS</span></a>
 
-            <ng-view></ng-view>
+                    </li>
+                    <li>
+                        <a ng-href="#/lastSale">
+                            <span class="fa fa-table solo">Last Sold Items</span>
+                        </a>
 
+                    </li>
+
+                    <li>
+                        <a class="row">
+                            <span class="fa fa-edit solo col-sm-10">
+                                <p style="padding-left:20px ;">New Entry</p>
+                            </span><span class="fa arrow solo col-sm-2"></span>
+                        </a>
+                        <ul class="nav">
+                            <li>
+                                <!-- <a ng-href="#/dataEntry"> New Item Entry</a> -->
+                                <a ng-href="#/editItem"> Inventory</a>
+                            </li>
+                            <li>
+                                <!-- <a ng-href="#/dataEntry"> New Item Entry</a> -->
+                                <a ng-href="#/stockInventory">Generate Bill</a> <!--Because of the requirment-->
+
+                            </li>
+                            
+                            <!-- <li>
+                                <a ng-href="#/newBill">Add NewBill & Payment</a>
+                            </li> -->
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="row"><span class="fa fa-sitemap solo col-sm-10">
+                                <p style="padding-left:12px">Stock Management</p>
+                            </span><span class="fa arrow col-sm-2"></span></a>
+                        <ul class="nav ">
+                            <li>
+                                <a ng-href="#/Stock">Check Item Stock</a>
+                            </li>
+                            <li>
+                                <a ng-href="#/supplierDetail">Supplier's Details</a>
+                            </li>
+                            <li>
+                                <a ng-href="#/supplierLedger">Supplier's Ledger</a>
+                            </li>
+
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+
+                    <li>
+                        <a class="row">
+                            <span class="fa fa-sitemap solo col-md-10">
+                                <p style="padding-left:20px ;">Reports</p>
+                            </span><span class="fa arrow solo col-md-2"></span>
+                        </a>
+                        <ul class="nav">
+                            <li>
+                                <a ng-href="#/dailyReport">Daily Sale's Report</a>
+                            </li>
+                            <li>
+                                <a ng-href="#/customSalesReport">Weekly Sale's Report</a>
+                            </li>
+                            <li>
+                                <a ng-href="#/salesReport">Monthly Sale's Report</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="row">
+                            <span class="fa fa-male solo col-md-10">
+                                <p style="padding-left:20px;">Salesman</p>
+                            </span><span class="fa arrow col-md-2"></span>
+                        </a>
+                        <ul class="nav">
+                            <li>
+                                <a ng-href="#/addSalesman"> Add New Saleman</a>
+                            </li>
+                            <li>
+                                <a ng-href="#/SmanReport">Salesman's Report</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a ng-href="#/userGuide"><span class="fa fa-edit solo"> User Guide </span></a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="container" style="width:100% ">
+                <ng-view></ng-view>
+            </div>
+        </div>
     </div>
-
-
-
-
+  
+    <!--for toggle sidebar-->
+    <script src="js\jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap3.min.js"></script>
+    
+    <script>
+            $("#menu-toggle").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("active");
+            });
+    </script>
+    <!--for toggle sidebar-->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="bower_components/angular-print/angularPrint.js"></script>
@@ -232,6 +255,7 @@
     <script src="bower_components/angular-route/angular-route.min.js"></script>
 
     <!-- jQuery -->
+    <!-- <script src="js/jquery-1.11.1.min.js"></script> -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
 
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  -->
@@ -249,21 +273,14 @@
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
     <!-- <script src="js/bootstrap.js"></script> -->
-    <!-- <script src="js/bootstrap.min.js"></script> -->
     <!-- <script src="js/jquery.js"></script> -->
     <!-- <script src="js/jquery.min.js"></script> -->
 
-
-    
-
-    
-
+    >
+    <!--Materialize js-->
+    <!-- <script src="dist/js/sb-admin-2.js"></script> -->
 
     <!--Materialize js-->
-    <script src="dist/js/sb-admin-2.js"></script>
-
-    <!--Materialize js-->
-
 
 </body>
 

@@ -19,10 +19,8 @@ var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'ngRou
       when("/addSalesman", { templateUrl: "partials/addSalesman.html", controller: "addSalesman" }).
       when("/SmanReport", { templateUrl: "partials/SmanReport.html", controller: "SmanReport" }).
       when("/customSalesReport", { templateUrl: "partials/customSalesReport.html", controller: "customSalesReport" }).
-
-
-
-
+      when("/stockInventory", { templateUrl: "partials/stockInventory.html", controller: "stockInventory" }).
+      when("/editItem", { templateUrl: "partials/editItem.html", controller: "editItem" }).
 
       otherwise({ redirectTo: '/login' });
 
@@ -89,6 +87,10 @@ var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'ngRou
           scope.$apply(function () {
             scope.$parent[attrs.visible] = true;
           });
+          //Make sure the modal and backdrop are siblings (changes the DOM)
+          $(this).before($('.modal-backdrop'));
+          //Make sure the z-index is higher than the backdrop
+          $(this).css("z-index", parseInt($('.modal-backdrop').css('z-index')) + 1);
         });
 
         $(element).on('hidden.bs.modal', function () {
@@ -108,19 +110,19 @@ app.directive('barcode', function () {
     },
     link: function ($scope) {
       $scope.$watch('food', function (food) {
-        console.log($scope.myInput);
         var barcode = new bytescoutbarcode128();
         var space = "  ";
 
         barcode.valueSet($scope.myInput);
         barcode.setMargins(5, 5, 5, 5);
         barcode.setBarWidth(2);
-
-        var width = barcode.getMinWidth();
-
-        barcode.setSize(width, 800);
-
-        $scope.src = barcode.exportToBase64(width, 800, 0);
+        try {
+          var width = barcode.getMinWidth();
+          barcode.setSize(width, 800);
+          $scope.src = barcode.exportToBase64(width, 800, 0);
+        }
+        catch (err) {
+        }
       }, true);
     }
   }

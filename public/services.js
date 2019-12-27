@@ -82,9 +82,7 @@ angular.module('myApp.services', []).
         }
 
         ergastAPI.getCategory = function () {
-            console.log("get cat")
             var abc = { asd: 'asd' };
-            console.log("Getting")
             var req = {
                 method: 'POST',
                 //  url: 'http://burhanisystem.herokuapp.com/getCategory',
@@ -377,6 +375,74 @@ angular.module('myApp.services', []).
             return $http(req);
         }
 
+        ergastAPI.getCategoryBySupplier = function (abc) {
+
+            var req = {
+                method: 'POST',
+                url: urls + '/getCategoryBySupplier',
+                //  url: 'http://burhanisystem.herokuapp.com/getCategoryBySupplier',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.updateData = function (abc) {
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/updateData',
+                url: urls + '/updateData',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.getItems = function (abc) {
+
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/getItems',
+                url: urls + '/getItems',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.getAllItem = function () {
+            var abc = { asd: 'asd' };
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/getAllItem',
+                url: urls + '/getAllItem',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.paymentOrBill = function (abc) {
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/paymentOrBill',
+                url: urls + '/paymentOrBill',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.updateItem = function (abc) {
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/updateItem',
+                url: urls + '/updateItem',
+
+                data: abc
+            };
+            return $http(req);
+        }
 
         return ergastAPI;
     });

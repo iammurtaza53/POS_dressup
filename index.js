@@ -25,15 +25,16 @@ mongoose.connection.on('connected', function () {
 })
 mongoose.connection.on('error', err => console.log('MongoDB connection error: ${err}'));
 
-var category = mongoose.model('cat',
+/**table models */
+mongoose.model('cat',
   new Schema({ _id: String, categoryName: String }),
   'Categories');
 
-var supplier = mongoose.model('sup',
+mongoose.model('sup',
   new Schema({ _id: String, supplierName: String }),
   'Supplier');
 
-var product = mongoose.model('ItemCollection', // new item collection
+mongoose.model('ItemCollection', // new item collection
   new Schema({
     _id: String, barcode: Number, itemName: String, itemDesc: String, itemQty: Number,
     itemWholesale: Number, itemRetail: Number, itemCategory: String, itemSupplier: String,
@@ -41,11 +42,11 @@ var product = mongoose.model('ItemCollection', // new item collection
   }),
   'ItemCollection');
 
-var category = mongoose.model('saveBarcode',
+mongoose.model('saveBarcode',
   new Schema({ _id: String, barcode: Number }),
   'saveBarcode ');
 
-var salecolletion = mongoose.model('saleCollection', //salecollection daily
+mongoose.model('saleCollection', //salecollection daily
   new Schema({
     _id: String, date: String, time: String, soldItems: [Number],
     totalQty: Number, totalPrice: Number, totalDiscount: Number, profit: Number,
@@ -53,19 +54,23 @@ var salecolletion = mongoose.model('saleCollection', //salecollection daily
   }),
   'saleCollection');
 
-var suppBill = mongoose.model('supplierBill',  //not good should do something about it
+mongoose.model('supplierBill',  //not good should do something about it
   new Schema({
-    _id: String, date: String, billNo: String, particular: String, credit: Number,
-    debit: Number, balance: Number, Supplier: String
+    _id: String, date: String, bill_No: String, credit: Number, balance: Number,
+    debit: Number, supplierName: String, purchaseItems: [{
+      barcode: Number, purchaseQty: Number
+    }]
   }),
   'supplierBill');
-var salesman = mongoose.model('salesman', //salesman name need some work n it
+
+mongoose.model('salesman', //salesman name need some work n it
   new Schema({
     _id: String, name: String, fname: String, address: String, phone: String,
     CNIC: Number
   }),
   'salesman');
-var expense = mongoose.model('expense',
+
+mongoose.model('expense',
   new Schema({ _id: String, date: String, dayexpense: [Number], start: Number }),
   'expense');
 
@@ -318,81 +323,13 @@ app.post('/getSupDetail', function (req, res) { // did changing by mistake
   });
 });
 
-app.post('/addBill', function (req, res) {
 
-  // var collection = db.get('supplierBill');
-  var mod = mongoose.model('supplierBill');
-  var idBalance = "Balance_" + req.body.Supplier;
-
-  mod.findOne({ idBalance: idBalance }, {}, function (er, docu) {
-    if (docu !== null) {
-      mod.updateOne({ idBalance: idBalance }, { $inc: { balance: +req.body.balance } }, function (err, docs) {
-        if (err) { console.log(err); res.send(false); }
-        else {
-          if (req.body.bool === 0) {
-            mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
-              var bal = docu.balance + req.body.balance;
-              var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier, matchId: req.body.matchId };
-              mod.collection.insertOne(billed, function (err1, doc1) {
-                if (doc1) res.send(true);
-                else {
-                  res.send(false);
-                }
-              });
-            });
-          }
-          else {
-            var bal = docu.balance + req.body.balance;
-            var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier };
-            mod.collection.insertOne(Notbilled, function (err1, doc1) {
-              if (err1) {
-                res.send(false);
-              }
-              else {
-                res.send(true);
-              }
-
-            });
-          }
-        }
-      });
-    }
-    else {
-      var obj = { idBalance: idBalance, balance: req.body.balance };
-      mod.collection.insertOne(obj, function (err1, doc1) {
-        if (err1) res.send(false);
-        else {
-          if (req.body.bool === 0) {
-            mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
-              var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier, matchId: req.body.matchId };
-              mod.collection.insertOne(billed, function (err1, doc1) {
-                if (err1) res.send(false);
-                else {
-                  res.send(true);
-                }
-              });
-            });
-          }
-          else {
-            var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier };
-            mod.collection.insertOne(Notbilled, function (err1, doc1) {
-              if (err1) res.send(false);
-              else {
-                res.send(true);
-              }
-            });
-          }
-        }
-      });
-    }
-  });
-});
 
 app.post('/getBill', function (req, res) {
 
   // var collection = db.get('supplierBill');
   var collection = mongoose.model('supplierBill');
-  collection.find({ Supplier: req.body.Supplier }, {}, function (e, docs) {
+  collection.find({ supplierName: req.body.Supplier }, {}, function (e, docs) {
     if (docs) {
       res.send(docs);
     }
@@ -442,7 +379,6 @@ app.post('/getItem', function (req, res) {
 });
 
 app.post('/addItem', function (req, res) {
-
   var item = mongoose.model('ItemCollection');
   item.findOne({ itemName: req.body.itemName, itemSupplier: req.body.Supplier }, {}, function (e, docs1) { // check if supplier is alreay added
     if (docs1) {
@@ -475,7 +411,6 @@ app.post('/addItem', function (req, res) {
       });
     }
   });
-
 });
 
 
@@ -952,7 +887,7 @@ app.post('/deleteItems', function (req, res) {
           res.send(false);
         }
       });
-    }else{
+    } else {
       res.send(false);
     }
   });
@@ -985,6 +920,130 @@ app.post('/getProduct', function (req, res) {
   });
 });
 
+app.post('/getCategoryBySupplier', function (req, res) {
+  var item = mongoose.model('ItemCollection');
+  item.find({ itemSupplier: req.body.supplier }, function (findErr, find) {
+    if (find) {
+      res.send(find);
+    } else {
+      res.send(false)
+    }
+  })
+});
+
+
+app.post('/updateData', function (req, res) {
+  var collection = mongoose.model('ItemCollection');
+  for (i = 0; i < req.body.barcode.length; i++) {
+    collection.updateOne({ barcode: req.body.barcode[i] }, { $inc: { itemQty: +req.body.additem[i] } }, function (err, docs) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+  res.send(true);
+});
+
+app.post('/addBill', function (req, res) {
+  var enterBill = mongoose.model('supplierBill')
+  // var bill_No = req.body.supplierName+ '_'+ req.body.bill_No;
+  var insObj = {
+    date: req.body.date, bill_No: req.body.bill_No, credit: req.body.credit, debit: req.body.debit,
+    supplierName: req.body.supplierName, purchaseItems: req.body.purchaseItems
+  }
+  enterBill.findOne({ supplierName: req.body.supplierName, bill_No: req.body.bill_No }, function (findErr, find) {
+    if (find) {
+      res.send(false);
+    } else {
+      enterBill.collection.insertOne(insObj, function (insErr, ins) {
+        if (ins) {
+          res.send(true);
+        } else {
+          console.log(err)
+        }
+      });
+    }
+  });
+
+});
+
+app.post('/getItems', async function (req, res) {
+  var retriveData = [];
+  var collection = mongoose.model('ItemCollection');
+  for (i = 0; i < req.body.barcode.length; i++) {
+    var barcode = req.body.barcode[i];
+    barcode = S(barcode).toInt();
+    await collection.findOne({ barcode: barcode }).then(docs => {
+      if (docs) {
+        retriveData.push(docs);
+      }
+      else {
+        res.send(false);
+      }
+    });
+  }
+  res.send(retriveData);
+});
+
+app.post('/getAllItem', function (req, res) {
+
+  var collection = mongoose.model('ItemCollection');
+
+  collection.find({}, function (err, doc) {
+    if (err) {
+
+      res.send(false);
+    }
+    else {
+      res.send(doc);
+    }
+  });
+});
+
+app.post('/paymentOrBill', function (req, res) {
+
+  var supBill = mongoose.model('supplierBill');
+  if (req.body.select == 2) {
+    supBill.updateOne({ supplierName: req.body.supplierName, bill_No: req.body.bill_No },
+      { $inc: { debit: +req.body.debit, credit: +req.body.credit } }, function (updErr, updat) {
+        if (updat) {
+          res.send(true)
+        }
+      });
+  }
+  else if (req.body.select == 1) {
+    supBill.findOne({ supplierName: req.body.supplierName, bill_No: req.body.bill_No }, function (findErr, find) {
+      if (find) {
+        res.send(false);
+      } else {
+        var obj = { bill_No: req.body.bill_No, credit: req.body.credit, date: req.body.date, supplierName: req.body.supplierName, debit: req.body.debit }
+        supBill.collection.insertOne(obj, function (inErr, ins) {
+          if (ins) {
+            res.send(ins.bill_No);
+          }
+        });
+      }
+    });
+  }
+});
+
+app.post('/updateItem', function (req, res) {
+
+  var collection = mongoose.model('ItemCollection');
+
+  var updateObj = {
+    itemName: req.body.itemName, itemDesc: req.body.itemDesc, type: req.body.type,
+    size: req.body.size, code: req.body.code, itemSupplier: req.body.itemSupplier, itemCategory: req.body.itemCategory,
+    itemWholesale: req.body.itemWholesale, itemRetail: req.body.itemRetail, itemQty: req.body.itemQty
+  }
+  collection.updateOne({ barcode: req.body.barcode }, updateObj, function (err, docs) {
+    if (err) { res.send(false); }
+    else {
+      res.send(true);
+    }
+  });
+});
+
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -996,6 +1055,77 @@ function ensureAuthenticated(req, res, next) {
   }
   res.redirect("/#/login");
 }
+
+
+// app.post('/addBill', function (req, res) {
+
+//   // var collection = db.get('supplierBill');
+//   var mod = mongoose.model('supplierBill');
+//   var idBalance = "Balance_" + req.body.Supplier;
+
+//   mod.findOne({ idBalance: idBalance }, {}, function (er, docu) {
+//     if (docu !== null) {
+//       mod.updateOne({ idBalance: idBalance }, { $inc: { balance: +req.body.balance } }, function (err, docs) {
+//         if (err) { console.log(err); res.send(false); }
+//         else {
+//           if (req.body.bool === 0) {
+//             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
+//               var bal = docu.balance + req.body.balance;
+//               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier, matchId: req.body.matchId };
+//               mod.collection.insertOne(billed, function (err1, doc1) {
+//                 if (doc1) res.send(true);
+//                 else {
+//                   res.send(false);
+//                 }
+//               });
+//             });
+//           }
+//           else {
+//             var bal = docu.balance + req.body.balance;
+//             var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier };
+//             mod.collection.insertOne(Notbilled, function (err1, doc1) {
+//               if (err1) {
+//                 res.send(false);
+//               }
+//               else {
+//                 res.send(true);
+//               }
+
+//             });
+//           }
+//         }
+//       });
+//     }
+//     else {
+//       var obj = { idBalance: idBalance, balance: req.body.balance };
+//       mod.collection.insertOne(obj, function (err1, doc1) {
+//         if (err1) res.send(false);
+//         else {
+//           if (req.body.bool === 0) {
+//             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
+//               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier, matchId: req.body.matchId };
+//               mod.collection.insertOne(billed, function (err1, doc1) {
+//                 if (err1) res.send(false);
+//                 else {
+//                   res.send(true);
+//                 }
+//               });
+//             });
+//           }
+//           else {
+//             var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier };
+//             mod.collection.insertOne(Notbilled, function (err1, doc1) {
+//               if (err1) res.send(false);
+//               else {
+//                 res.send(true);
+//               }
+//             });
+//           }
+//         }
+//       });
+//     }
+//   });
+// });
 
 /*
 *function InsertInto(col1,i){
