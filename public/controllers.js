@@ -2467,7 +2467,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   }
 
   $scope.printOldBarcode = function (printQty, PitemBar) { // modal btn function to print barcode only print barcode nothing much
-    array = [];
+    arrays = [];
     var arr = printBarcodefunc(printQty, PitemBar);
 
     printwindow(arr, 0);
