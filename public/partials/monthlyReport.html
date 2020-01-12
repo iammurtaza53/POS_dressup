@@ -2,22 +2,18 @@
     <div class="col-lg-10">
         <h1> Monthly Sale's Report</h1>
     </div>
-    
-    <!-- /.col-lg-12 -->
 </div>
 <hr>
-<!-- /.panel-heading -->
 <div class="panel-body">
-
-
     <div class='row'>
-        <select class="form-control" ng-model="selectedCategories.categoryId"
-            ng-options="category.categoryId as category.name for category in chooseCategories"></select>
-        <br />
-        <br />
-        <button type="button" ng-click="generateReport(selectedCategories.categoryId)"
-            class="btn btn-lg btn-success from-control">Generate Report</button>
+        <span class="col-md-4">
+            <input type="month" ng-model="monthYear" class="form-control">
+        </span>
+        <button type="button" ng-click="generateReport(monthYear)"
+            class="btn btn-md btn-success from-control">Generate Report</button>
     </div>
+    <br>
+    <hr>
     <div class='row' ng-show="whenTable">
 
         <div print-section>
@@ -78,17 +74,11 @@
                     </tr>
                     <tr>
                         <td></td>
-
                         <td></td>
                         <td></td>
-
                         <td></td>
                         <td ng-model="mysale">Total Sale: Rs {{mysale}}</td>
                     </tr>
-
-
-
-
 
                 </tbody>
             </table>
@@ -98,7 +88,6 @@
             <p align="center">**************** Monthly Report ****************</p>
 
         </div>
-        <a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a>
+        <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
     </div>
 </div>
-

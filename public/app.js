@@ -21,6 +21,7 @@ var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'ngRou
       when("/customSalesReport", { templateUrl: "partials/customSalesReport.html", controller: "customSalesReport" }).
       when("/stockInventory", { templateUrl: "partials/stockInventory.html", controller: "stockInventory" }).
       when("/editItem", { templateUrl: "partials/editItem.html", controller: "editItem" }).
+      when("/monthlyExpense", { templateUrl: "partials/monthlyExpense.html", controller: "monthlyExpense" }).
 
       otherwise({ redirectTo: '/login' });
 

@@ -77,6 +77,10 @@ mongoose.model('expense',
 mongoose.model('eLedger',
   new Schema({ _id: String, date: String, time: String, expenseTitle: String, expense: Number }),
   'eLedger');
+
+mongoose.model('monthExpense',
+  new Schema({ _id: String, date: String, time: String, expenseTitle: String, expense: Number }),
+  'monthExpense');
 //make collection Model
 //collection function to pass and search for the collection
 
@@ -480,22 +484,32 @@ app.post('/getSoldItems', function (req, res) {
 app.post('/getMonthlySlip', function (req, res) {
   // var collection = db.get('saleCollection');
   var collection = mongoose.model('saleCollection');
-  var array = [];
-  var bool = false;
-  collection.find({}, function (err, doc) {
-    if (err) {
+  // var array = [];
+  // var bool = false;
+  // collection.find({}, function (err, doc) {
+  //   if (err) {
+  //     res.send(false);
+  //   }
+  //   else {
+  //     for (var i in doc) {
+
+  //       if (S(doc[i].date).contains(req.body.date) === true) {
+  //         array.push(doc[i]);
+  //       }
+  //     }
+  //     res.send(array);
+  //   }
+  // });
+
+
+  collection.find({ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
+    if (doc) {
+      res.send(doc);
+    } else {
       res.send(false);
     }
-    else {
-      for (var i in doc) {
-
-        if (S(doc[i].date).contains(req.body.date) === true) {
-          array.push(doc[i]);
-        }
-      }
-      res.send(array);
-    }
   });
+
 });
 
 app.post('/sync', function (req, res) {
@@ -767,18 +781,26 @@ app.post('/getSalemanReport', function (req, res) {
   var array = [];
   var cat = [];
 
-  collection.find({ salesman: req.body.name }, function (err, doc) {
-    if (err) {
-      res.send(false);
-    }
-    else {
-      for (var i in doc) {
+  // collection.find({ salesman: req.body.name }, function (err, doc) {
+  //   if (err) {
+  //     res.send(false);
+  //   }
+  //   else {
+  //     for (var i in doc) {
 
-        if (S(doc[i].date).contains(req.body.date) === true) {
-          array.push(doc[i]);
-        }
-      }
-      res.send(array);
+  //       if (S(doc[i].date).contains(req.body.date) === true) {
+  //         array.push(doc[i]);
+  //       }
+  //     }
+  //     res.send(array);
+  //   }
+  // });
+
+  collection.find({ $and: [{ salesman: req.body.name }, { date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
+    if(doc){
+      res.send(doc);
+    }else{
+      res.send(false);
     }
   });
 });
@@ -1044,6 +1066,56 @@ app.post('/updateItem', function (req, res) {
   });
 });
 
+app.post('/addExpense', function (req, res) {
+  var expense = mongoose.model('monthExpense');
+
+  var obj = { date: req.body.date, time: req.body.time, expenseTitle: req.body.expenseTitle, expense: req.body.expense }
+  expense.collection.insertOne(obj, function (err, docs) {
+    if (docs) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  })
+});
+
+app.post('/monthExpense', function (req, res) {
+  var expense = mongoose.model('monthExpense');
+
+  expense.find({ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
+    if (doc) {
+      res.send(doc);
+    } else {
+      console.log(err)
+    }
+  });
+
+
+
+
+  //   expense.logmessages.aggregate( [ {
+  //     $project: {
+  //        date: {
+  //           $dateFromString: {
+  //              dateString: '$date',
+  //              timezone: '$timezone'
+  //           }
+  //        }
+  //     }
+  //  } ] );
+});
+
+// app.post('/getYear', function(req,res){
+//   getMyear = mongoose.model('monthExpense');
+//   monthExpense.find({},function(err,doc){
+//     if(doc){
+//       for (date of doc){
+//         var dates=date.doc.slice(12,15);
+//         console.log(dates);
+//       }
+//     }
+//   })
+// });
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),

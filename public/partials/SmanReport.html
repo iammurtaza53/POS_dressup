@@ -14,18 +14,20 @@
                 </div>
                 <br>
                 <strong>Choose Salesman </strong></p><select class="form-control" ng-model="selectedSalesman.salesmanId"
-                    ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman" ng-change="openMonth()"></select></strong>
+                    ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman"
+                    ng-change="openMonth()"></select></strong>
                 </br>
                 <br />
-                <select class="form-control" ng-model="selectedMonth.monthId" ng-show="whenmonth"
-                    ng-options="month.monthId as month.name for month in chooseMonth"
-                    ng-change="callIt(selectedSalesman.salesmanId,selectedMonth.monthId)"></select>
+                <span class="col-md-4" ng-show="whenmonth">
+                    <input type="month" ng-model="monthYear" class="form-control"
+                        ng-change="callIt(selectedSalesman.salesmanId,monthYear)">
+                </span>
+                <br>
                 <br />
-
-                <!-- /.table-responsive -->
+                <hr>
                 <div class='row' ng-show="whenTable">
                     <div>
-                        <table class="table table-hover " >
+                        <table class="table table-hover ">
                             <thead>
                                 <tr>
                                     <th>Receipt Id</th>
@@ -37,15 +39,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                <tr  ng-repeat='s in sale'>
-                                    
-                                    <td >{{s._id}}</td>
+
+                                <tr ng-repeat='s in sale'>
+
+                                    <td>{{s._id}}</td>
                                     <td>{{s.totalQty}}</td>
                                     <td>{{s.time}}</td>
                                     <td>{{s.date}}</td>
                                     <td>Rs {{s.totalPrice}}</td>
-                                    
+
                                 </tr>
                                 <tr></tr>
                                 <tr>
@@ -85,11 +87,9 @@
                     <center><a ng-click="print()" class="btn btn-lg btn-success col-sm-2 ">Print</a></center>
                 </div>
             </div>
-            <!-- /.panel-body -->
         </div>
-        <!-- /.panel -->
     </div>
-    
+
     <modal title="Salesman's Montly Report" visible="showReturnModal">
         <div print-section>
 
@@ -157,9 +157,4 @@
         </div>
         <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
     </modal>
-    <!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
-
-
-<!-- /#wrapper -->

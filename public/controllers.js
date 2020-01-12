@@ -698,12 +698,12 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     else {
       var payObj = { supplierName: $scope.supplierChoose, date: $scope.date, bill_No: bill_No, debit: debit, credit: credit, select: myS }
       myService.paymentOrBill(payObj).success(function (res) {
-        if(res==false){
-        alert('Bill No for this Supplier is already added');
-        }else{  
+        if (res == false) {
+          alert('Bill No for this Supplier is already added');
+        } else {
           $route.reload();
         }
-        
+
 
       });
     }
@@ -933,41 +933,22 @@ app.controller("monthlyReport", function ($scope, myService, $routeParams, $loca
   $scope.whenTable = false;
   var da = new Date();
   $scope.mdate = da.toDateString();
-  $scope.chooseCategories = [
-    { categoryId: 0, name: "Choose Month", slug: "Choose Category" },
-    { categoryId: 1, name: "January", slug: "Jan" },
-    { categoryId: 2, name: "February", slug: "Feb" },
-    { categoryId: 3, name: "March", slug: "Mar" },
-    { categoryId: 4, name: "April", slug: "Apr" },
-    { categoryId: 5, name: "May", slug: "May" },
-    { categoryId: 6, name: "June", slug: "Jun" },
-    { categoryId: 7, name: "July", slug: "Jul" },
-    { categoryId: 8, name: "August", slug: "Aug" },
-    { categoryId: 9, name: "September", slug: "Sep" },
-    { categoryId: 10, name: "October", slug: "Oct" },
-    { categoryId: 11, name: "November", slug: "Nov" },
-    { categoryId: 12, name: "December", slug: "Dec" }];
 
-  $scope.selectedCategories = angular.copy($scope.chooseCategories[0]);
 
   var qty = 0;
 
   var retail = 0;
   var profit = 0;
-  $scope.generateReport = function (index) {
-    $scope.whenTable = true;
+  $scope.generateReport = function (monthYear) {
 
-    //console.log($scope.chooseCategories[index].slug);
-    var obj = { date: $scope.chooseCategories[index].slug };
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
+    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
 
-
-    $scope.chosed = $scope.chooseCategories[index].name;
-    //console.log($scope.chosed);
-
-
-
+    var obj={monthYear:monthYear}
     myService.getMonthlySlip(obj).success(function (res) {
       if (res) {
+
         for (var i in res) {
           qty = qty + res[i].totalQty;
           retail = retail + res[i].totalPrice;
@@ -977,6 +958,7 @@ app.controller("monthlyReport", function ($scope, myService, $routeParams, $loca
         $scope.myProfit = profit;
         $scope.mysale = retail;
         $scope.sale = res;
+        $scope.whenTable = true;
       }
     });
   }
@@ -1158,66 +1140,39 @@ app.controller("SmanReport", function ($scope, myService, $routeParams, $locatio
   $scope.whenTable = false;
   $scope.whenmonth = false;
   //console.log('here');
-  $rootScope.logout = function () {
-    $rootScope.menu = false;
-    $rootScope.posUser = false;
-    meLogin = false;
-    mepOs = false;
-    entryUser = false;
-    $rootScope.entryUser = false;
-    $rootScope.loggedIn = false;
-    $location.path('login');
-
-  }
-  var array1 = [];
+  
 
   getSman();
   var da = new Date();
   $scope.mdate = da.toDateString();
   $scope.date = da.toDateString();
   var wholesale = 0;
-  // $scope.mdate = da.toDateString();
-  $scope.chooseMonth = [
-    { monthId: 0, name: "Select Month", slug: "Choose Month" },
-    { monthId: 1, name: "January", slug: "Jan" },
-    { monthId: 2, name: "February", slug: "Feb" },
-    { monthId: 3, name: "March", slug: "Mar" },
-    { monthId: 4, name: "April", slug: "Apr" },
-    { monthId: 5, name: "May", slug: "May" },
-    { monthId: 6, name: "June", slug: "Jun" },
-    { monthId: 7, name: "July", slug: "Jul" },
-    { monthId: 8, name: "August", slug: "Aug" },
-    { monthId: 9, name: "September", slug: "Sep" },
-    { monthId: 10, name: "October", slug: "Oct" },
-    { monthId: 11, name: "November", slug: "Nov" },
-    { monthId: 12, name: "December", slug: "Dec" }];
-
-  $scope.selectedMonth = angular.copy($scope.chooseMonth[0]);
+ 
 
   $scope.openMonth = function () {
     $scope.whenmonth = true;
   }
 
-  $scope.callIt = function (id, id2) {
+  $scope.callIt = function (id, monthYear) {
     var qty = 0;
     var retail = 0;
     var profit = 0;
 
-    var obj = { name: $scope.chooseSalesman[id].name, date: $scope.chooseMonth[id2].slug };
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
+
+    var obj = { name: $scope.chooseSalesman[id].name, monthYear: monthYear };
     myService.getSalemanReport(obj).success(function (res) {
       if (res) {
-        //console.log('res', res);
         $scope.whenTable = true;
         for (var i in res) {
           qty = qty + res[i].totalQty;
-          //console.log(qty);
           retail = retail + res[i].totalPrice;
           profit = profit + res[i].profit;
         }
         $scope.totalit = qty;
         $scope.myProfit = profit;
         $scope.mysale = retail;
-        //console.log(res);
         $scope.sale = res;
         $scope.d = res.len.length;
       }
@@ -1232,14 +1187,12 @@ app.controller("SmanReport", function ($scope, myService, $routeParams, $locatio
   $scope.Reload = function () {
     $route.reload();
   }
+  var array1 = [];
 
   function getSman() {
     myService.getSaleman().success(function (res) {
+      array1 = [];
       if (res) {
-        for (var i = 0; i < array1.length; i++) {
-          array1.pop();
-        }
-        //console.log(res);
         for (var i in res) {
           var obj = { salesmanId: i, name: "" + res[i].name };
           array1.push(obj);
@@ -2758,6 +2711,48 @@ app.controller("editItem", function ($scope, myService, $interval, $routeParams,
 
 });
 
+app.controller("monthlyExpense", async function ($scope, myService, $interval,$route,$rootScope,$window) {
+  $rootScope.loggedOut = true;
+  $scope.shoModal = false;
+  $scope.showthis=false;
+
+  $interval(function () {
+    var d = new Date();
+    $scope.mtime = d.toLocaleTimeString();
+    $scope.mdate = d.toDateString();
+  }, 1000);
+
+  $scope.showExpense = function (monthYear) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
+    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
+
+    var obj={monthYear:monthYear}
+    myService.monthExpense(obj).success(function(res){
+      if(res){
+        $scope.texpense = 0;
+        for(i in res){
+          $scope.texpense = $scope.texpense + res[i].expense;
+        }
+        $scope.expenses =res;
+        $scope.showthis=true;
+      }
+    });
+  }
+
+  $scope.addExpense = function (title, amount) {
+    var obj = { date: $scope.mdate, time: $scope.mtime, expenseTitle: title, expense: amount }
+    myService.addExpense(obj).success(function (res) {
+      if (res) {
+        alert('Expense added "~"');
+        $route.reload();
+      }
+    });
+  }
+  $scope.print =function(){
+    $window.print();
+  }
+});
 
 
 /** Global Varaible */

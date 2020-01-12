@@ -13,7 +13,6 @@
         <tr>
             <th>Action</th>
             <th>Receipt Id</th>
-            <!-- <th>Barcodes</th> -->
             <th>Price</th>
             <th>Total Qty</th>
             <th>Total Discount</th>
@@ -25,7 +24,6 @@
         <tr ng-repeat="sale in sales | filter:query ">
             <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteSale(sale)">Delete</td>
             <td>{{sale._id}}</td>
-            <!-- <td>{{sale.soldItems}} </td> -->
             <td>Rs {{sale.totalPrice}}</td>
             <td>{{sale.totalQty}}</td>
             <td>Rs {{sale.totalDiscount}}</td>

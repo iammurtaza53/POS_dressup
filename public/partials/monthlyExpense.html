@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-10">
+        <h1>Monthly Expense Report</h1>
+    </div>
+    <div class="col-md-2" style="padding-top: 25px;">
+        <button class="btn btn-md btn-danger form-control" ng-click="shoModal=!showModal">Enter Expense</button>
+    </div>
+</div>
+<hr>
+<div class='row'>
+    <span class="col-md-4">
+        <input type="month" ng-model="monthYear" class="form-control">
+    </span>
+    <button type="button" ng-click="showExpense(monthYear)" class="btn btn-md btn-success from-control">Show
+        Expense</button>
+    <br>
+</div>
+<hr>
+<div ng-show="showthis">
+    <div print-section>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Expense Report: {{varaible}}</h3>
+            </div>
+            <center>
+                <div class="col-md-4">
+                    <p><b>Date:{{mdate}}</b></p>
+                    <p><b>Time:{{mtime}}</b></p>
+                </div>
+            </center>
+        </div>
+        <hr>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>expenseTitle</th>
+                    <th>expense</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='expense in expenses'>
+                    <td>{{expense.date}}</td>
+                    <td>{{expense.time}}</td>
+                    <td>{{expense.expenseTitle}}</td>
+                    <td>{{expense.expense}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <br>
+        <p ng-model="texpense" class=" col-md-offset-8"><strong>Total Expense: </strong>{{texpense}}</p>
+    </div>
+
+    <center><a ng-click="print()" class=" hidden-print btn btn-lg btn-success">Print</a></center>
+</div>
+
+<modal title="Add Expense" visible="shoModal">
+    <div class="row">
+        <label class="col-md-2">Title:</label>
+        <span class="col-md-10"><input class="form-control" type="text" name="title" ng-model="title"></span>
+        <br>
+        <br>
+        <label class="col-md-2">Amount:</label>
+        <span class="col-md-10"><input class="form-control" type="number" name="amount" ng-model="amount"></span>
+    </div>
+    <hr>
+    <button class="btn btn-md btn-success col-md-offset-9" ng-click="addExpense(title,amount)">Add Expense</button>
+</modal>
