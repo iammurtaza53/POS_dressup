@@ -327,8 +327,6 @@ app.post('/getSupDetail', function (req, res) { // did changing by mistake
   });
 });
 
-
-
 app.post('/getBill', function (req, res) {
 
   // var collection = db.get('supplierBill');
@@ -417,8 +415,6 @@ app.post('/addItem', function (req, res) {
   });
 });
 
-
-
 app.post('/getCategory', function (req, res) {
 
   var collection = mongoose.model('cat');
@@ -484,23 +480,6 @@ app.post('/getSoldItems', function (req, res) {
 app.post('/getMonthlySlip', function (req, res) {
   // var collection = db.get('saleCollection');
   var collection = mongoose.model('saleCollection');
-  // var array = [];
-  // var bool = false;
-  // collection.find({}, function (err, doc) {
-  //   if (err) {
-  //     res.send(false);
-  //   }
-  //   else {
-  //     for (var i in doc) {
-
-  //       if (S(doc[i].date).contains(req.body.date) === true) {
-  //         array.push(doc[i]);
-  //       }
-  //     }
-  //     res.send(array);
-  //   }
-  // });
-
 
   collection.find({ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
     if (doc) {
@@ -552,47 +531,39 @@ app.post('/deleteSale', function (req, res) {
   });
 });
 
+app.post('/showBill', async function (req, res) {
+
+  var collect = mongoose.model('ItemCollection');
+  var soldItems = req.body.soldItems;
+  var array = [];
+  for (var i in soldItems) {
+    await collect.findOne({ barcode: soldItems[i] }).then(resp => {
+      if (resp.length != 0) {
+        array[i] = resp;
+      }
+    })
+  }
+  res.send(array);
+
+});
+
 app.post('/returnSale', function (req, res) {
 
-  var collect = mongoose.model('saleCollection');
-  var arr = [];
-  var mysold = [];
-  for (var i = 0; i < req.body.sold.length; i++) {
-    var barcode = S(req.body.sold[i].barcode).chompLeft('000000000').s;
-    barcode = S(barcode).toInt();
-    mysold.push(barcode);
-  }
-  var obj = { date: req.body.date, time: req.body.time, soldItems: mysold, totalQty: req.body.totalQty, totalPrice: req.body.sale, totalDiscount: req.body.discount, profit: req.body.profit };
-  var my = true;
-  collect.collection.insertOne(obj, function (err1, doc1) {
-    if (err1) res.send(false);
-    else {
-      for (var i = 0; i < req.body.sold.length;) {
-        if (req.body.sold[i].itemQty > 0) {
-          var qty = req.body.sold[i].itemQty - 1;
+  var collect = mongoose.model('ItemCollection');
+  var sale = mongoose.model('saleCollection');
+  mongoose.set('useFindAndModify', false);
+  collect.findOneAndUpdate({ barcode: req.body.barcode }, { $inc: { itemQty: +1 } }, function (updateErr, upd) {
+    if (res) {
+      sale.updateOne({ date: req.body.date, time: req.body.time }, {
+        totalPrice: req.body.totalPrice, totalDiscount: req.body.totalDiscount, $pull: { soldItems: upd.barcode }, $inc: { totalQty: -1 }
+      }, function (delE, del) {
+        if (del) {
+          res.send(del);
         }
-        var barcode = S(req.body.sold[i].barcode).chompLeft('000000000').s;
-        barcode = S(barcode).toInt();
-        var id = barcode;
-
-        var myobj = { itemName: req.body.sold[i].itemName, itemDesc: req.body.sold[i].itemDesc, id: id, date: req.body.date, time: req.body.time, itemRetail: req.body.sold[i].itemRetail, itemQty: '1', itemSupplier: req.body.sold[i].itemSupplier };
-
-        i++;
-        arr.push(id);
-        for (var j = 0; j < arr.length; j++) {
-          if (arr[j] === id && i !== 1) {
-            if (qty > 0) {
-              qty = qty - 1;
-            }
-          }
-        }
-        var k = i;
-
-        upDateit2(id, qty, k - 1, req.body.sold.length, res, req.body.time, req.body.date);
-
-      }
+      });
     }
   });
+
 });
 
 app.post('/sendSale', function (req, res) {
@@ -651,33 +622,7 @@ app.post('/sendSale', function (req, res) {
 * enough to "optimize" the code below.
 * Now close this file and go play with something else.
 */
-function upDateit2(id, qty, i, length, res, time, date) {
-  // var collectio = db.get(collect);
-  var collectio = mongoose.model('ItemCollection')
-  // var collection = db.get('saleCollection');
-  var collection = mongoose.model('saleCollection');
 
-  collectio.updateOne({ barcode: id }, { $inc: { itemQty: +1 } }, function (errr, docs) {
-    if (errr) res.send(false);
-  });
-
-  if (i === length - 1) {
-    collection.findOne({ time: time }, {}, function (e, docs1) {
-      if (docs1) {
-        if (docs1.date == date) {
-          var ids = docs1._id;
-          res.send(ids);
-        }
-      }
-      else {
-        res.send(false);
-      }
-    });
-  }
-  else {
-    return 0;
-  }
-}
 
 function upDateit(id, qty, i, length, res, time, date) {
 
@@ -781,25 +726,10 @@ app.post('/getSalemanReport', function (req, res) {
   var array = [];
   var cat = [];
 
-  // collection.find({ salesman: req.body.name }, function (err, doc) {
-  //   if (err) {
-  //     res.send(false);
-  //   }
-  //   else {
-  //     for (var i in doc) {
-
-  //       if (S(doc[i].date).contains(req.body.date) === true) {
-  //         array.push(doc[i]);
-  //       }
-  //     }
-  //     res.send(array);
-  //   }
-  // });
-
   collection.find({ $and: [{ salesman: req.body.name }, { date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
-    if(doc){
+    if (doc) {
       res.send(doc);
-    }else{
+    } else {
       res.send(false);
     }
   });
@@ -871,7 +801,6 @@ app.post('/weeklyReport', async function (req, res) {
         collect = collect.concat(resp);
       }
     })
-
   }
   res.send(collect);
 
@@ -952,7 +881,6 @@ app.post('/getCategoryBySupplier', function (req, res) {
     }
   })
 });
-
 
 app.post('/updateData', function (req, res) {
   var collection = mongoose.model('ItemCollection');
@@ -1091,31 +1019,8 @@ app.post('/monthExpense', function (req, res) {
   });
 
 
-
-
-  //   expense.logmessages.aggregate( [ {
-  //     $project: {
-  //        date: {
-  //           $dateFromString: {
-  //              dateString: '$date',
-  //              timezone: '$timezone'
-  //           }
-  //        }
-  //     }
-  //  } ] );
 });
 
-// app.post('/getYear', function(req,res){
-//   getMyear = mongoose.model('monthExpense');
-//   monthExpense.find({},function(err,doc){
-//     if(doc){
-//       for (date of doc){
-//         var dates=date.doc.slice(12,15);
-//         console.log(dates);
-//       }
-//     }
-//   })
-// });
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -1127,116 +1032,75 @@ function ensureAuthenticated(req, res, next) {
   }
   res.redirect("/#/login");
 }
+/*
+// app.post('/returnSale', function (req, res) {
 
-
-// app.post('/addBill', function (req, res) {
-
-//   // var collection = db.get('supplierBill');
-//   var mod = mongoose.model('supplierBill');
-//   var idBalance = "Balance_" + req.body.Supplier;
-
-//   mod.findOne({ idBalance: idBalance }, {}, function (er, docu) {
-//     if (docu !== null) {
-//       mod.updateOne({ idBalance: idBalance }, { $inc: { balance: +req.body.balance } }, function (err, docs) {
-//         if (err) { console.log(err); res.send(false); }
-//         else {
-//           if (req.body.bool === 0) {
-//             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
-//               var bal = docu.balance + req.body.balance;
-//               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier, matchId: req.body.matchId };
-//               mod.collection.insertOne(billed, function (err1, doc1) {
-//                 if (doc1) res.send(true);
-//                 else {
-//                   res.send(false);
-//                 }
-//               });
-//             });
-//           }
-//           else {
-//             var bal = docu.balance + req.body.balance;
-//             var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: bal, Supplier: req.body.Supplier };
-//             mod.collection.insertOne(Notbilled, function (err1, doc1) {
-//               if (err1) {
-//                 res.send(false);
-//               }
-//               else {
-//                 res.send(true);
-//               }
-
-//             });
-//           }
-//         }
-//       });
-//     }
+//   var collect = mongoose.model('saleCollection');
+//   var arr = [];
+//   var mysold = [];
+//   for (var i = 0; i < req.body.sold.length; i++) {
+//     var barcode = S(req.body.sold[i].barcode).chompLeft('000000000').s;
+//     barcode = S(barcode).toInt();
+//     mysold.push(barcode);
+//   }
+//   var obj = { date: req.body.date, time: req.body.time, soldItems: mysold, totalQty: req.body.totalQty, totalPrice: req.body.sale, totalDiscount: req.body.discount, profit: req.body.profit };
+//   var my = true;
+//   collect.collection.insertOne(obj, function (err1, doc1) {
+//     if (err1) res.send(false);
 //     else {
-//       var obj = { idBalance: idBalance, balance: req.body.balance };
-//       mod.collection.insertOne(obj, function (err1, doc1) {
-//         if (err1) res.send(false);
-//         else {
-//           if (req.body.bool === 0) {
-//             mod.findOne({ matchId: req.body.matchId }, {}, function (e, docs) {
-//               var billed = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier, matchId: req.body.matchId };
-//               mod.collection.insertOne(billed, function (err1, doc1) {
-//                 if (err1) res.send(false);
-//                 else {
-//                   res.send(true);
-//                 }
-//               });
-//             });
-//           }
-//           else {
-//             var Notbilled = { date: req.body.date, billNo: req.body.billNo, particular: req.body.particular, credit: req.body.credit, debit: req.body.debit, balance: req.body.balance, Supplier: req.body.Supplier };
-//             mod.collection.insertOne(Notbilled, function (err1, doc1) {
-//               if (err1) res.send(false);
-//               else {
-//                 res.send(true);
-//               }
-//             });
+//       for (var i = 0; i < req.body.sold.length;) {
+//         if (req.body.sold[i].itemQty > 0) {
+//           var qty = req.body.sold[i].itemQty - 1;
+//         }
+//         var barcode = S(req.body.sold[i].barcode).chompLeft('000000000').s;
+//         barcode = S(barcode).toInt();
+//         var id = barcode;
+
+//         var myobj = { itemName: req.body.sold[i].itemName, itemDesc: req.body.sold[i].itemDesc, id: id, date: req.body.date, time: req.body.time, itemRetail: req.body.sold[i].itemRetail, itemQty: '1', itemSupplier: req.body.sold[i].itemSupplier };
+
+//         i++;
+//         arr.push(id);
+//         for (var j = 0; j < arr.length; j++) {
+//           if (arr[j] === id && i !== 1) {
+//             if (qty > 0) {
+//               qty = qty - 1;
+//             }
 //           }
 //         }
-//       });
+//         var k = i;
+
+//         upDateit2(id, qty, k - 1, req.body.sold.length, res, req.body.time, req.body.date);
+
+//       }
 //     }
 //   });
 // });
 
-/*
-*function InsertInto(col1,i){
-*
-*console.log(col1,i);
-*   var col1
-*    var collection=db.get(col1);
-*
-*      collection.find({},function (err, doc) {
-*      if(doc){
-*       var collection1=db1.get(col1);
-*      //console.log(col1,doc);
-*      collection1.insert(doc, function (err1, doc1) {
-*        return i;
-*         });
-*       }
-*      });
-*  }
-*
-*function CopyDatabase (res) {
-* db1.driver.dropDatabase();
-*
-*   //console.log('Me ONLINE');
-*var i=0;
-*var myBoo=false;
-*db.driver.collectionNames(function(err,docs){
-* if(docs){
-*  for(;i<docs.length;i++){
-*   //console.log(docs,i);
-*  InsertInto(docs[i].name,i);
-* if(i===docs.length){
-*  //console.log('send');
-*       res.send(true);
-*    }
-*}
-*}
-*else{
-*  res.send(false);
-*}
-*});
-*}
+function upDateit2(id, qty, i, length, res, time, date) {
+  // var collectio = db.get(collect);
+  var collectio = mongoose.model('ItemCollection')
+  // var collection = db.get('saleCollection');
+  var collection = mongoose.model('saleCollection');
+
+  collectio.updateOne({ barcode: id }, { $inc: { itemQty: +1 } }, function (errr, docs) {
+    if (errr) res.send(false);
+  });
+
+  if (i === length - 1) {
+    collection.findOne({ time: time }, {}, function (e, docs1) {
+      if (docs1) {
+        if (docs1.date == date) {
+          var ids = docs1._id;
+          res.send(ids);
+        }
+      }
+      else {
+        res.send(false);
+      }
+    });
+  }
+  else {
+    return 0;
+  }
+}
 */

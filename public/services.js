@@ -444,18 +444,6 @@ angular.module('myApp.services', []).
             return $http(req);
         }
 
-        ergastAPI.getYear = function () {
-            var abc = { asd: 'asd' };
-            var req = {
-                method: 'POST',
-                //  url: 'http://burhanisystem.herokuapp.com/getYear',
-    
-                url: urls + '/getYear',
-                data: abc
-            };
-            return $http(req);
-        }
-
         ergastAPI.addExpense = function (abc) {
             var req = {
                 method: 'POST',
@@ -473,6 +461,17 @@ angular.module('myApp.services', []).
                 method: 'POST',
                 url: urls + '/monthExpense',
                 //  url: 'http://burhanisystem.herokuapp.com/monthExpense',
+
+                data: abc
+            };
+            return $http(req);
+        }
+
+        ergastAPI.showBill = function (abc) {
+            var req = {
+                method: 'POST',
+                //  url: 'http://burhanisystem.herokuapp.com/showBill',
+                url: urls + '/showBill',
 
                 data: abc
             };

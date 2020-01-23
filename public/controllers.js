@@ -885,6 +885,7 @@ app.controller("newBill", function ($scope, myService, $routeParams, $location, 
 
 app.controller("lastSale", function ($scope, myService, $routeParams, $location, $rootScope, $route) {
   $rootScope.loggedOut = true;
+  $scope.showModal = false;
   $rootScope.logout = function () {
     $rootScope.menu = false;
     $rootScope.posUser = false;
@@ -912,8 +913,50 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
       }
     });
   }
+
   $scope.printSlip = function () {
     $window.print();
+  }
+
+  $scope.showBill = function (sale) {
+    $scope.bill = sale;
+    var obj = { soldItems: sale.soldItems }
+
+    myService.showBill(obj).success(function (res) {
+      if (res != 0) {
+        $scope.sold = res;
+        $scope.showModal = true;
+      }
+    });
+  };
+
+  $scope.return = function (thisItem, bill) {
+
+    if (bill.soldItems.length != 1) {
+      /**Find Item On a Dixcount and Evaluate discout and total price*/
+      orignal = bill.totalDiscount + bill.totalPrice;
+      eachDisPer = (bill.totalDiscount / orignal);
+      discountOnItem = Math.round(thisItem.itemRetail * eachDisPer);
+      discountNow = bill.totalDiscount - discountOnItem;
+      orignalNow = orignal - thisItem.itemRetail;
+      totalNow = orignalNow - discountNow;
+
+      var thisObj = { barcode: thisItem.barcode, date: bill.date, time: bill.time, totalPrice: totalNow, totalDiscount: discountNow }
+      myService.returnSale(thisObj).success(function (res) {
+        if (res) {
+          var index = bill.soldItems.indexOf(thisItem.barcode);
+          bill.soldItems.splice(index,1);
+          $scope.sold.splice(index, 1);
+          $scope.bill.totalPrice = totalNow;
+          $scope.bill.totalDiscount = discountNow;
+          $scope.bill.totalQty--;
+        }
+      });
+    }
+  }
+
+  $scope.Done= function (){
+    $scope.showModal=false;
   }
 });
 
@@ -943,9 +986,9 @@ app.controller("monthlyReport", function ($scope, myService, $routeParams, $loca
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
-    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
+    monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
 
-    var obj={monthYear:monthYear}
+    var obj = { monthYear: monthYear }
     myService.getMonthlySlip(obj).success(function (res) {
       if (res) {
 
@@ -1140,14 +1183,14 @@ app.controller("SmanReport", function ($scope, myService, $routeParams, $locatio
   $scope.whenTable = false;
   $scope.whenmonth = false;
   //console.log('here');
-  
+
 
   getSman();
   var da = new Date();
   $scope.mdate = da.toDateString();
   $scope.date = da.toDateString();
   var wholesale = 0;
- 
+
 
   $scope.openMonth = function () {
     $scope.whenmonth = true;
@@ -1159,7 +1202,7 @@ app.controller("SmanReport", function ($scope, myService, $routeParams, $locatio
     var profit = 0;
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
+    monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
 
     var obj = { name: $scope.chooseSalesman[id].name, monthYear: monthYear };
     myService.getSalemanReport(obj).success(function (res) {
@@ -2233,18 +2276,6 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     }
   }
 
-
-  // $scope.enterBalance = function (debit, credit) { // balance Debit and credit
-
-  //     $scope.balanceModal = false;
-  //     setTimeout(() => { // delay to open showPurcahse modal to get focus
-  //       $scope.purchased = purchase;
-  //       $scope.showPurchase = true;
-  //     }, 400)
-
-
-  // }
-
   $scope.enter = function ($event) { // this function only to make input to go next line when Enter
     var that = document.activeElement; //this is used to get focus function
     var keyCode = $event.which || $event.keyCode;
@@ -2711,10 +2742,10 @@ app.controller("editItem", function ($scope, myService, $interval, $routeParams,
 
 });
 
-app.controller("monthlyExpense", async function ($scope, myService, $interval,$route,$rootScope,$window) {
+app.controller("monthlyExpense", async function ($scope, myService, $interval, $route, $rootScope, $window) {
   $rootScope.loggedOut = true;
   $scope.shoModal = false;
-  $scope.showthis=false;
+  $scope.showthis = false;
 
   $interval(function () {
     var d = new Date();
@@ -2725,17 +2756,17 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval,$r
   $scope.showExpense = function (monthYear) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
-    monthYear = [monthNames[monthYear.getMonth()] , monthYear.getFullYear()];
+    monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
 
-    var obj={monthYear:monthYear}
-    myService.monthExpense(obj).success(function(res){
-      if(res){
+    var obj = { monthYear: monthYear }
+    myService.monthExpense(obj).success(function (res) {
+      if (res) {
         $scope.texpense = 0;
-        for(i in res){
+        for (i in res) {
           $scope.texpense = $scope.texpense + res[i].expense;
         }
-        $scope.expenses =res;
-        $scope.showthis=true;
+        $scope.expenses = res;
+        $scope.showthis = true;
       }
     });
   }
@@ -2749,7 +2780,7 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval,$r
       }
     });
   }
-  $scope.print =function(){
+  $scope.print = function () {
     $window.print();
   }
 });

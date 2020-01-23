@@ -1,9 +1,12 @@
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Last Sold Items</h1>
+    <input ng-model="search.$" hidden>
+    <h1 class="col-md-5">Last Sold Items</h1>
+    <div class="col-md-offset-9">
+        <h1><input class="form-control" type="text" ng-model="search._id" placeholder="Receipt ID"></h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
+<hr>
 <!-- /.panel-heading -->
 
 
@@ -18,10 +21,11 @@
             <th>Total Discount</th>
             <th>Date</th>
             <th>Time</th>
+            <th>Bill</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="sale in sales | filter:query ">
+        <tr ng-repeat="sale in sales | filter:search ">
             <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteSale(sale)">Delete</td>
             <td>{{sale._id}}</td>
             <td>Rs {{sale.totalPrice}}</td>
@@ -29,6 +33,49 @@
             <td>Rs {{sale.totalDiscount}}</td>
             <td>{{sale.date}}</td>
             <td>{{sale.time}}</td>
+            <td><button class="btn btn-secondary" ng-click="showBill(sale)">Show</button></td>
         </tr>
     </tbody>
 </table>
+
+<modal title="Sale Receipt" visible="showModal">
+    <h3 align="center">Sale Receipt</h3>
+    <br />
+    <p align="left" ng-model="mdate"><strong>Date:</strong> {{bill.date}} </p>
+    <p align="left" ng-model="mtime"><strong>Time:</strong> {{bill.time}} </p>
+    <p ng-model="slipId"><strong>Receipt ID:</strong> {{bill._id}}</p>
+    <p style="text-transform: capitalize;"><strong>Salesman:</strong> {{bill.salesman}} </p>
+    <hr />
+    <br />
+    <table class="table table-hover ">
+        <thead style="border-bottom:2px solid">
+            <tr style="border-bottom:2px solid;">
+                <th>Barcod</th>
+                <th>Name&nbsp;&nbsp;&nbsp;</th>
+                <th>Description</th>
+                <th>Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th>return</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='thisSold in sold'>
+                <td>{{thisSold.barcode}}</td>
+                <td>{{thisSold.itemName}}</td>
+                <td>{{thisSold.itemDesc}}</td>
+                <td>Rs {{thisSold.itemRetail}}</td>
+                <td><button class="btn btn-secondary" ng-click="return(thisSold,bill)">Return</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <strong>Total Items:</strong> {{ bill.totalQty }}<br>
+        <strong>Total Price :</strong> {{ bill.totalPrice}}<br>
+        <strong>Discount:</strong> Rs {{ bill.totalDiscount }}<br>
+        <strong></strong>
+        
+    </div>
+
+    <center><a ng-click="Done()" class="btn btn-md btn-success">Done</a></center>
+
+</modal>
