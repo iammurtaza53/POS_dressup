@@ -886,6 +886,7 @@ app.controller("newBill", function ($scope, myService, $routeParams, $location, 
 app.controller("lastSale", function ($scope, myService, $routeParams, $location, $rootScope, $route) {
   $rootScope.loggedOut = true;
   $scope.showModal = false;
+  
   $rootScope.logout = function () {
     $rootScope.menu = false;
     $rootScope.posUser = false;
@@ -896,6 +897,7 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
     $rootScope.loggedIn = false;
     $location.path('login')
   }
+
   myService.getSoldItems().success(function (res) {
     if (res) {
       $scope.sales = res;
@@ -919,6 +921,7 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
   }
 
   $scope.showBill = function (sale) {
+    console.log(sale)
     $scope.bill = sale;
     var obj = { soldItems: sale.soldItems }
 
@@ -949,7 +952,7 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
           $scope.sold.splice(index, 1);
           $scope.bill.totalPrice = totalNow;
           $scope.bill.totalDiscount = discountNow;
-          $scope.bill.totalQty--;
+          $scope.bill.totalQty--; 
         }
       });
     }

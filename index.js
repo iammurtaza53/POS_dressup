@@ -542,6 +542,10 @@ app.post('/showBill', async function (req, res) {
         array[i] = resp;
       }
     })
+      .catch((err) => {
+        console.log(err)
+
+      })
   }
   res.send(array);
 
