@@ -1,3 +1,3 @@
 @echo off
 
-mongod --dbpath F:\mongo\db
+E:\dressData\db2\bin\mongod.exe --dbpath E:\dressData\db2
