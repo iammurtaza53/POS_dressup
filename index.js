@@ -3,7 +3,7 @@ var express = require('express')
   , cors = require('cors')
   , util = require('util')
   , LocalStrategy = require('passport-local').Strategy;
-
+ 
 
 
 
@@ -973,7 +973,7 @@ app.post('/paymentOrBill', function (req, res) {
         var obj = { bill_No: req.body.bill_No, credit: req.body.credit, date: req.body.date, supplierName: req.body.supplierName, debit: req.body.debit }
         supBill.collection.insertOne(obj, function (inErr, ins) {
           if (ins) {
-            res.send(ins.bill_No);
+            res.send(ins.ops[0].bill_No);
           }
         });
       }
@@ -1013,8 +1013,10 @@ app.post('/addExpense', function (req, res) {
 
 app.post('/monthExpense', function (req, res) {
   var expense = mongoose.model('monthExpense');
-
-  expense.find({ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
+  
+  var fiter={ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }
+  expense.find(fiter,function (err, doc) {
+    // console.log(doc)
     if (doc) {
       res.send(doc);
     } else {

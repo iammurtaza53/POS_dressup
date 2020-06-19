@@ -46,7 +46,7 @@
                                 <td>Rs. {{sale.debit}}</td>
                                 <td>Rs. {{sale.credit}}</td>
                                 <td>Rs. {{sale.debit-sale.credit}}</td>
-                                <td><button type="button" ng-click="getByBillNo(sale)"
+                                <td><button  ng-if="sale.purchaseItems.length>0" type="button" ng-click="getByBillNo(sale)"
                                         class="btn btn-sm btn-info">showBill</button></td>
                             </tr>
                             <tr style="font-weight: bold;">
@@ -188,7 +188,7 @@
             <h3>Supplier: {{supplierChoose}}</h3>
         </span></center>
     <br>
-    <form>
+    <form name="billForm" >
         </br>
         <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
         </br>
@@ -202,7 +202,7 @@
         <center><button type="button" ng-click="addBill(bill_No,debit,credit)" class="btn btn-lg btn-success">Add
                 Bill</button></center>
 
-    </form>
+    </form> 
 </modal>
 
 <modal title="PAYMENT" visible=showpay>
@@ -211,7 +211,7 @@
             <h3>Supplier: {{supplierChoose}}</h3>
         </span></center>
     <br>
-    <form>
+    <form name="billForm" >
         </br>
         <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
         </br>

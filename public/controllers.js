@@ -642,7 +642,9 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
   }
 
   $scope.whenTable = false;
+  var suppId = undefined
   $scope.getSup = function (id) {
+    suppId = id;
     $scope.supplierChoose = $scope.chooseSupplier[id].name
     var obj = { Supplier: $scope.chooseSupplier[id].name };
     myService.getBill(obj).success(function (res) {
@@ -665,9 +667,11 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
   $scope.getByBillNo = function (sale) {
     $scope.totalit = 0;
     var barcode = [];
+    console.log(sale.purchaseItems)
     for (i in sale.purchaseItems) {
       barcode.push(sale.purchaseItems[i].barcode)
     }
+
     var getItemObj = { barcode: barcode }
     myService.getItems(getItemObj).success(function (res) {
       for (i in sale.purchaseItems) {
@@ -698,10 +702,19 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     else {
       var payObj = { supplierName: $scope.supplierChoose, date: $scope.date, bill_No: bill_No, debit: debit, credit: credit, select: myS }
       myService.paymentOrBill(payObj).success(function (res) {
+        console.log(res)
         if (res == false) {
           alert('Bill No for this Supplier is already added');
         } else {
-          $route.reload();
+          // $route.reload();
+          $scope.getSup(suppId)
+          $scope.showpay = false;
+          $scope.showbill = false;
+          $scope.bill_No = '';
+          $scope.debit = '';
+          $scope.credit = '';
+          
+          // angular.copy($scope.billForm);
         }
 
 
@@ -2386,7 +2399,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
           arr = printBarcodefunc(purchase[i].additem, purchase[i]);
         }
         printwindow(arr, 1);
-        $scope.barcodemodal = false;
+        $scope.barcodemodal = false
+        setTimeout(function(){  $window.location.reload(); }, 3000);
+        
       }
     });
     // $window.location.reload()
@@ -2398,6 +2413,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   $scope.barcode = function (item) { // appear modal to ask for quantity
     $scope.barcodemodal = true;
     $scope.PitemBar = item;
+   
   }
 
   $scope.addNewItem = function () {
@@ -2754,15 +2770,16 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
     var d = new Date();
     $scope.mtime = d.toLocaleTimeString();
     $scope.mdate = d.toDateString();
-  }, 1000);
+  }, 1000)
 
   $scope.showExpense = function (monthYear) {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
     monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
 
     var obj = { monthYear: monthYear }
     myService.monthExpense(obj).success(function (res) {
+      console.log(res)
       if (res) {
         $scope.texpense = 0;
         for (i in res) {

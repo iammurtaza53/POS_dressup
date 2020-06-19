@@ -60,11 +60,12 @@
         </thead>
         <tbody>
             <tr ng-repeat='thisSold in sold'>
+                {{}}
                 <td>{{thisSold.barcode}}</td>
                 <td>{{thisSold.itemName}}</td>
                 <td>{{thisSold.itemDesc}}</td>
                 <td>Rs {{thisSold.itemRetail}}</td>
-                <td><button class="btn btn-secondary" ng-click="return(thisSold,bill)">Return</button></td>
+                <td><button ng-show="sold.length>1 " class="btn btn-secondary" ng-click="return(thisSold,bill)">Return</button></td>
             </tr>
         </tbody>
     </table>
