@@ -480,7 +480,6 @@ app.post('/getSoldItems', function (req, res) {
 app.post('/getMonthlySlip', function (req, res) {
   // var collection = db.get('saleCollection');
   var collection = mongoose.model('saleCollection');
-
   collection.find({ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }, function (err, doc) {
     if (doc) {
       res.send(doc);
@@ -811,7 +810,8 @@ app.post('/weeklyReport', async function (req, res) {
 });
 
 app.post('/expenseLedger', function (req, res) {
-  var eDetail = mongoose.model('eLedger')
+  // var eDetail = mongoose.model('eLedger')
+  var eDetail = mongoose.model('monthExpense')
   var obj2 = { date: req.body.date, time: req.body.time, expenseTitle: req.body.eTitle, expense: req.body.expense }
   eDetail.collection.insertOne(obj2, function (err, doc) {
     if (doc) {
@@ -821,7 +821,8 @@ app.post('/expenseLedger', function (req, res) {
 });
 
 app.post('/dailyexpense', function (req, res) {
-  var eDetail = mongoose.model('eLedger');
+  // var eDetail = mongoose.model('eLedger');
+  var eDetail = mongoose.model('monthExpense');
   eDetail.find({ date: req.body.date }, function (err, doc) {
     if (doc != null) {
       res.send(doc);
@@ -958,8 +959,8 @@ app.post('/paymentOrBill', function (req, res) {
 
   var supBill = mongoose.model('supplierBill');
   if (req.body.select == 2) {
-    supBill.updateOne({ supplierName: req.body.supplierName, bill_No: req.body.bill_No },
-      { $inc: { debit: +req.body.debit, credit: +req.body.credit } }, function (updErr, updat) {
+    var obj = {credit: req.body.credit, date: req.body.date, supplierName: req.body.supplierName }
+    supBill.collection.insertOne(obj, function (updErr, updat) {
         if (updat) {
           res.send(true)
         }
@@ -1013,7 +1014,6 @@ app.post('/addExpense', function (req, res) {
 
 app.post('/monthExpense', function (req, res) {
   var expense = mongoose.model('monthExpense');
-  
   var fiter={ $and: [{ date: { $regex: req.body.monthYear[0] } }, { date: { $regex: req.body.monthYear[1] } }] }
   expense.find(fiter,function (err, doc) {
     // console.log(doc)

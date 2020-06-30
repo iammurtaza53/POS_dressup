@@ -58,13 +58,20 @@
 
 <modal title="Add Expense" visible="shoModal">
     <div class="row">
+        <label class="col-md-2">Date:</label>
+        <span class="col-md-4">
+            <input type="date" ng-model="expenseDate" class="form-control">
+        </span>
+        <br>
+        <br>
         <label class="col-md-2">Title:</label>
-        <span class="col-md-10"><input class="form-control" type="text" name="title" ng-model="title"></span>
+        <span class="col-md-10"><input required class="form-control" type="text" name="title" ng-model="title"></span>
         <br>
         <br>
         <label class="col-md-2">Amount:</label>
-        <span class="col-md-10"><input class="form-control" type="number" name="amount" ng-model="amount"></span>
+        <span class="col-md-10"><input required class="form-control" type="number" name="amount" ng-model="amount"></span>
+        
     </div>
     <hr>
-    <button class="btn btn-md btn-success col-md-offset-9" ng-click="addExpense(title,amount)">Add Expense</button>
+    <button class="btn btn-md btn-success col-md-offset-9" ng-click="addExpense(title,amount,expenseDate)">Add Expense</button>
 </modal>

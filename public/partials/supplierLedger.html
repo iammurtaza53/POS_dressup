@@ -41,9 +41,9 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat='sale in sales | filter:query | orderBy: _id'>
-                                <td>{{sale.date}}</td>
-                                <td>{{sale.bill_No}}</td>
-                                <td>Rs. {{sale.debit}}</td>
+                                <td>{{sale.date}}</td> 
+                                <td ng-show="sale.bill_No">{{sale.bill_No}}</td> <td ng-show="sale.bill_No==undefined">-</td>
+                                <td ng-show="sale.debit||sale.debit==0">Rs. {{sale.debit}}</td> <td ng-show="sale.debit==undefined">-</td>
                                 <td>Rs. {{sale.credit}}</td>
                                 <td>Rs. {{sale.debit-sale.credit}}</td>
                                 <td><button  ng-if="sale.purchaseItems.length>0" type="button" ng-click="getByBillNo(sale)"
@@ -135,12 +135,12 @@
         <br />
         <div class="row" style="font-size:21px">
             <span class="col-md-6" ng-model="mdate"><strong>Date:</strong> {{mdate}} </span>
-            <span class="col-md-4" ng-model="mtime"><strong>Time:</strong> {{mtime}} </span>
+            <!-- <span class="col-md-4" ng-model="mtime"><strong>Time:</strong> {{mtime}} </span> -->
             <br>
             <br>
             <span class="col-md-6" style="text-transform: capitalize;"><strong>Supplier:</strong> {{supplierChoose}}
             </span>
-            <span class="col-md-4"><strong>Bill No:</strong>{{bill_No}}</span>
+            <span class="col-md-4"><strong>Bill No:</strong>{{receipt_bill}}</span>
         </div>
         <table class="table table-hover font-size:21px">
             <thead style="border-bottom:2px solid">
@@ -213,16 +213,17 @@
     <br>
     <form name="billForm" >
         </br>
-        <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
+        <!-- <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'> -->
+        <input type="date" ng-model="paymentDate" class="form-control">
         </br>
 
-        <input type="number" class="form-control" min="0" placeholder="Debit Rs" ng-model='debit' value='0'>
-        </br>
+        <!-- <input type="number" class="form-control" min="0" placeholder="Debit Rs" ng-model='debit' value='0'>
+        </br> -->
 
         <input type="number" class="form-control" min="0" placeholder="Credit Rs" ng-model='credit' value='0'>
         </br>
 
-        <center><button type="button" ng-click="addBill(bill_No,debit,credit)"
+        <center><button type="button" ng-click="addBill(paymentDate,credit)"
                 class="btn btn-lg btn-success">PAY</button></center>
 
     </form>

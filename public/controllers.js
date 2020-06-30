@@ -438,7 +438,7 @@ app.controller("editName", function ($scope, myService, $routeParams, $location,
 app.controller("supplierDetail", function ($scope, myService, $routeParams, $location, $rootScope) {
   $rootScope.loggedOut = true;
   $scope.whenTable = false;
-  //console.log('here');
+  
 
   getSup();
   $rootScope.logout = function () {
@@ -482,6 +482,7 @@ app.controller("supplierDetail", function ($scope, myService, $routeParams, $loc
       $scope.totalit = qty;
       $scope.myProfit = profit;
       $scope.mysale = retail;
+      
 
     });
   }
@@ -602,6 +603,10 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
   $rootScope.loggedOut = true;
   $scope.showbill = false;
   $scope.showpay = false;
+
+  $scope.paymentDate = new Date();
+  // console.log($scope.paymentDate);
+
   $rootScope.logout = function () {
     $rootScope.menu = false;
     $rootScope.posUser = false;
@@ -644,6 +649,8 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
   $scope.whenTable = false;
   var suppId = undefined
   $scope.getSup = function (id) {
+    let debit = 0;
+    let credit = 0;
     suppId = id;
     $scope.supplierChoose = $scope.chooseSupplier[id].name
     var obj = { Supplier: $scope.chooseSupplier[id].name };
@@ -657,8 +664,10 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
         $scope.whenTable = true;
         $scope.sales = res;
         for (i in res) {
-          $scope.totalDebit = $scope.totalDebit + res[i].debit;
-          $scope.totalCredit = $scope.totalCredit + res[i].credit;
+          debit = res[i].debit||0
+          credit = res[i].credit||0
+          $scope.totalDebit = ($scope.totalDebit + debit);
+          $scope.totalCredit = ($scope.totalCredit + credit);
         }
       }
     });
@@ -667,7 +676,7 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
   $scope.getByBillNo = function (sale) {
     $scope.totalit = 0;
     var barcode = [];
-    console.log(sale.purchaseItems)
+    console.log(sale)
     for (i in sale.purchaseItems) {
       barcode.push(sale.purchaseItems[i].barcode)
     }
@@ -681,6 +690,8 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
       $scope.showItems = res;
       $scope.showPurchase = true;
     });
+    $scope.receipt_bill = sale.bill_No
+    $scope.mdate = sale.date
   }
   /**add bill or payment */
   var myS = 0;
@@ -695,12 +706,12 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     myS = 2;
   }
 
-  $scope.addBill = function (bill_No, debit, credit) {
-    if (debit == null || credit == null) {
+  $scope.addBill = function (date, credit) {
+    if ( credit == null) {
       alert("You can't leave any field empty, Please put 0");
     }
     else {
-      var payObj = { supplierName: $scope.supplierChoose, date: $scope.date, bill_No: bill_No, debit: debit, credit: credit, select: myS }
+      var payObj = { supplierName: $scope.supplierChoose, date: date.toDateString(), credit: credit, select: myS }
       myService.paymentOrBill(payObj).success(function (res) {
         console.log(res)
         if (res == false) {
@@ -710,8 +721,8 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
           $scope.getSup(suppId)
           $scope.showpay = false;
           $scope.showbill = false;
-          $scope.bill_No = '';
-          $scope.debit = '';
+          // $scope.bill_No = '';
+          // $scope.debit = '';
           $scope.credit = '';
           
           // angular.copy($scope.billForm);
@@ -999,11 +1010,9 @@ app.controller("monthlyReport", function ($scope, myService, $routeParams, $loca
   var retail = 0;
   var profit = 0;
   $scope.generateReport = function (monthYear) {
-
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
     monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
-
     var obj = { monthYear: monthYear }
     myService.getMonthlySlip(obj).success(function (res) {
       if (res) {
@@ -1133,7 +1142,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
   $scope.showexpense = function (eDate) {
     $scope.texpense = 0;
     var obj = { date: eDate.toDateString() }
-    myService.dailyexpense(obj).success(function (res) {
+    myService.dailyexpense(obj).success(function (res) { 
       if (res) {
         console.log('controller 902')
         for (i in res) {
@@ -1216,8 +1225,8 @@ app.controller("SmanReport", function ($scope, myService, $routeParams, $locatio
     var qty = 0;
     var retail = 0;
     var profit = 0;
-
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    console.log(monthYear)
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
 
     var obj = { name: $scope.chooseSalesman[id].name, monthYear: monthYear };
@@ -2761,11 +2770,14 @@ app.controller("editItem", function ($scope, myService, $interval, $routeParams,
 
 });
 
-app.controller("monthlyExpense", async function ($scope, myService, $interval, $route, $rootScope, $window) {
+app.controller("monthlyExpense", async function ($scope, myService, $interval, $route, $rootScope, $window, $filter) {
   $rootScope.loggedOut = true;
   $scope.shoModal = false;
   $scope.showthis = false;
-
+  // $scope.expenseDate = $filter('date')('2019-02-13','dd/MM/yyyy');
+  $scope.expenseDate = new Date ()
+  
+  
   $interval(function () {
     var d = new Date();
     $scope.mtime = d.toLocaleTimeString();
@@ -2773,10 +2785,10 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
   }, 1000)
 
   $scope.showExpense = function (monthYear) {
+    
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
     monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
-
     var obj = { monthYear: monthYear }
     myService.monthExpense(obj).success(function (res) {
       console.log(res)
@@ -2791,14 +2803,19 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
     });
   }
 
-  $scope.addExpense = function (title, amount) {
-    var obj = { date: $scope.mdate, time: $scope.mtime, expenseTitle: title, expense: amount }
-    myService.addExpense(obj).success(function (res) {
-      if (res) {
-        alert('Expense added "~"');
-        $route.reload();
-      }
-    });
+  $scope.addExpense = function (title, amount, date) {
+    var obj = { date: date.toDateString(), time: $scope.mtime, expenseTitle: title, expense: amount }
+    
+   
+    if(title!=undefined && amount!=undefined && date!=undefined){
+      myService.addExpense(obj).success(function (res) {
+        if (res) {
+          alert('Expense added "~"');
+          $route.reload();
+        }
+      });
+    }
+    
   }
   $scope.print = function () {
     $window.print();
