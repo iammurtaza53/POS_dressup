@@ -662,13 +662,16 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
         $scope.totalDebit = 0;
         $scope.totalCredit = 0;
         $scope.whenTable = true;
-        $scope.sales = res;
+        var balance = 0;
         for (i in res) {
-          debit = res[i].debit||0
-          credit = res[i].credit||0
+          debit = res[i].debit || 0
+          credit = res[i].credit || 0
+          balance =  balance + (debit -  credit)
+          res[i].balance = balance
           $scope.totalDebit = ($scope.totalDebit + debit);
           $scope.totalCredit = ($scope.totalCredit + credit);
         }
+        $scope.sales = res;
       }
     });
   }
@@ -706,12 +709,14 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     myS = 2;
   }
 
-  $scope.addBill = function (date, credit) {
-    if ( credit == null) {
+  $scope.addBill = function (date, credit,debit,bill_No) {
+    console.log({date}, {credit},{debit},{bill_No})
+    if ( credit == null && debit ==null) {
       alert("You can't leave any field empty, Please put 0");
     }
     else {
-      var payObj = { supplierName: $scope.supplierChoose, date: date.toDateString(), credit: credit, select: myS }
+      var payObj = { supplierName: $scope.supplierChoose, date: date.toDateString(),bill_No,bill_No, credit: credit, debit:debit, select: myS }
+      console.log(payObj)  
       myService.paymentOrBill(payObj).success(function (res) {
         console.log(res)
         if (res == false) {
@@ -721,9 +726,10 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
           $scope.getSup(suppId)
           $scope.showpay = false;
           $scope.showbill = false;
-          // $scope.bill_No = '';
-          // $scope.debit = '';
-          $scope.credit = '';
+          $scope.bill_No = '';
+          $scope.paymentDate = new Date()
+          $scope.debit = 0;
+          $scope.credit = 0;
           
           // angular.copy($scope.billForm);
         }
@@ -823,7 +829,9 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
       mywindow.document.write('</body></html>');
       setTimeout(() => {
         mywindow.print();
-        mywindow.close();
+        setTimeout(() => {
+          mywindow.close();
+        },1000)
       }, 1000)
 
       // mywindow.close();

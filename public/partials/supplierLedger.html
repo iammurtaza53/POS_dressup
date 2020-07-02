@@ -44,8 +44,9 @@
                                 <td>{{sale.date}}</td> 
                                 <td ng-show="sale.bill_No">{{sale.bill_No}}</td> <td ng-show="sale.bill_No==undefined">-</td>
                                 <td ng-show="sale.debit||sale.debit==0">Rs. {{sale.debit}}</td> <td ng-show="sale.debit==undefined">-</td>
-                                <td>Rs. {{sale.credit}}</td>
-                                <td>Rs. {{sale.debit-sale.credit}}</td>
+                                <td ng-show="sale.credit||sale.credit==0">Rs. {{sale.credit}}</td> <td ng-show="sale.credit==undefined">-</td>
+                                <!-- <td>Rs. {{sale.debit-sale.credit}}</td> -->
+                                <td>Rs. {{sale.balance}}</td>
                                 <td><button  ng-if="sale.purchaseItems.length>0" type="button" ng-click="getByBillNo(sale)"
                                         class="btn btn-sm btn-info">showBill</button></td>
                             </tr>
@@ -55,6 +56,7 @@
                                 <td>Rs. {{totalDebit}}</td>
                                 <td>Rs. {{totalCredit}}</td>
                                 <td>Rs. {{totalDebit-totalCredit}}</td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,10 +106,18 @@
             <tbody>
                 <tr ng-repeat='s in sales | filter:query | orderBy: _id'>
                     <td>{{s.date}}</td>
-                    <td>{{s.bill_No}}</td>
-                    <td>Rs. {{s.debit}}</td>
-                    <td>Rs. {{s.credit}}</td>
-                    <td>Rs. {{s.debit-s.credit}}</td>
+                    <td ng-show="s.bill_No">{{s.bill_No}}</td> <td ng-show="s.bill_No==undefined">-</td>
+                    <td ng-show="s.debit||s.debit==0">Rs. {{s.debit}}</td> <td ng-show="s.debit==undefined">-</td>
+                    <td ng-show="s.credit||s.credit==0">Rs. {{s.credit}}</td> <td ng-show="s.credit==undefined">-</td>
+                    <td>Rs. {{s.balance}}</td>
+                </tr>
+                <tr style="font-weight: bold;">
+                    <td></td>
+                    <td></td>
+                    <td>Rs. {{totalDebit}}</td>
+                    <td>Rs. {{totalCredit}}</td>
+                    <td>Rs. {{totalDebit-totalCredit}}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -119,6 +129,8 @@
     </div>
     <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
 </modal>
+
+
 
 <modal title="Supplier Bill" visible="showPurchase">
     <div print-section>
@@ -190,6 +202,9 @@
     <br>
     <form name="billForm" >
         </br>
+        <!-- <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'> -->
+        <input type="date" ng-model="paymentDate" class="form-control">
+        </br>
         <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
         </br>
 
@@ -199,7 +214,7 @@
         <input type="number" class="form-control" min="0" placeholder="Credit Rs" ng-model='credit' value='0'>
         </br>
 
-        <center><button type="button" ng-click="addBill(bill_No,debit,credit)" class="btn btn-lg btn-success">Add
+        <center><button type="button" ng-click="addBill(paymentDate,credit,debit,bill_No)" class="btn btn-lg btn-success">Add
                 Bill</button></center>
 
     </form> 

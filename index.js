@@ -956,7 +956,6 @@ app.post('/getAllItem', function (req, res) {
 });
 
 app.post('/paymentOrBill', function (req, res) {
-
   var supBill = mongoose.model('supplierBill');
   if (req.body.select == 2) {
     var obj = {credit: req.body.credit, date: req.body.date, supplierName: req.body.supplierName }
@@ -974,7 +973,8 @@ app.post('/paymentOrBill', function (req, res) {
         var obj = { bill_No: req.body.bill_No, credit: req.body.credit, date: req.body.date, supplierName: req.body.supplierName, debit: req.body.debit }
         supBill.collection.insertOne(obj, function (inErr, ins) {
           if (ins) {
-            res.send(ins.ops[0].bill_No);
+            // res.send(ins.ops[0].bill_No);
+            res.send(true);
           }
         });
       }
