@@ -15,7 +15,7 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "moment": "^2.24.0",
-    "mongodb": "^1.4.40",
+    "mongodb": "^3.1.13",
     "mongodb-restore": "^1.6.2",
     "mongoose": "5.7.10",
     "monk": "^1.0.1",
