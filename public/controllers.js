@@ -2490,10 +2490,10 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     arrays = [];
     var arr = printBarcodefunc(printQty, PitemBar);
 
-    printwindow(arr, 0);
+    // printwindow(arr, 0);
 
-    $("#pqty").val(''); // do null to the modal field
-    $scope.barcodemodal = false; // close modal
+    // $("#pqty").val(''); // do null to the modal field
+    // $scope.barcodemodal = false; // close modal
   }
 
   /** call functions */
@@ -2520,8 +2520,8 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     var width = barcode.getMinWidth();
     barcode.private_fontSize = 20;
     barcode.setSize(width, 120);
-    var barcodeImage = document.getElementById('barcodeImage');
-    barcodeImage.src = barcode.exportToBase64(width, 120, 0);
+    // var barcodeImage = document.getElementById('barcodeImage');
+    // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
     var convert = cipher(PitemBar.itemWholesale);
     var name = PitemBar.itemName;
@@ -2544,18 +2544,28 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       + '</div> </div>'
 
       + '<div style="width:50% ;float:right;">'
-      + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
+      + '<div><svg id="barcode"></svg>'
       + '<div> '//<div style="font-size:18px;">' + PitemBar.size + '</div>
       + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
       + '<div><span>Rs: ' + PitemBar.itemRetail + '</span></div>  </div>'
       + '</div>';
 
 
-    var myVal = { text: MYS };
-    for (var i = 1; i <= printQty; i++) {
-      arrays.push(myVal);
-    }
-    return arrays;
+      document.getElementById("barcode-print").innerHTML += MYS;
+      JsBarcode("#barcode", zeroAppend + PitemBar.barcode);
+
+      var printContents = document.getElementById("barcode-print").innerHTML
+      var popupWin = window.open('', '_blank', 'width=300,height=300');
+      popupWin.document.open();
+      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+      popupWin.document.close();
+  
+
+    // var myVal = { text: MYS };
+    // for (var i = 1; i <= printQty; i++) {
+    //   arrays.push(myVal);
+    // }
+    // return arrays;
   }
 
   function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function
