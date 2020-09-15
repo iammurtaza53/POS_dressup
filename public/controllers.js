@@ -787,7 +787,7 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
 
 
     /**HAssan- Ali*/
-    var MYS = '<div style=" width:50% ;float:left">'
+    var MYS = '<div style=" width:50% ;float:left" >'
       + '<div style="padding-left:10%;line-height:150px;">'
       + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
       + '<div><span>' + PitemBar.type + '</span>'
@@ -796,15 +796,23 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
       + '<div>' + convert + '</div>'
       + '</div> </div>'
 
-      + '<div style="width:50% ;float:right;">'
-      + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
+      + '<div style="width:50% ;float:right; ">'
+      + '<div><svg id="barcode"></svg>'
       + '<div> '//<div style="font-size:18px;">' + PitemBar.size + '</div>
       + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
       + '<div><span>Rs: ' + PitemBar.itemRetail + '</span></div>  </div>'
       + '</div>';
 
+      document.getElementById("barcode-print").innerHTML += MYS;
+      JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
+        height: 400,
+        width: 10,
+        fontSize: 100,
+      });
 
-    var myVal = { text: MYS };
+      var printContents = document.getElementById("barcode-print").innerHTML
+      
+    var myVal = { text: printContents };
     for (var i = 1; i <= printQty; i++) {
       arrays.push(myVal);
     }
@@ -815,26 +823,25 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     var uselessFontSize = 100;
     $timeout(function () {
       $scope.showOld = false;
-      var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
-      mywindow.document.write('<html><head>');
-      mywindow.document.write('<style>');
-      mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
-      mywindow.document.write('</style>');
-      mywindow.document.write('</head><body style=" margin:0; padding: 0;">');
+      var popupWin = window.open('', '_blank', 'width=300,height=300');
+      popupWin.document.open();
+      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
+      popupWin.document.write('<style>');
+      popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+      popupWin.document.write('</style>');
+      popupWin.document.write('</head><body style=" margin:0; padding: 0;" onload="window.print() ">');
       for (var i = 0; i < arrays.length; i++) {
-        mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
-        mywindow.document.write(arrays[i].text);
-        mywindow.document.write('</div>');
+        popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
+        popupWin.document.write(arrays[i].text);
+        popupWin.document.write('</div>');
       }
-      mywindow.document.write('</body></html>');
+      popupWin.document.write('</body></html>');
       setTimeout(() => {
-        mywindow.print();
-        setTimeout(() => {
-          mywindow.close();
-        },1000)
+        popupWin.print();
+        // popupWin.close();
       }, 1000)
 
-      // mywindow.close();
+      // popupWin.close();
     }, 1000);
   }
   /** END of two part barcode*/
@@ -2430,7 +2437,6 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   $scope.barcode = function (item) { // appear modal to ask for quantity
     $scope.barcodemodal = true;
     $scope.PitemBar = item;
-   
   }
 
   $scope.addNewItem = function () {
@@ -2487,10 +2493,11 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   }
 
   $scope.printOldBarcode = function (printQty, PitemBar) { // modal btn function to print barcode only print barcode nothing much
+    console.log({printQty}, {PitemBar})
     arrays = [];
     var arr = printBarcodefunc(printQty, PitemBar);
 
-    // printwindow(arr, 0);
+    printwindow(arr, 0);
 
     // $("#pqty").val(''); // do null to the modal field
     // $scope.barcodemodal = false; // close modal
@@ -2534,7 +2541,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
 
 
     /**HAssan- Ali*/
-    var MYS = '<div style=" width:50% ;float:left">'
+    var MYS = '<div style=" width:50% ;float:left" >'
       + '<div style="padding-left:10%;line-height:150px;">'
       + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
       + '<div><span>' + PitemBar.type + '</span>'
@@ -2543,7 +2550,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       + '<div>' + convert + '</div>'
       + '</div> </div>'
 
-      + '<div style="width:50% ;float:right;">'
+      + '<div style="width:50% ;float:right; ">'
       + '<div><svg id="barcode"></svg>'
       + '<div> '//<div style="font-size:18px;">' + PitemBar.size + '</div>
       + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
@@ -2552,44 +2559,45 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
 
 
       document.getElementById("barcode-print").innerHTML += MYS;
-      JsBarcode("#barcode", zeroAppend + PitemBar.barcode);
+      JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
+        height: 400,
+        width: 10,
+        fontSize: 100,
+      });
 
       var printContents = document.getElementById("barcode-print").innerHTML
-      var popupWin = window.open('', '_blank', 'width=300,height=300');
-      popupWin.document.open();
-      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
-      popupWin.document.close();
-  
-
-    // var myVal = { text: MYS };
-    // for (var i = 1; i <= printQty; i++) {
-    //   arrays.push(myVal);
-    // }
-    // return arrays;
+      
+    var myVal = { text: printContents };
+    for (var i = 1; i <= printQty; i++) {
+      arrays.push(myVal);
+    }
+    return arrays;
   }
 
   function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function
     var uselessFontSize = 100;
     $timeout(function () {
       $scope.showOld = false;
-      var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
-      mywindow.document.write('<html><head>');
-      mywindow.document.write('<style>');
-      mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
-      mywindow.document.write('</style>');
-      mywindow.document.write('</head><body style=" margin:0; padding: 0;">');
+      var popupWin = window.open('', '_blank', 'width=300,height=300');
+      popupWin.document.open();
+      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
+      popupWin.document.write('<style>');
+      popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+      popupWin.document.write('</style>');
+      popupWin.document.write('</head><body style=" margin:0; padding: 10px;" onload="popupWin.print()">');
       for (var i = 0; i < arrays.length; i++) {
-        mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
-        mywindow.document.write(arrays[i].text);
-        mywindow.document.write('</div>');
+        popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
+        popupWin.document.write(arrays[i].text);
+        popupWin.document.write('</div>');
       }
-      mywindow.document.write('</body></html>');
+      popupWin.document.write('</body></html>');
+      popupWin.print();
       setTimeout(() => {
-        mywindow.print();
-        mywindow.close();
+        popupWin.print();
+        // popupWin.close();
       }, 1000)
 
-      // mywindow.close();
+      // popupWin.close();
     }, 1000);
   }
   /** END of two part barcode*/
