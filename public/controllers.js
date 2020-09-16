@@ -2511,7 +2511,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       
       /**HAssan- Ali*/
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
-        height: 400,
+        height: 350,
         width: 10,
         fontSize: 100,
       });
