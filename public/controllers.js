@@ -836,10 +836,12 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
         popupWin.document.write('</div>');
       }
       popupWin.document.write('</body></html>');
-      setTimeout(() => {
-        popupWin.print();
-        // popupWin.close();
-      }, 1000)
+      setTimeout(() => {	     
+        popupWin.print();	        
+        // setTimeout(() => {	        
+          popupWin.close();	
+        // },1000)	
+      }, 1000 )
 
       // popupWin.close();
     }, 1000);
@@ -2493,7 +2495,6 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   }
 
   $scope.printOldBarcode = function (printQty, PitemBar) { // modal btn function to print barcode only print barcode nothing much
-    console.log({printQty}, {PitemBar})
     arrays = [];
     var arr = printBarcodefunc(printQty, PitemBar);
 
@@ -2578,24 +2579,25 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     var uselessFontSize = 100;
     $timeout(function () {
       $scope.showOld = false;
-      var popupWin = window.open('', '_blank', 'width=300,height=300');
+      var popupWin = window.open('', '_blank', 'width=2000,height=1500');
       popupWin.document.open();
       popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
       popupWin.document.write('<style>');
       popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
-      popupWin.document.write('</style>');
-      popupWin.document.write('</head><body style=" margin:0; padding: 10px;" onload="popupWin.print()">');
+      popupWin.document.write('</style>'); // onload="window.print()"
+      popupWin.document.write('</head><body style=" margin:0; padding: 10px;"  >');
       for (var i = 0; i < arrays.length; i++) {
         popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
         popupWin.document.write(arrays[i].text);
         popupWin.document.write('</div>');
       }
       popupWin.document.write('</body></html>');
-      popupWin.print();
-      setTimeout(() => {
-        popupWin.print();
-        // popupWin.close();
-      }, 1000)
+      setTimeout(() => {	     
+        popupWin.print();	        
+        // setTimeout(() => {	        
+          popupWin.close();	
+        // },1000)	
+      }, 1000 )
 
       // popupWin.close();
     }, 1000);
