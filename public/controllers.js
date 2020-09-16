@@ -2524,7 +2524,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       return arrays;      
   }
 
-  function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function
+  function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function//sameer
     var uselessFontSize = 100;
     $timeout(function () {
       $scope.showOld = false;
