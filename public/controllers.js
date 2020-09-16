@@ -331,7 +331,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         
         document.getElementById("barcode-print").innerHTML ;
       JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck,{
-        height: 400,
+        height: 100,
         width: 10,
         fontSize: 100,
       });
@@ -356,7 +356,7 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
           popupWin.document.open();
           popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
           popupWin.document.write('<style>');
-          popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+          popupWin.document.write('.nameClass{ text-transform:uppercase; font-family:sans-serif; letter-spacing: 5px;}');
           popupWin.document.write('</style>');
           popupWin.document.write('</head><body style=" margin:0; padding: 0;" onload="window.print() ">');
           for (var i = 0; i < arrays.length; i++) {
@@ -2532,9 +2532,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       popupWin.document.open();
       popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
       popupWin.document.write('<style>');
-      popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+      popupWin.document.write('.nameClass{ text-transform:uppercase; font-family:sans-serif; letter-spacing: 5px;}');
       popupWin.document.write('</style>'); // onload="window.print()"
-      popupWin.document.write('</head><body style=" margin:0; padding: 10px;"  >');
+      popupWin.document.write('</head><body style=" margin:0; padding: 0px;"  >');
       for (var i = 0; i < arrays.length; i++) {
         popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
         popupWin.document.write(arrays[i].text);

@@ -235,11 +235,11 @@
 
 <!-- /.row -->
 
-<div id="barcode-print" style="display: none;" >
-    <div style=" width:50% ;float:left" >
-        <div style="padding-left:10%;line-height:150px;">
+<div id="barcode-print" style="display: none;" > <!--font-weight:bold;-->
+    <div style=" width:50% ;float:left " >
+        <div style="padding-left:10%;line-height:150px; font-weight:bold">
             <div>
-                <span style="font-size:120px; text-decoration: underline">Dress Up</span>
+                <span style="font-size:120px; border-bottom:black solid 2px">Dress Up</span>
             </div>
             <div>
                 <span> {{PitemBar.type }}</span>
@@ -253,10 +253,11 @@
     <div style="width:50% ;float:right; ">
         <div>
             <svg id="barcode"></svg>
-        <div> 
-        <div style="font-size:100px ;"> {{PitemBar.name}} </div> 
-        <div>
-            <span>Rs: {{PitemBar.itemRetail }}</span>
-        </div>  </div>
+        <div style="font-weight:bold"> 
+            <div style="font-size:100px ;"> {{PitemBar.name}} </div> 
+            <div>
+                <span>Rs: {{PitemBar.itemRetail }}</span>
+            </div>  
+    </div>
     </div>
 </div>
