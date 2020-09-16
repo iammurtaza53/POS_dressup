@@ -789,7 +789,7 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     /**HAssan- Ali*/
     var MYS = '<div style=" width:50% ;float:left" >'
       + '<div style="padding-left:10%;line-height:150px;">'
-      + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
+      + '<div><span style="font-size:' + dressUpFontSize + 'px;text-decoration: underline">Dress Up</span></div>'
       + '<div><span>' + PitemBar.type + '</span>'
       + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + PitemBar.size + '</span></div>'
       + '<div>' + PitemBar.code + '</div>'
@@ -2544,7 +2544,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     /**HAssan- Ali*/
     var MYS = '<div style=" width:50% ;float:left" >'
       + '<div style="padding-left:10%;line-height:150px;">'
-      + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
+      + '<div><span style="font-size:' + dressUpFontSize + 'px; text-decoration: underline">Dress Up</span></div>'
       + '<div><span>' + PitemBar.type + '</span>'
       + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + PitemBar.size + '</span></div>'
       + '<div>' + PitemBar.code + '</div>'
@@ -2595,7 +2595,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       setTimeout(() => {	     
         popupWin.print();	        
         // setTimeout(() => {	        
-          popupWin.close();	
+          // popupWin.close();	
         // },1000)	
       }, 1000 )
 
