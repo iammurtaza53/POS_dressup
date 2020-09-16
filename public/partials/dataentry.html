@@ -45,6 +45,7 @@
         <button type="button" ng-click="newEntry()" class="btn btn-lg btn-success">New Entry</button>
         <button type="button" ng-click="OldEntry()" class="btn btn-lg btn-success">Old Entry</button>
     </div>
+    <div><button type="button" ng-click="go()" >Inventory</button></div>
     <div class="col-md-offset-10">
             <button type="button" ng-click="deleteshow()" class="btn btn-lg btn-danger">Delete Entry</button>
 
@@ -260,150 +261,34 @@
         </div>
         <!-- /.panel -->
     </div>
+    
 </div>
 
 <!-- /.row -->
-<barcode style="display: none;" food="food"></barcode>
-
-<button type="button" ng-click="go()" >Inventory</button>
-
-<!-- <modal title="Generate Barcode" visible="showOld"
-    style="width: 100%; height:auto; overflow:visible; float: none !important; position:relative; ">
-
-    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index ">
-        <div style="page-break-after:always" ng-bind-html="s.text"></div>
-    </div>
-
-
-</modal> -->
-
-
-
-
-
-
-
-
-
-
-<!-- <modal hidden title="Generate Barcode" visible="showModal
-    style="display:none;  width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
-
-    <barcode style="display: none;" food="food"></barcode>
-
-    <div print-section ng-repeat="s in sa track by $index">
-        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
-    </div>
-
-
-</modal> -->
-
-
-<!-- <div class="modal fade" id="myModal" role="dialog" visible="showOld">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
+<div id="barcode-print" style="display: none;">
+    <div style=" width:50% ;float:left" >
+        <div style="padding-left:10%;line-height:150px;">
+            <div>
+                <span style="font-size:120px; text-decoration: underline">Dress Up</span>
             </div>
-            <div class="modal-body">
-                <div class="row" style="page-break-before: always;text-align:center; margin-top: -25px;">
-                    <div style="width: 50%;float:left">
-                        <div style="font-size: 25px;">
-                            <p><strong>zango rango</strong></p>
-                            <p><strong>Rs: 260 -LEE</strong></p>
-                            <p><strong><img align="middle"
-                                        src="data:image/png;base64,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"></strong>
-                            </p>
-                        </div>
-                    </div>
-                    <div style="float:right;width: 50%">
-                        <div style="font-size: 25px;">
-                            <p><strong>zango rango</strong></p>
-                            <p><strong>Rs: 260 -LEE</strong></p>
-                            <p><strong><img align="middle"
-                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOYAAABkCAYAAACSEkxoAAAG1ElEQVR4Xu2dMS81QRiF55a0So1o6CSiE79DIWoNEj+ACK1EglaFwk9Qi04kSv+BWnm/zO7dtTvfXe/MzjvuXB6l3ZldZ98z57xn9ttvMBwOh4YfEACBrBAYQMysngc3AwIFAhCTQgCBDBGAmBk+FG4JBCAmNQACGSLwI8QcDAatP73Km6rfu/mTe341WDrPnTd0XHW+dL9/fV4tnHyfp8sb37rpyjWl+nLn76qHlHyGmMYY3wKRHlDf433HaRFkUguNL+4QM9ESICmQ9IBCC2faCn3a7ldrQZCeu6R4sePdcu9yctLzSUEbFBPFrOsqtNClBVdaUEOv5y4IseMhJj1muTcl4CAVcuhxaaVPddx33lhixY6HmBATYjZYoBXeQMxIEy0phQRwLkrhqwS//X7pMdO/xUqPSY9JjzlCgPBn9N68r6X57Qo0bUqMYqKYLRMtWV5eMCjhSo0DxISYEPObNFeLIKGOROu6vgutG3H4Oi1pH5RUllSWVJZUNihCJfwh/CH8IfwZ3wNJlibUak1bmDJt94uVpcekx6TH/M8C0mMGueLuk3nBoMRGwiHUGWgp16SuKzklKbyJHU/4Q/gDMQl/gmSO8Ifwh/CH8Ifwp7lspn4RIFWopGWhY61o7HisLFYWK4uVxcqmUgrmbW8TxIZZsYoXOx7FRDFRTBQTxUTZSmVLhQM9Ji8Y8IJBBMEg5ngCubi4+7juCwwSjkFS6Hky2yVsl7BdwnYJ2yVsl3xZ7NjwJnY84Q/hD+EP4Y+niS1Pw8piZbGyWFmsLFYWK+sjnSgmioliopgoJoqJYqKYzkoobYxLx6X9rL7H+46b1P1qXTc2VY0dTypLKksqSyrrI5T1OfSY9Jj0mPSY9Jj0mPSYPtKJYqKYKCaKiWKimCgmikkq26qB0BSzb1rsOy70ftw0OHY8qSypLKksqayPUJLKjrOUWvtz1Ty+K7qvwuQyrxZOvvi4Fc0Hn4M43n2y9G0Y6QHlUpDTRqBU9wsx+YJBrx4pVUEyLx/jsgXZ9YV4JR0r257hD1wFxSwfmYRDqDPQUq5JXVdySvwXCZpUHzOXVJDSAwotHJSNj3F9p2x882fEKIiJYjbXa63wRlrQJcV1NcT9Mr7vl/JT6BpWljd/6roKLXRpwZWcTuj1XOseOx5iso9Jj9lgAYopayyKiWKimCMEsLLDdjghWRLJErnHCX8Ifwh/ZFUWtwkg5qCFooSH7/FUC5TWNo3v3+GWmJYVpsekx6THpMf0kLCvU+gx6THpMekxSwS6muwui0SP2c/qYmX5T4W+lWlpv0vqNSAmxGwWGD1mkCvuPhlilthIOIQuQFohzKSuKy3I0ps7seMJfwh/ICbhT5DMEf4Q/hD+EP4Q/jSXTd+XpPuGOH3HSRZZOu573VgrGjseK4uVxcpiZbGyvit2aOjBvHzBoLndF8S0wJPpMekx6THpMekx6TH54LOPeKKYKCaKiWKimCgmioliOiuhFPNLxwl/CH8If8YsK777VhCIfyj9HYH4St6IXNI7ohLh2NbgJfbmOs1L7D5m2OMciFmCJOEQugBNynprXVdakHmJ3YNcMadIBSk9oNCCxcpiZbGyHoyFmChmCisqLeiS4rqly1fy+EpeURO8xO6X8roEosf0UEOfU1BMFBPF9GHK1zk/8uZP2C1xNgiAAMSkBkAgQwQgZoYPhVsCAYhJDYBAhghAzAwfCrcEAhCTGgCBDBGAmBk+FG4JBCCmYg28vb2Zzc1N8/r6ak5OTszh4WE9++npqTk6OjIrKyvm/v7eLC0tFcc+Pj7M1taWeXh4MDs7O+b8/NzMzMwUx3Kfr/rj7N+2uLhY/B386CAAMXVwrAlmybi6umoODg7MxsZGUax3d3fm8fGxIN3Ly4uxhWx/Nzs72zrP/t7+2DkqwuY6X5OUdsG5vb2FmEq1ZKeBmEpgWnU7Pj42V1dXZm5urkXGs7OzWlGahFteXja7u7vFOKugT09PNWnf39+znq9aVObn5wsEUUylQhpNAzGV8LSkurm5qa1oRbLr6+uCbNvb22Z9fd18fn7WKrm2ttYinyX3/v6+ubi4MJaYOc9XWXELH1ZWqYga00BMJUybdtX2iBUxLy8vzd7eXmFPXWIuLCzUCmlVtknM5+fn2v7mOB/EVCqcjmkgphK+KCbhj1IpFdNATCU0/1qPaRWeVFapeMZMAzGVsM09RdW+vyZs9JhKRUSPqQ+knTH3fUft+0Mx09QRVjYdrswMAlEIYGWj4GMwCKRBAGKmwZVZQSAKAYgZBR+DQSANAhAzDa7MCgJRCEDMKPgYDAJpEICYaXBlVhCIQuAfc+m6TPmw2AoAAAAASUVORK5CYII="></strong>
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <span> {{PitemBar.type }}</span>
+                <span style="float:right; padding-right:20%; font-size:100px;"> {{PitemBar.size}} </span>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+            <div> {{PitemBar.code}} </div>
+            <div> {{convert}} </div>
+        </div> 
     </div>
-</div> -->
-
-
-<!-- <modal title="Generate Barcode" visible="showOld"
-    style="width: 100%; height:auto; overflow:visible;float: none !important; ">
-    <div class="row">
-        <div class="col-md-6" style="margin:0; padding:0;" print-section ng-repeat="s in sa track by $index" >
-            <div  ng-bind-html="s.text" >
-            </div>
-            <div  ng-if="bark" style="page-break-before: always;">
-            </div>
-
-        </div>
-    </div>
-</modal> -->
-
-
-<!-- <modal title="Generate Barcode" visible="showOld"
-    style="width: 100%; height:auto; overflow:visible;float: none !important; position: relative;">
-
-    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
-        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
-    </div>
-
-</modal> -->
-
-<!-- these modal has no front blank page-->
-<!-- <modal title="Generate Barcode" visible="showModal"
-    style="width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
-
-    <barcode style="display: none;" food="food"></barcode>
-
-    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
-        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
-    </div>
-
-
-</modal> -->
-
-<!-- <modal title="Generate Barcode" visible="showOld"
-    style="width: 100%; overflow:hidden;float: none; height: auto;position: relative;top:-1000px;">
-
-
-
-    <div print-section style="text-align:center;" ng-repeat="s in sa track by $index">
-        <div style="page-break-before: always;" ng-bind-html="s.text"></div>
-    </div>
-
-
-</modal> -->
-
-<!-- /#wrapper -->
-
-<!-- <div print-section style="height: auto; text-align: center">
-    <div style="float:left;width: 50%;">
+  
+    <div style="width:50% ;float:right; ">
         <div>
-            <p><strong>zango rango</strong></p>
-            <p><strong>Rs: 260 -LEE</strong></p>
-            <p><strong><img align="middle" src="data:image/png;base64,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"></strong>
-            </p>
-        </div>
-    </div>
-    <div style="float:right;width: 50%;">
+            <svg id="barcode"></svg>
+        <div> 
+        <div style="font-size:100px ;"> {{name}} </div> 
         <div>
-            <p><strong>zango rango</strong></p>
-            <p><strong>Rs: 260 -LEE</strong></p>
-            <p><strong><img align="middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOYAAABkCAYAAACSEkxoAAAG1ElEQVR4Xu2dMS81QRiF55a0So1o6CSiE79DIWoNEj+ACK1EglaFwk9Qi04kSv+BWnm/zO7dtTvfXe/MzjvuXB6l3ZldZ98z57xn9ttvMBwOh4YfEACBrBAYQMysngc3AwIFAhCTQgCBDBGAmBk+FG4JBCAmNQACGSLwI8QcDAatP73Km6rfu/mTe341WDrPnTd0XHW+dL9/fV4tnHyfp8sb37rpyjWl+nLn76qHlHyGmMYY3wKRHlDf433HaRFkUguNL+4QM9ESICmQ9IBCC2faCn3a7ldrQZCeu6R4sePdcu9yctLzSUEbFBPFrOsqtNClBVdaUEOv5y4IseMhJj1muTcl4CAVcuhxaaVPddx33lhixY6HmBATYjZYoBXeQMxIEy0phQRwLkrhqwS//X7pMdO/xUqPSY9JjzlCgPBn9N68r6X57Qo0bUqMYqKYLRMtWV5eMCjhSo0DxISYEPObNFeLIKGOROu6vgutG3H4Oi1pH5RUllSWVJZUNihCJfwh/CH8IfwZ3wNJlibUak1bmDJt94uVpcekx6TH/M8C0mMGueLuk3nBoMRGwiHUGWgp16SuKzklKbyJHU/4Q/gDMQl/gmSO8Ifwh/CH8Ifwp7lspn4RIFWopGWhY61o7HisLFYWK4uVxcqmUgrmbW8TxIZZsYoXOx7FRDFRTBQTxUTZSmVLhQM9Ji8Y8IJBBMEg5ngCubi4+7juCwwSjkFS6Hky2yVsl7BdwnYJ2yVsl3xZ7NjwJnY84Q/hD+EP4Y+niS1Pw8piZbGyWFmsLFYWK+sjnSgmioliopgoJoqJYqKYzkoobYxLx6X9rL7H+46b1P1qXTc2VY0dTypLKksqSyrrI5T1OfSY9Jj0mPSY9Jj0mPSYPtKJYqKYKCaKiWKimCgmikkq26qB0BSzb1rsOy70ftw0OHY8qSypLKksqayPUJLKjrOUWvtz1Ty+K7qvwuQyrxZOvvi4Fc0Hn4M43n2y9G0Y6QHlUpDTRqBU9wsx+YJBrx4pVUEyLx/jsgXZ9YV4JR0r257hD1wFxSwfmYRDqDPQUq5JXVdySvwXCZpUHzOXVJDSAwotHJSNj3F9p2x882fEKIiJYjbXa63wRlrQJcV1NcT9Mr7vl/JT6BpWljd/6roKLXRpwZWcTuj1XOseOx5iso9Jj9lgAYopayyKiWKimCMEsLLDdjghWRLJErnHCX8Ifwh/ZFUWtwkg5qCFooSH7/FUC5TWNo3v3+GWmJYVpsekx6THpMf0kLCvU+gx6THpMekxSwS6muwui0SP2c/qYmX5T4W+lWlpv0vqNSAmxGwWGD1mkCvuPhlilthIOIQuQFohzKSuKy3I0ps7seMJfwh/ICbhT5DMEf4Q/hD+EP4Q/jSXTd+XpPuGOH3HSRZZOu573VgrGjseK4uVxcpiZbGyvit2aOjBvHzBoLndF8S0wJPpMekx6THpMekx6TH54LOPeKKYKCaKiWKimCgmioliOiuhFPNLxwl/CH8If8YsK777VhCIfyj9HYH4St6IXNI7ohLh2NbgJfbmOs1L7D5m2OMciFmCJOEQugBNynprXVdakHmJ3YNcMadIBSk9oNCCxcpiZbGyHoyFmChmCisqLeiS4rqly1fy+EpeURO8xO6X8roEosf0UEOfU1BMFBPF9GHK1zk/8uZP2C1xNgiAAMSkBkAgQwQgZoYPhVsCAYhJDYBAhghAzAwfCrcEAhCTGgCBDBGAmBk+FG4JBCCmYg28vb2Zzc1N8/r6ak5OTszh4WE9++npqTk6OjIrKyvm/v7eLC0tFcc+Pj7M1taWeXh4MDs7O+b8/NzMzMwUx3Kfr/rj7N+2uLhY/B386CAAMXVwrAlmybi6umoODg7MxsZGUax3d3fm8fGxIN3Ly4uxhWx/Nzs72zrP/t7+2DkqwuY6X5OUdsG5vb2FmEq1ZKeBmEpgWnU7Pj42V1dXZm5urkXGs7OzWlGahFteXja7u7vFOKugT09PNWnf39+znq9aVObn5wsEUUylQhpNAzGV8LSkurm5qa1oRbLr6+uCbNvb22Z9fd18fn7WKrm2ttYinyX3/v6+ubi4MJaYOc9XWXELH1ZWqYga00BMJUybdtX2iBUxLy8vzd7eXmFPXWIuLCzUCmlVtknM5+fn2v7mOB/EVCqcjmkgphK+KCbhj1IpFdNATCU0/1qPaRWeVFapeMZMAzGVsM09RdW+vyZs9JhKRUSPqQ+knTH3fUft+0Mx09QRVjYdrswMAlEIYGWj4GMwCKRBAGKmwZVZQSAKAYgZBR+DQSANAhAzDa7MCgJRCEDMKPgYDAJpEICYaXBlVhCIQuAfc+m6TPmw2AoAAAAASUVORK5CYII="></strong>
-            </p>
-        </div>
+            <span>Rs: {{PitemBar.itemRetail }}</span>
+        </div>  </div>
     </div>
-</div> -->
-
+</div>
 
 

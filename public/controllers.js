@@ -201,8 +201,8 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
     var width = barcode.getMinWidth();
     barcode.private_fontSize = 20;
     barcode.setSize(width, 120);
-    var barcodeImage = document.getElementById('barcodeImage');
-    barcodeImage.src = barcode.exportToBase64(width, 120, 0);
+    // var barcodeImage = document.getElementById('barcodeImage');
+    // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
     var convert = cipher($scope.sale.itemWholesale);
     var name = $scope.sale.itemName
@@ -210,83 +210,50 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
       name = name.substring(0, 25);
     }
 
-    //+'<div class="row">'
-    var dressUpFontSize = 120;
-    var criticalFontSize = 100;
-    var uselessFontSize = 100;
+    $scope.convert = convert
+    $scope.PitemBar= $scope.sale
+    console.log($scope.PitemBar,$scope.sale)
+    $scope.name= name
 
-    /**HAssan */
-    var MYS = '<div style=" width:50% ;float:left">'
-      + '<div style="padding-left:10%;line-height:150px;">'
-      + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
-      + '<div><span>' + $scope.sale.type + '</span>'
-      + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + $scope.sale.size + '</span></div>'
-      + '<div>' + $scope.sale.code + '</div>'
-      + '<div>' + convert + '</div>'
-      + '</div> </div>'
+    document.getElementById("barcode-print").innerHTML ;
+      JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck,{
+        height: 400,
+        width: 10,
+        fontSize: 100,
+      });
 
-      + '<div style="width:50% ;float:right;">'
-      + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
-      + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
-      + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
-      + '<div><span>Rs: ' + $scope.sale.itemRetail + '</span></div>  </div>'
-      + '</div>';
-
-
-
-    // var MYS = '<div style="max-width: 33.333333%;position: relative; width: 30%; padding-right: 15px; padding-left: 15px;">'
-    //   + '<div style="line-height:100px;">'
-    //   + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
-    //   + '<div><span>' + $scope.sale.type + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:' + criticalFontSize + 'px;">' + $scope.sale.size + '</span></div>'
-    //   + '<div>' + $scope.sale.code + '</div>'
-    //   + '<div>' + convert + '</div>'
-    //   + '</div> </div>'
-
-    //   + '<div style=" max-width: 66.666667%;position: relative; width: 70%; padding-right: 15px; padding-left: 15px;">'
-    //   + '<div><img id="barcodeImage" class="barImg" src="' + barcodeImage.src + '" /></div>'
-    //   + '<div style="font-size:' + criticalFontSize + 'px;"> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
-    //   + '<div>' + name + '</div> </div>'
-    //   + '<div><span>Rs: ' + $scope.sale.itemRetail + '</span></div>'
-    //   + '</div>';
-
-    /**Tahir bhai */
-    // var MYS = '<div  style=" width:50% ;float:left ">'
-    // + '<div style="font-size:16px; margin-left:0px;line-height: 36px; margin-bottom:20px">'
-    // + '<div><span style="font-size:20px;">Dress Up</span></div>'
-    // + '<div><span>' + $scope.sale.type + '</span><span style="float:right;font-size:18px;">' + $scope.sale.size + '</span></div>'
-    // + '<div>' + $scope.sale.code + '</div><div>' + convert + '</div>'
-    // + '</div> </div>'
-    // + '<div style="width:50% ;float:right;margin-top:5px">'
-    // + '<div><img id="barcodeImage" class="barImg" width="150px" src="' + barcodeImage.src + '" /></div>'
-    // + '<div>'
-    // + '<div style="font-size:20px;">' + name + '</div> </div>'
-    // + '<div><span style="font-size:20px;">Rs: ' + $scope.sale.itemRetail + '</span></div>'
-    // + '</div>';
-
+      var printContents = document.getElementById("barcode-print").innerHTML
+      
     var arrays = [];
-    var myVal = { text: MYS };
+    var myVal = { text: printContents };
     for (var i = 1; i <= $scope.myQty; i++) {
       arrays.push(myVal);
     }
-    console.log($scope.myQty);
-    console.log(arrays);
     $scope.sa = arrays;
+    var uselessFontSize = 100;
     $timeout(function () {
       $scope.showOld = false;
-      var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
-      mywindow.document.write('<html><head>');
-      mywindow.document.write('<style>');
-      mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
-      mywindow.document.write('</style>');
-      mywindow.document.write('</head><body style="margin:0; padding: 0;">');
+      var popupWin = window.open('', '_blank', 'width=300,height=300');
+      popupWin.document.open();
+      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
+      popupWin.document.write('<style>');
+      popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+      popupWin.document.write('</style>');
+      popupWin.document.write('</head><body style=" margin:0; padding: 0;" onload="window.print() ">');
       for (var i = 0; i < arrays.length; i++) {
-        mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:40px;height:900px; font-size: ' + uselessFontSize + 'px;">');
-        mywindow.document.write(arrays[i].text);
-        mywindow.document.write('</div>');
+        popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
+        popupWin.document.write(arrays[i].text);
+        popupWin.document.write('</div>');
       }
-      mywindow.document.write('</body></html>');
-      mywindow.print();
-      mywindow.close();
+      popupWin.document.write('</body></html>');
+      setTimeout(() => {	     
+        popupWin.print();	        
+        // setTimeout(() => {	        
+          popupWin.close();	
+        // },1000)	
+      }, 1000 )
+
+      // popupWin.close();
     }, 1000);
     // }
     // });
@@ -349,63 +316,63 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         var width = barcode.getMinWidth();
         barcode.private_fontSize = 20;
         barcode.setSize(width, 120);
-        var barcodeImage = document.getElementById('barcodeImage');
-        barcodeImage.src = barcode.exportToBase64(width, 120, 0);
+        // var barcodeImage = document.getElementById('barcodeImage');
+        // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
         var convert = cipher($scope.itemWholesale);
         var name = $scope.itemName
         if ($scope.itemName && $scope.itemName.length > 25) {
           name = name.substring(0, 25);
         }
+        
+        $scope.convert = convert
+        $scope.PitemBar= {type:$scope.type,size:$scope.size,code:$scope.code,itemRetail:$scope.itemRetail }
+        $scope.name= name
+        
+        document.getElementById("barcode-print").innerHTML ;
+      JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck,{
+        height: 400,
+        width: 10,
+        fontSize: 100,
+      });
 
-        var dressUpFontSize = 120;
-        var criticalFontSize = 100;
-        var uselessFontSize = 100;
-
-        var MYS = '<div style=" width:50% ;float:left">'
-          + '<div style="padding-left:10%;line-height:150px;">'
-          + '<div><span style="font-size:' + dressUpFontSize + 'px;">Dress Up</span></div>'
-          + '<div><span>' + $scope.type + '</span>'
-          + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + $scope.size + '</span></div>'
-          + '<div>' + $scope.code + '</div>'
-          + '<div>' + convert + '</div>'
-          + '</div> </div>'
-
-          + '<div style="width:50% ;float:right;">'
-          + '<div><img id="barcodeImage" style="width:90%" class="barImg" src="' + barcodeImage.src + '" /></div>'
-          + '<div> '//<div style="font-size:18px;">' + $scope.sale.size + '</div>
-          + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
-          + '<div><span>Rs: ' + $scope.itemRetail + '</span></div>  </div>'
-          + '</div>';
-
-
+      var printContents = document.getElementById("barcode-print").innerHTML
+      
 
         var arrays = [];
-        var myVal = { text: MYS };
         //console.log($scope.itemQty);
+        var myVal = { text: printContents };
         for (var i = 1; i <= $scope.itemQty; i++) {
           arrays.push(myVal);
         }
         $scope.sa = arrays;
         // $scope.showModal = true;
 
+        var uselessFontSize = 100;
 
         $timeout(function () {
           $scope.showOld = false;
-          var mywindow = window.open('', 'PRINT', 'height=2000,width=1500');
-          mywindow.document.write('<html><head>');
-          mywindow.document.write('<style>');
-          mywindow.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
-          mywindow.document.write('</style>');
-          mywindow.document.write('</head><body style="margin:0; padding: 0;">');
+          var popupWin = window.open('', '_blank', 'width=300,height=300');
+          popupWin.document.open();
+          popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head>');
+          popupWin.document.write('<style>');
+          popupWin.document.write('.nameClass{ font-weight:bold; text-transform:uppercase; font-family:MONOSPACE; letter-spacing: 5px;}');
+          popupWin.document.write('</style>');
+          popupWin.document.write('</head><body style=" margin:0; padding: 0;" onload="window.print() ">');
           for (var i = 0; i < arrays.length; i++) {
-            mywindow.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:40px;height:900px; font-size: ' + uselessFontSize + 'px;">');
-            mywindow.document.write(arrays[i].text);
-            mywindow.document.write('</div>');
+            popupWin.document.write('<div class= "nameClass" style="width:1900px; margin-bottom:10px;height:937px; font-size: ' + uselessFontSize + 'px;">');
+            popupWin.document.write(arrays[i].text);
+            popupWin.document.write('</div>');
           }
-          mywindow.document.write('</body></html>');
-          mywindow.print();
-          mywindow.close();
+          popupWin.document.write('</body></html>');
+          setTimeout(() => {	     
+            popupWin.print();	        
+            // setTimeout(() => {	        
+              popupWin.close();	
+            // },1000)	
+          }, 1000 )
+    
+          // popupWin.close();
         }, 1000);
       }
 
@@ -745,8 +712,18 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     arrays = [];
     var arr;
     for (i in item) {
+    convert = cipher(item[i].itemWholesale);
+
+    var name = item[i].itemName;
+
+    if (item[i].itemName && item[i].itemName.length > 25) {
+      name = name.substring(0, 25);
+    }
+    item[i].convert =convert
+    item[i].name =name
       arr = printBarcodefunc(item[i].additem, item[i]);
     }
+    
     printwindow(arr, 1);
   }
 
@@ -773,8 +750,8 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     var width = barcode.getMinWidth();
     barcode.private_fontSize = 20;
     barcode.setSize(width, 120);
-    var barcodeImage = document.getElementById('barcodeImage');
-    barcodeImage.src = barcode.exportToBase64(width, 120, 0);
+    // var barcodeImage = document.getElementById('barcodeImage');
+    // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
     var convert = cipher(PitemBar.itemWholesale);
     var name = PitemBar.itemName;
@@ -782,28 +759,14 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
       name = name.substring(0, 25);
     }
 
-    var dressUpFontSize = 120;
-    var criticalFontSize = 100;
-
-
+  
     /**HAssan- Ali*/
-    var MYS = '<div style=" width:50% ;float:left" >'
-      + '<div style="padding-left:10%;line-height:150px;">'
-      + '<div><span style="font-size:' + dressUpFontSize + 'px;text-decoration: underline">Dress Up</span></div>'
-      + '<div><span>' + PitemBar.type + '</span>'
-      + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + PitemBar.size + '</span></div>'
-      + '<div>' + PitemBar.code + '</div>'
-      + '<div>' + convert + '</div>'
-      + '</div> </div>'
+      $scope.convert = convert
+      $scope.PitemBar= PitemBar
+      console.log($scope.PitemBar)
+      $scope.name= name
 
-      + '<div style="width:50% ;float:right; ">'
-      + '<div><svg id="barcode"></svg>'
-      + '<div> '//<div style="font-size:18px;">' + PitemBar.size + '</div>
-      + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
-      + '<div><span>Rs: ' + PitemBar.itemRetail + '</span></div>  </div>'
-      + '</div>';
-
-      document.getElementById("barcode-print").innerHTML += MYS;
+      document.getElementById("barcode-print").innerHTML ;
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
         height: 400,
         width: 10,
@@ -2436,10 +2399,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
 
   }
 
-  $scope.barcode = function (item) { // appear modal to ask for quantity
-    $scope.barcodemodal = true;
-    $scope.PitemBar = item;
-  }
+ 
 
   $scope.addNewItem = function () {
 
@@ -2494,6 +2454,21 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     });
   }
 
+  $scope.barcode = function (item) { // appear modal to ask for quantity
+    $scope.barcodemodal = true;
+    $scope.PitemBar = item;
+    convert = cipher($scope.PitemBar.itemWholesale);
+
+    var name = $scope.PitemBar.itemName;
+
+    if ($scope.itemName && $scope.itemName.length > 25) {
+      name = name.substring(0, 25);
+    }
+    $scope.PitemBar.convert =convert
+      $scope.PitemBar.name =name
+      console.log($scope.PitemBar)
+  }
+
   $scope.printOldBarcode = function (printQty, PitemBar) { // modal btn function to print barcode only print barcode nothing much
     arrays = [];
     var arr = printBarcodefunc(printQty, PitemBar);
@@ -2531,48 +2506,22 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     // var barcodeImage = document.getElementById('barcodeImage');
     // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
-    var convert = cipher(PitemBar.itemWholesale);
-    var name = PitemBar.itemName;
-    if (PitemBar.itemName && PitemBar.itemName.length > 25) {
-      name = name.substring(0, 25);
-    }
-
-    var dressUpFontSize = 120;
-    var criticalFontSize = 100;
-
-
-    /**HAssan- Ali*/
-    var MYS = '<div style=" width:50% ;float:left" >'
-      + '<div style="padding-left:10%;line-height:150px;">'
-      + '<div><span style="font-size:' + dressUpFontSize + 'px; text-decoration: underline">Dress Up</span></div>'
-      + '<div><span>' + PitemBar.type + '</span>'
-      + '<span style="float:right; padding-right:20%; font-size:' + criticalFontSize + 'px;">' + PitemBar.size + '</span></div>'
-      + '<div>' + PitemBar.code + '</div>'
-      + '<div>' + convert + '</div>'
-      + '</div> </div>'
-
-      + '<div style="width:50% ;float:right; ">'
-      + '<div><svg id="barcode"></svg>'
-      + '<div> '//<div style="font-size:18px;">' + PitemBar.size + '</div>
-      + '<div style="font-size:' + criticalFontSize + 'px;">' + name + '</div> '
-      + '<div><span>Rs: ' + PitemBar.itemRetail + '</span></div>  </div>'
-      + '</div>';
-
-
-      document.getElementById("barcode-print").innerHTML += MYS;
+      // $scope.convert = convert
+      $scope.PitemBar = PitemBar
+      
+      /**HAssan- Ali*/
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
         height: 400,
         width: 10,
         fontSize: 100,
       });
-
+      // document.getElementById("barcode-print").innerHTML ;
       var printContents = document.getElementById("barcode-print").innerHTML
-      
-    var myVal = { text: printContents };
-    for (var i = 1; i <= printQty; i++) {
-      arrays.push(myVal);
-    }
-    return arrays;
+      var myVal = { text: printContents };
+      for (var i = 1; i <= printQty; i++) {
+        arrays.push(myVal);
+      }
+      return arrays;      
   }
 
   function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function
@@ -2595,7 +2544,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       setTimeout(() => {	     
         popupWin.print();	        
         // setTimeout(() => {	        
-          // popupWin.close();	
+          popupWin.close();	
         // },1000)	
       }, 1000 )
 
