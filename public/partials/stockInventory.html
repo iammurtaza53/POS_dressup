@@ -236,32 +236,24 @@
 <!-- /.row -->
 
 <div id="barcode-print" style="display: none;" > <!--font-weight:bold;-->
-    
-    <div style=" width:50% ;float:left; height:50%" >
-        <div style="padding-left:10%;line-height:150px;">
-            <div>
-                <span> {{PitemBar.type }}</span>
-                <span style="float:right; padding-right:20%; font-size:100px;"> {{PitemBar.size}} </span>
-            </div>
+    <div style="text-align:center; width:100%">
+        <span style="font-size:150px; border-bottom:black solid 2px">Dress Up</span>
+    </div>
+    <div style="width:100%">
+        <div style="padding-left:20px;line-height:120px; width:30%; float:left">
+            <span> {{PitemBar.type }}</span>
+            <span style="float:right; padding-right:20%; font-size:100px;"> {{PitemBar.size}} </span>
             <div> {{PitemBar.code}} </div>
             <div> {{PitemBar.convert}} </div>
-        </div> 
-    </div>
-    <div style=" width:50% ;float:left; height:50%" >
-        <div style="text-align:center">
-            <span style="font-size:120px; border-bottom:black solid 2px">Dress Up</span>
         </div>
-        <div style="padding-top:60px"> 
-            <div style="font-size:100px ;"> {{PitemBar.name}} </div> 
-            <div>
-                <span>Rs: {{PitemBar.itemRetail }}</span>
-            </div>  
-        </div>
-    </div>
-  
-    <div style="width:100% ;float:right; height:50%">
-        <div style="text-align:center">
+        <div style="text-align:center; width:100%">
             <svg id="barcode" style="letter-spacing: 20px;"></svg>
+        </div>
+    </div>
+    <div style=" width:100%; text-align:center" >
+        <div style="font-weight:bold;font-size:100px;">
+            <span>{{PitemBar.name}} </span>
+            <span style="padding-left: 260px; font-weight:bold"> Rs: {{PitemBar.itemRetail }} </span>
         </div>
     </div>
 </div>

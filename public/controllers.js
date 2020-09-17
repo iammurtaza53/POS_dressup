@@ -2512,9 +2512,10 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       /**HAssan- Ali*/
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
         height: 350,
-        width: 15,
-        fontSize: 100,
+        width: 15 ,
+        fontSize: 50,
         font:'sans-serif',
+        // textAlign: "right"
       });
       // document.getElementById("barcode-print").innerHTML ;
       var printContents = document.getElementById("barcode-print").innerHTML
@@ -2543,9 +2544,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       }
       popupWin.document.write('</body></html>');
       setTimeout(() => {	     
-        popupWin.print();	        
+        // popupWin.print();	        
         // setTimeout(() => {	        
-          popupWin.close();	
+          // popupWin.close();	
         // },1000)	
       }, 1000 )
 
