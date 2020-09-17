@@ -2543,9 +2543,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       }
       popupWin.document.write('</body></html>');
       setTimeout(() => {	     
-        // popupWin.print();	        
+        popupWin.print();	        
         // setTimeout(() => {	        
-          // popupWin.close();	
+          popupWin.close();	
         // },1000)	
       }, 1000 )
 
