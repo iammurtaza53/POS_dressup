@@ -768,9 +768,11 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
 
       document.getElementById("barcode-print").innerHTML ;
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
-        height: 400,
-        width: 10,
+        height: 350,
+        width: 15 ,
         fontSize: 100,
+        font:'sans-serif',
+        // textAlign: "right"
       });
 
       var printContents = document.getElementById("barcode-print").innerHTML
@@ -2544,9 +2546,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       }
       popupWin.document.write('</body></html>');
       setTimeout(() => {	     
-        // popupWin.print();	        
+        popupWin.print();	        
         // setTimeout(() => {	        
-          // popupWin.close();	
+          popupWin.close();	
         // },1000)	
       }, 1000 )
 

@@ -235,16 +235,16 @@
 
 <!-- /.row -->
 
-<div id="barcode-print" style="display: none;" > <!--font-weight:bold;-->
-    <div style="text-align:center; width:100%;padding-bottom:10px">
+<div id="barcode-print" style="display: none;" > <!--font-weight:900;-->
+    <div style="text-align:center; width:100%;padding-bottom:10px;">
         <span style="font-size:150px; border-bottom:black solid 2px">Dress Up</span>
     </div>
     <div style="width:100%">
-        <div style="padding-left:30px;line-height:120px; width:30%; float:left">
-            <!-- <span>24-38</span> -->
-            <span> {{PitemBar.type }}</span> 
-            <!-- <span style="float:right; padding-right:20%; font-size:100px;"> 30 </span> -->
-            <span style="float:right; padding-right:20%; font-size:100px;"> {{PitemBar.size}} </span>
+        <div style="margin-left:50px;line-height:120px; width:30%; float:left;font-weight:bold">
+            <!-- <span>24-38 </span> -->
+            <span> {{PitemBar.type }} </span> 
+            <!-- <span style="font-size:100px;"> : 30 </span> -->
+            <span style="font-size:100px;"> : {{PitemBar.size}} </span>
             <!-- <div style="font-size:80px;"> A.B.G-1230 </div> -->
             <div style="font-size:80px;"> {{PitemBar.code}} </div>
             <!-- <div> OBE </div> -->
@@ -255,7 +255,7 @@
         </div>
     </div>
     <div style=" width:100%; text-align:center" >
-        <div style="font-weight:bold;font-size:100px;">
+        <div style="font-weight:600;font-size:100px;">
             <!-- <span>BABA PANT </span> -->
             <span>{{PitemBar.name}} </span>
             <!-- <span style="padding-left: 260px; font-weight:bold"> RS: 1175 </span> -->
