@@ -2513,6 +2513,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       
       /**HAssan- Ali*/
       JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
+      // JsBarcode("#barcode", '999999',{
         height: 350,
         width: 15 ,
         fontSize: 100,
@@ -2546,9 +2547,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
       }
       popupWin.document.write('</body></html>');
       setTimeout(() => {	     
-        popupWin.print();	        
+        popupWin.print();   
         // setTimeout(() => {	        
-          popupWin.close();	
+          popupWin.close();
         // },1000)	
       }, 1000 )
 
