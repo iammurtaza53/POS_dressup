@@ -1,7 +1,7 @@
 'use strict';
 
 
-var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'ngRoute', 'AngularPrint', 'ngSanitize'])
+var app = angular.module('myApp', ['myApp.controllers', 'base64', 'naif.base64', 'myApp.services', 'ngRoute', 'AngularPrint', 'ngSanitize',])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
       when("/login", { templateUrl: "partials/login.html", controller: "loginUser" }).
@@ -22,11 +22,11 @@ var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'ngRou
       when("/stockInventory", { templateUrl: "partials/stockInventory.html", controller: "stockInventory" }).
       when("/editItem", { templateUrl: "partials/editItem.html", controller: "editItem" }).
       when("/monthlyExpense", { templateUrl: "partials/monthlyExpense.html", controller: "monthlyExpense" }).
-      
+
       otherwise({ redirectTo: '/login' });
 
 
-
+    
   }]).directive('contenteditable', function () {
     return {
       restrict: 'A', // only activate on element attribute

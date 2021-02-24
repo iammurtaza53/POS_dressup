@@ -2,7 +2,16 @@
     <h1 class="col-md-10">
         <a ng-href="#/dataEntry" style="color: black; text-decoration-line: none;"> Add Bill</a>
     </h1>
-    <h1><button type="button" ng-click="showSAdd()" class="btn btn-lg btn-info col-md-2">Add Supplier</button></h1>
+
+    
+        <h5><button type="button" ng-click="showSAdd()" class="btn btn-lg btn-info col-md-2" style="display:inline-block;margin-left: -262px;
+            margin-top: 13px;
+        ">Add Supplier</button></h5>
+    </div>
+    <div class="inner">
+        <h5><button type="button" class="btn btn-lg btn-success col-md-2" style="margin-top: -57px; display: inline-block;float:right;">Sync Products</button>
+        </h5>
+    
     <!--This shows to add new supplier-->
 </div>
 <hr>
@@ -17,7 +26,7 @@
         Bill No<input class="form-control" ng-model="bill_No">
     </div>
     <div class="col-md-1" style="padding-left: 0;">
-        Debit   <input class="form-control " type="number" ng-model="debit" ng-init="debit=0" placeholder="Debit">
+        Debit <input class="form-control " type="number" ng-model="debit" ng-init="debit=0" placeholder="Debit">
     </div>
     <div class="col-md-1" style="padding-left: 0;">
 
@@ -39,8 +48,8 @@
     </div>
     <h4 class="col-md-2" style="margin-top: 25px;">Total Balance: <span style="font-weight: bolder;">{{balance}}</span>
     </h4>
-    &nbsp;<button type="button" class="btn btn-md btn-success col-md-2" ng-click="showbill()">Generate</button>
-   
+    &nbsp;<button type="button" class="btn btn-md btn-success col-md-2" style="margin-left: -14px;" ng-click="showbill()">Generate</button>
+
 </div>
 
 <br />
@@ -70,7 +79,6 @@
         <tbody>
             <tr ng-repeat="item in items | filter :search ">
                 <td><button type="button" ng-click="barcode(item)" class="btn btn-sm btn-info">print</button></td>
-                <!--genrate barcode for the item-->
                 <td>{{item.barcode}}</td>
                 <td>{{item.itemName}}</td>
                 <td>{{item.itemDesc}}</td>
@@ -84,13 +92,18 @@
                 <td>{{item.itemQty}}</td>
                 <td> <input type="number" tabindex="1" class="form-control" ng-model="additem[$index]"
                         ng-keydown="addinStock($event,item,additem[$index])"></td>
-                <!--add item into supplier bill-->
+
             </tr>
             <tr ng-If="addTrue">
                 <!-- add NEw item to the selected supplier-->
-                <td colspan="2"><input class="form-control" ng-model="add.name" ng-init="add.name =''" type="text"
-                        placeholder="Name"></td>
-                <td colspan="2"><input class="form-control" ng-model="add.decs" ng-init="add.decs =''" type="text"
+                <td>
+                    <input type="file" ng-model="add.image" base-sixty-four-input multiple>
+                </td>
+                <td>Auto Generate</td>
+                <td><input class="form-control" ng-model="add.name" ng-init="add.name =''" type="text"
+                        placeholder="Name">
+                </td>
+                <td><input class="form-control" ng-model="add.decs" ng-init="add.decs =''" type="text"
                         placeholder="Description"></td>
                 <td><input class="form-control" ng-model="add.type" ng-init="add.type =''" type="text"
                         placeholder="Type"></td>
@@ -101,29 +114,29 @@
                 <td><input class="form-control" ng-model="add.code" ng-init="add.code =''" type="text"
                         placeholder="Code"></td>
 
-                <!-- category list and input -->
+
                 <td><input class="form-control" ng-model="add.category" ng-init="add.category =''" type="text"
                         placeholder="Category" ng-keydown="enterFunction($event,selectedCustomer)" list="categoryList">
                 </td>
                 <datalist id="categoryList" ng-click="click(selectedCustomer)">
                     <option ng-repeat="v in chooseCategories" value="{{v.name}}"></option>
                 </datalist>
-                <!-- category list and input END -->
+
 
                 <td><input class="form-control" ng-model="add.WholeRs" ng-init="add.WholeRs =''" type="number"
                         placeholder="WholeSale"></td>
 
                 <td ng-show="Rs" ng-click="inRs()">{{showMRP}}%</td>
-                <!--show this if enter retail price in money-->
+
                 <td ng-show="per"><input class="form-control" type="number" ng-init="MRP =''"
                         ng-keydown="conversion($event)" ng-model="add.MRP" placeholder="MRP"></td>
-                <!--show this if retail price is in %-->
+
 
                 <td ng-show="per" ng-click="inRs()">{{showRetail}}Rs</td>
-                <!--show this if retail price is in %-->
+
                 <td ng-show="Rs"><input class="form-control" ng-model="add.retailRs" type="number"
                         ng-init="add.retailRs =''" placeholder="retail" ng-keydown="conversion($event)"></td>
-                <!--show this if enter retail price in money-->
+
 
                 <td><input class="form-control" ng-model="add.additem" type="number" ng-init="add.additem =''"
                         placeholder="add Qty"></td>
@@ -235,14 +248,15 @@
 
 <!-- /.row -->
 
-<div id="barcode-print" style="display: none;" > <!--font-weight:900;-->
+<div id="barcode-print" style="display: none;">
+    <!--font-weight:900;-->
     <div style="text-align:center; width:100%;padding-bottom:10px;">
         <span style="font-size:150px; border-bottom:black solid 2px">Dress Up</span>
     </div>
     <div style="width:100%">
         <div style="margin-left:50px;line-height:120px; width:30%; float:left;font-weight:bold">
             <!-- <span>24-38 </span> -->
-            <span> {{PitemBar.type }} </span> 
+            <span> {{PitemBar.type }} </span>
             <!-- <span style="font-size:100px;"> : 30 </span> -->
             <span style="font-size:100px;"> : {{PitemBar.size}} </span>
             <!-- <div style="font-size:75px;"> AB.B.G-12300 </div> -->
@@ -254,7 +268,7 @@
             <svg id="barcode" style="letter-spacing: 20px;"></svg>
         </div>
     </div>
-    <div style=" width:100%; text-align:center" >
+    <div style=" width:100%; text-align:center">
         <div style="font-weight:600;font-size:100px;">
             <!-- <span>BABA PANT </span> -->
             <span>{{PitemBar.name}} </span>

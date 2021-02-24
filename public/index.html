@@ -75,23 +75,15 @@
     </style>
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
 </head>
 
-<body >
-
-
+<body>
 
     <!------ Include the above in your HEAD tag ---------->
 
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top"  style="margin-bottom: 0" ng-show="loggedOut">
+        <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0" ng-show="loggedOut">
             <!-- <div class="container-fluid"> -->
             <div class="navbar-header" role="navigation">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -110,8 +102,9 @@
                 </div>
             </div>
             <ul class="nav navbar-top-links navbar-right">
-                <span class="navbar-brand" align="right"><a href="https://www.5cube.io" target="_blank" style="text-decoration: none; color: black;">Developed By: 5Cube</a></span>
-                <span class="navbar-brand" style="padding:0 ;padding-left: 10px; padding-right: 30px;" >
+                <span class="navbar-brand" align="right"><a href="https://www.5cube.io" target="_blank"
+                        style="text-decoration: none; color: black;">Developed By: 5Cube</a></span>
+                <span class="navbar-brand" style="padding:0 ;padding-left: 10px; padding-right: 30px;">
                     <li class="dropdown">
                         <a class="dropdown-toggle row" data-toggle="dropdown" href="#">
                             <span class="fa fa-user solo"></span> <span class="fa fa-caret-down solo"></span>
@@ -133,7 +126,8 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper" role="navigation" ng-show="loggedOut">
             <nav id="spy">
-                <ul class="sidebar-nav navbar-default nav navbar-collapse" style="width:100%; font-weight: bold;" id="side-menu">
+                <ul class="sidebar-nav navbar-default nav navbar-collapse" style="width:100%; font-weight: bold;"
+                    id="side-menu">
                     <li class="sidebar-brand">
                         <a ng-href="#/pos"><span class="fa fa-table solo">POS</span></a>
 
@@ -158,10 +152,11 @@
                             </li>
                             <li>
                                 <!-- <a ng-href="#/dataEntry"> New Item Entry</a> -->
-                                <a ng-href="#/stockInventory">Generate Bill</a> <!--Because of the requirment-->
+                                <a ng-href="#/stockInventory">Generate Bill</a>
+                                <!--Because of the requirment-->
 
                             </li>
-                            
+
                             <!-- <li>
                                 <a ng-href="#/newBill">Add NewBill & Payment</a>
                             </li> -->
@@ -238,16 +233,16 @@
             </div>
         </div>
     </div>
-  
+
     <!--for toggle sidebar-->
     <script src="js\jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap3.min.js"></script>
-    
+
     <script>
-            $("#menu-toggle").click(function (e) {
-                e.preventDefault();
-                $("#wrapper").toggleClass("active");
-            });
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("active");
+        });
     </script>
     <!--for toggle sidebar-->
     <script src="bower_components/angular/angular.js"></script>
@@ -255,7 +250,10 @@
     <script src="bower_components/angular-print/angularPrint.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular-base64/angular-base64.js"></script>
 
+    <script type="text/javascript"
+        src="https://cdn.rawgit.com/adonespitogo/angular-base64-upload/master/src/angular-base64-upload.js"></script>
     <!-- jQuery -->
     <!-- <script src="js/jquery-1.11.1.min.js"></script> -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -274,16 +272,6 @@
     <script src="js/code128.js"></script>
     <script src="js/JsBarcode.code128.min.js"></script>
     <!-- Custom Theme JavaScript -->
-    <script src="dist/js/sb-admin-2.js"></script>
-    <!-- <script src="js/bootstrap.js"></script> -->
-    <!-- <script src="js/jquery.js"></script> -->
-    <!-- <script src="js/jquery.min.js"></script> -->
-
-    >
-    <!--Materialize js-->
-    <!-- <script src="dist/js/sb-admin-2.js"></script> -->
-
-    <!--Materialize js-->
 
 </body>
 

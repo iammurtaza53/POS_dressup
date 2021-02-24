@@ -1,9 +1,8 @@
-// import { Router } from "express";
-
 var app = angular.module('myApp.controllers', []);
 var meLogin = false;
 var mepOs = false;
 var entryUser = false;
+
 
 app.controller('registerUser', function ($scope, myService, $location, $rootScope) {
   $rootScope.loggedOut = true;
@@ -211,19 +210,19 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
     }
 
     $scope.convert = convert
-    $scope.PitemBar= $scope.sale
-    console.log($scope.PitemBar,$scope.sale)
-    $scope.name= name
+    $scope.PitemBar = $scope.sale
+    console.log($scope.PitemBar, $scope.sale)
+    $scope.name = name
 
-    document.getElementById("barcode-print").innerHTML ;
-      JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck,{
-        height: 400,
-        width: 10,
-        fontSize: 100,
-      });
+    document.getElementById("barcode-print").innerHTML;
+    JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck, {
+      height: 400,
+      width: 10,
+      fontSize: 100,
+    });
 
-      var printContents = document.getElementById("barcode-print").innerHTML
-      
+    var printContents = document.getElementById("barcode-print").innerHTML
+
     var arrays = [];
     var myVal = { text: printContents };
     for (var i = 1; i <= $scope.myQty; i++) {
@@ -246,12 +245,12 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         popupWin.document.write('</div>');
       }
       popupWin.document.write('</body></html>');
-      setTimeout(() => {	     
-        popupWin.print();	        
+      setTimeout(() => {
+        popupWin.print();
         // setTimeout(() => {	        
-          popupWin.close();	
+        popupWin.close();
         // },1000)	
-      }, 1000 )
+      }, 1000)
 
       // popupWin.close();
     }, 1000);
@@ -324,20 +323,20 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
         if ($scope.itemName && $scope.itemName.length > 25) {
           name = name.substring(0, 25);
         }
-        
-        $scope.convert = convert
-        $scope.PitemBar= {type:$scope.type,size:$scope.size,code:$scope.code,itemRetail:$scope.itemRetail }
-        $scope.name= name
-        
-        document.getElementById("barcode-print").innerHTML ;
-      JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck,{
-        height: 100,
-        width: 10,
-        fontSize: 100,
-      });
 
-      var printContents = document.getElementById("barcode-print").innerHTML
-      
+        $scope.convert = convert
+        $scope.PitemBar = { type: $scope.type, size: $scope.size, code: $scope.code, itemRetail: $scope.itemRetail }
+        $scope.name = name
+
+        document.getElementById("barcode-print").innerHTML;
+        JsBarcode("#barcode", zeroAppend + $scope.barcodeCheck, {
+          height: 100,
+          width: 10,
+          fontSize: 100,
+        });
+
+        var printContents = document.getElementById("barcode-print").innerHTML
+
 
         var arrays = [];
         //console.log($scope.itemQty);
@@ -365,13 +364,13 @@ app.controller("dataEntry", function ($scope, myService, $routeParams, $location
             popupWin.document.write('</div>');
           }
           popupWin.document.write('</body></html>');
-          setTimeout(() => {	     
-            popupWin.print();	        
+          setTimeout(() => {
+            popupWin.print();
             // setTimeout(() => {	        
-              popupWin.close();	
+            popupWin.close();
             // },1000)	
-          }, 1000 )
-    
+          }, 1000)
+
           // popupWin.close();
         }, 1000);
       }
@@ -405,7 +404,7 @@ app.controller("editName", function ($scope, myService, $routeParams, $location,
 app.controller("supplierDetail", function ($scope, myService, $routeParams, $location, $rootScope) {
   $rootScope.loggedOut = true;
   $scope.whenTable = false;
-  
+
 
   getSup();
   $rootScope.logout = function () {
@@ -449,7 +448,7 @@ app.controller("supplierDetail", function ($scope, myService, $routeParams, $loc
       $scope.totalit = qty;
       $scope.myProfit = profit;
       $scope.mysale = retail;
-      
+
 
     });
   }
@@ -633,7 +632,7 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
         for (i in res) {
           debit = res[i].debit || 0
           credit = res[i].credit || 0
-          balance =  balance + (debit -  credit)
+          balance = balance + (debit - credit)
           res[i].balance = balance
           $scope.totalDebit = ($scope.totalDebit + debit);
           $scope.totalCredit = ($scope.totalCredit + credit);
@@ -676,14 +675,14 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     myS = 2;
   }
 
-  $scope.addBill = function (date, credit,debit,bill_No) {
-    console.log({date}, {credit},{debit},{bill_No})
-    if ( credit == null && debit ==null) {
+  $scope.addBill = function (date, credit, debit, bill_No) {
+    console.log({ date }, { credit }, { debit }, { bill_No })
+    if (credit == null && debit == null) {
       alert("You can't leave any field empty, Please put 0");
     }
     else {
-      var payObj = { supplierName: $scope.supplierChoose, date: date.toDateString(),bill_No,bill_No, credit: credit, debit:debit, select: myS }
-      console.log(payObj)  
+      var payObj = { supplierName: $scope.supplierChoose, date: date.toDateString(), bill_No, bill_No, credit: credit, debit: debit, select: myS }
+      console.log(payObj)
       myService.paymentOrBill(payObj).success(function (res) {
         console.log(res)
         if (res == false) {
@@ -697,7 +696,7 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
           $scope.paymentDate = new Date()
           $scope.debit = 0;
           $scope.credit = 0;
-          
+
           // angular.copy($scope.billForm);
         }
 
@@ -712,18 +711,18 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
     arrays = [];
     var arr;
     for (i in item) {
-    convert = cipher(item[i].itemWholesale);
+      convert = cipher(item[i].itemWholesale);
 
-    var name = item[i].itemName;
+      var name = item[i].itemName;
 
-    if (item[i].itemName && item[i].itemName.length > 25) {
-      name = name.substring(0, 25);
-    }
-    item[i].convert =convert
-    item[i].name =name
+      if (item[i].itemName && item[i].itemName.length > 25) {
+        name = name.substring(0, 25);
+      }
+      item[i].convert = convert
+      item[i].name = name
       arr = printBarcodefunc(item[i].additem, item[i]);
     }
-    
+
     printwindow(arr, 1);
   }
 
@@ -759,24 +758,24 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
       name = name.substring(0, 25);
     }
 
-  
+
     /**HAssan- Ali*/
-      $scope.convert = convert
-      $scope.PitemBar= PitemBar
-      console.log($scope.PitemBar)
-      $scope.name= name
+    $scope.convert = convert
+    $scope.PitemBar = PitemBar
+    console.log($scope.PitemBar)
+    $scope.name = name
 
-      document.getElementById("barcode-print").innerHTML ;
-      JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
-        height: 350,
-        width: 15 ,
-        fontSize: 100,
-        font:'sans-serif',
-        // textAlign: "right"
-      });
+    document.getElementById("barcode-print").innerHTML;
+    JsBarcode("#barcode", zeroAppend + PitemBar.barcode, {
+      height: 350,
+      width: 15,
+      fontSize: 100,
+      font: 'sans-serif',
+      // textAlign: "right"
+    });
 
-      var printContents = document.getElementById("barcode-print").innerHTML
-      
+    var printContents = document.getElementById("barcode-print").innerHTML
+
     var myVal = { text: printContents };
     for (var i = 1; i <= printQty; i++) {
       arrays.push(myVal);
@@ -801,12 +800,12 @@ app.controller("supplierLedger", function ($scope, $timeout, myService, $window,
         popupWin.document.write('</div>');
       }
       popupWin.document.write('</body></html>');
-      setTimeout(() => {	     
-        popupWin.print();	        
+      setTimeout(() => {
+        popupWin.print();
         // setTimeout(() => {	        
-          popupWin.close();	
+        popupWin.close();
         // },1000)	
-      }, 1000 )
+      }, 1000)
 
       // popupWin.close();
     }, 1000);
@@ -892,7 +891,7 @@ app.controller("newBill", function ($scope, myService, $routeParams, $location, 
 app.controller("lastSale", function ($scope, myService, $routeParams, $location, $rootScope, $route) {
   $rootScope.loggedOut = true;
   $scope.showModal = false;
-  
+
   $rootScope.logout = function () {
     $rootScope.menu = false;
     $rootScope.posUser = false;
@@ -954,18 +953,18 @@ app.controller("lastSale", function ($scope, myService, $routeParams, $location,
       myService.returnSale(thisObj).success(function (res) {
         if (res) {
           var index = bill.soldItems.indexOf(thisItem.barcode);
-          bill.soldItems.splice(index,1);
+          bill.soldItems.splice(index, 1);
           $scope.sold.splice(index, 1);
           $scope.bill.totalPrice = totalNow;
           $scope.bill.totalDiscount = discountNow;
-          $scope.bill.totalQty--; 
+          $scope.bill.totalQty--;
         }
       });
     }
   }
 
-  $scope.Done= function (){
-    $scope.showModal=false;
+  $scope.Done = function () {
+    $scope.showModal = false;
   }
 });
 
@@ -1124,7 +1123,7 @@ app.controller("dailyReport", function ($scope, myService, $routeParams, $route,
   $scope.showexpense = function (eDate) {
     $scope.texpense = 0;
     var obj = { date: eDate.toDateString() }
-    myService.dailyexpense(obj).success(function (res) { 
+    myService.dailyexpense(obj).success(function (res) {
       if (res) {
         console.log('controller 902')
         for (i in res) {
@@ -2391,8 +2390,8 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
         }
         printwindow(arr, 1);
         $scope.barcodemodal = false
-        setTimeout(function(){  $window.location.reload(); }, 3000);
-        
+        setTimeout(function () { $window.location.reload(); }, 3000);
+
       }
     });
     // $window.location.reload()
@@ -2400,8 +2399,6 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     // $scope.reload() //This wasn't working here so use widnow reload
 
   }
-
- 
 
   $scope.addNewItem = function () {
 
@@ -2412,6 +2409,7 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     }
     if ($scope.add.name != "" && $scope.add.decs != "" && $scope.add.additem != "" && $scope.add.WholeRs != "" && $scope.add.retailRs != "" && $scope.add.type != "" && $scope.add.category != "" && $scope.add.size != "" && $scope.add.code != "") {
       var addObj = {
+        itemImg: $scope.add.image,
         itemName: $scope.add.name, itemDesc: $scope.add.decs, itemQty: $scope.add.additem, itemWholesale: $scope.add.WholeRs, additem: $scope.add.additem,
         itemRetail: $scope.add.retailRs, itemCategory: $scope.add.category, type: $scope.add.type, size: $scope.add.size, code: $scope.add.code, itemSupplier: $scope.supplierChoose
       };
@@ -2430,8 +2428,8 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
           $scope.items.push(addObj);
         }
       });
-      $scope.add.name = ""; $scope.add.decs = ""; $scope.add.additem = ""; $scope.add.WholeRs = ""; $scope.add.MRP = ""; $scope.add.retailRs = "";
-      $scope.add.type = ""; $scope.add.category = ""; $scope.add.size = ""; $scope.add.code = "";
+      // $scope.add.name = ""; $scope.add.decs = ""; $scope.add.additem = ""; $scope.add.WholeRs = ""; $scope.add.MRP = ""; $scope.add.retailRs = "";
+      // $scope.add.type = ""; $scope.add.category = ""; $scope.add.size = ""; $scope.add.code = "";
 
       // $scope.selectedSupplier = $scope.chooseSupplier[$scope._id];
     } else {
@@ -2466,9 +2464,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     if ($scope.itemName && $scope.itemName.length > 25) {
       name = name.substring(0, 25);
     }
-    $scope.PitemBar.convert =convert
-      $scope.PitemBar.name =name
-      console.log($scope.PitemBar)
+    $scope.PitemBar.convert = convert
+    $scope.PitemBar.name = name
+    console.log($scope.PitemBar)
   }
 
   $scope.printOldBarcode = function (printQty, PitemBar) { // modal btn function to print barcode only print barcode nothing much
@@ -2508,25 +2506,25 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
     // var barcodeImage = document.getElementById('barcodeImage');
     // barcodeImage.src = barcode.exportToBase64(width, 120, 0);
 
-      // $scope.convert = convert
-      $scope.PitemBar = PitemBar
-      
-      /**HAssan- Ali*/
-      JsBarcode("#barcode", zeroAppend + PitemBar.barcode,{
+    // $scope.convert = convert
+    $scope.PitemBar = PitemBar
+
+    /**HAssan- Ali*/
+    JsBarcode("#barcode", zeroAppend + PitemBar.barcode, {
       // JsBarcode("#barcode", '999999',{
-        height: 350,
-        width: 15 ,
-        fontSize: 100,
-        font:'sans-serif',
-        // textAlign: "right"
-      });
-      // document.getElementById("barcode-print").innerHTML ;
-      var printContents = document.getElementById("barcode-print").innerHTML
-      var myVal = { text: printContents };
-      for (var i = 1; i <= printQty; i++) {
-        arrays.push(myVal);
-      }
-      return arrays;      
+      height: 350,
+      width: 15,
+      fontSize: 100,
+      font: 'sans-serif',
+      // textAlign: "right"
+    });
+    // document.getElementById("barcode-print").innerHTML ;
+    var printContents = document.getElementById("barcode-print").innerHTML
+    var myVal = { text: printContents };
+    for (var i = 1; i <= printQty; i++) {
+      arrays.push(myVal);
+    }
+    return arrays;
   }
 
   function printwindow(arrays, ref) { // print barcode that saves in PrintBarcodefunc function//sameer
@@ -2546,12 +2544,12 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
         popupWin.document.write('</div>');
       }
       popupWin.document.write('</body></html>');
-      setTimeout(() => {	     
-        popupWin.print();   
+      setTimeout(() => {
+        popupWin.print();
         // setTimeout(() => {	        
-          popupWin.close();
+        popupWin.close();
         // },1000)	
-      }, 1000 )
+      }, 1000)
 
       // popupWin.close();
     }, 1000);
@@ -2757,9 +2755,9 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
   $scope.shoModal = false;
   $scope.showthis = false;
   // $scope.expenseDate = $filter('date')('2019-02-13','dd/MM/yyyy');
-  $scope.expenseDate = new Date ()
-  
-  
+  $scope.expenseDate = new Date()
+
+
   $interval(function () {
     var d = new Date();
     $scope.mtime = d.toLocaleTimeString();
@@ -2767,7 +2765,7 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
   }, 1000)
 
   $scope.showExpense = function (monthYear) {
-    
+
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     $scope.varaible = monthNames[monthYear.getMonth()] + " " + monthYear.getFullYear()
     monthYear = [monthNames[monthYear.getMonth()], monthYear.getFullYear()];
@@ -2787,9 +2785,9 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
 
   $scope.addExpense = function (title, amount, date) {
     var obj = { date: date.toDateString(), time: $scope.mtime, expenseTitle: title, expense: amount }
-    
-   
-    if(title!=undefined && amount!=undefined && date!=undefined){
+
+
+    if (title != undefined && amount != undefined && date != undefined) {
       myService.addExpense(obj).success(function (res) {
         if (res) {
           alert('Expense added "~"');
@@ -2797,13 +2795,12 @@ app.controller("monthlyExpense", async function ($scope, myService, $interval, $
         }
       });
     }
-    
+
   }
   $scope.print = function () {
     $window.print();
   }
 });
-
 
 /** Global Varaible */
 function cipher(number) { // change wholesale price to code
@@ -2847,92 +2844,6 @@ function cipher(number) { // change wholesale price to code
         break;
     }
   }
-  //console.log("encripted " + convert);
+
   return convert;
 }
-
-/* Discount per item in CHanedkey after retailArray[id] initilize*/
-
-//discount[id-1] = res.itemDiscount;   /* COMIT Dist make the list of item prizes function */
-
-// $scope.itemDiscount = function ($event, amount, para) {
-//   var done;
-//   var keyCode = $event.which || $event.keyCode ;
-//   //console.log('Key: '+keyCode);
-//   if (keyCode === 8){ if(amount==null) done = true; else done =false;}
-//   if (keyCode === 13 ||done) {
-//     if (bool === true) {
-//       if (amount == null) { 
-//           amount = 0;
-//       } /*if passed amount value is null the amount will be 0*/
-//       if (amount > discount[para]){  /* if Discount is greater than availabel discount on item show error*/
-//         $scope.error[para] = 'max discount on item ' + discount[para];
-//       } else{
-//         d = false;
-//         sum = sum - retailArray[para]  /*subtract previous added prize*/
-//         money = tempRetail[para] - amount;  /*Discount save to use Comment*/
-//         sum = sum + money; /* Do Discount comment*/
-//         mynew = sum;
-//         retailArray[para] = money; /*save money for the recipt comment*/
-//         $scope.priceSum = sum;
-//         $scope.error[para] = ''; /* NULL error*/
-//       }
-//     }
-//     else {
-//       //console.log('Nothing happend on line 1176');
-//     }
-//   }
-// }
-///* Item DIscount END*/    
-
-/* add discount percent that by drop down   ((in CHanedkey)) */
-// $scope.PERCENT = [
-//   { 'name': '0%', 'value': '0' },
-//   { 'name': '1%', 'value': '1' },
-//   { 'name': '2%', 'value': '2' },
-//   { 'name': '3%', 'value': '3' },
-//   { 'name': '4%', 'value': '4' },
-//   { 'name': '5%', 'value': '5' },
-//   { 'name': '6%', 'value': '6' },
-//   { 'name': '7%', 'value': '7' },
-//   { 'name': '8%', 'value': '8' },
-//   { 'name': '9%', 'value': '9' },
-//   { 'name': '10%', 'value': '10' },
-//   { 'name': '11%', 'value': '11' },
-//   { 'name': '12%', 'value': '12' },
-//   { 'name': '13%', 'value': '13' },
-//   { 'name': '14%', 'value': '14' },
-//   { 'name': '15%', 'value': '15' },
-// ];
-
-// $scope.disco = {
-//   'discount': $scope.PERCENT
-// };
-// var d = true;
-// var mynew;
-// var discountedAmount = 0;
-// $scope.addDiscountpercent = function (amount) {
-//   var temp;
-//   amount = Number(amount.value);
-//   if (bool === true) {
-//     sum = mynew;
-//     if (sum > 0) {
-//       //console.log(amount);
-//       d = false;
-//       temp = sum;
-//       amount = amount / 100;
-//       amount = temp * amount;
-//       amount = Math.round(amount);
-//       discountedAmount = amount;
-//       temp = temp - amount;
-//       $scope.priceSum = temp;
-//       sum = temp;
-//       $scope.discount = amount;
-//       //console.log(sum, temp, mynew);
-//     }
-//   }
-//   else {
-//     $scope.disco = '';
-//     alert('Please Do Some Sale');
-//   }
-// }
