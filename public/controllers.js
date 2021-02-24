@@ -2598,6 +2598,14 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   /** call functions END */
 });
 
+app.controller('MyController', function ($scope) {
+  
+  $scope.showModal = false;
+  $scope.open = function(){
+  $scope.showModal = !$scope.showModal;
+  };
+});
+
 app.controller("editItem", function ($scope, myService, $interval, $routeParams, $location, $route, $rootScope) {
   $rootScope.loggedOut = true;
   $scope.deletepage = false;

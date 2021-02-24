@@ -3,15 +3,16 @@
         <a ng-href="#/dataEntry" style="color: black; text-decoration-line: none;"> Add Bill</a>
     </h1>
 
-    
-        <h5><button type="button" ng-click="showSAdd()" class="btn btn-lg btn-info col-md-2" style="display:inline-block;margin-left: -262px;
+
+    <h5><button type="button" ng-click="showSAdd()" class="btn btn-lg btn-info col-md-2" style="display:inline-block;margin-left: -262px;
             margin-top: 13px;
         ">Add Supplier</button></h5>
-    </div>
-    <div class="inner">
-        <h5><button type="button" class="btn btn-lg btn-success col-md-2" style="margin-top: -57px; display: inline-block;float:right;">Sync Products</button>
-        </h5>
-    
+</div>
+<div class="inner">
+    <h5><button type="button" class="btn btn-lg btn-success col-md-2"
+            style="margin-top: -57px; display: inline-block;float:right;">Sync Products</button>
+    </h5>
+
     <!--This shows to add new supplier-->
 </div>
 <hr>
@@ -48,7 +49,8 @@
     </div>
     <h4 class="col-md-2" style="margin-top: 25px;">Total Balance: <span style="font-weight: bolder;">{{balance}}</span>
     </h4>
-    &nbsp;<button type="button" class="btn btn-md btn-success col-md-2" style="margin-left: -14px;" ng-click="showbill()">Generate</button>
+    &nbsp;<button type="button" class="btn btn-md btn-success col-md-2" style="margin-left: -14px;"
+        ng-click="showbill()">Generate</button>
 
 </div>
 
@@ -78,7 +80,15 @@
         </thead>
         <tbody>
             <tr ng-repeat="item in items | filter :search ">
-                <td><button type="button" ng-click="barcode(item)" class="btn btn-sm btn-info">print</button></td>
+                <td><button type="button" ng-click="barcode(item)" class="btn btn-info">print</button>
+                    <div ng-controller="MyController">
+                        <button ng-click="open()" class="btn btn-primary" ng-hide="item.image.length == 0"
+                            style="margin-top: -56px;margin-left: 63px;">View</button>
+                        <modal title="images" visible="showModal">
+                            <img src="img/{{item.image[0]}}" alt="">
+                        </modal>
+                    </div>
+                </td>
                 <td>{{item.barcode}}</td>
                 <td>{{item.itemName}}</td>
                 <td>{{item.itemDesc}}</td>
