@@ -85,7 +85,9 @@
                         <button ng-click="open()" class="btn btn-primary" ng-hide="item.image.length == 0"
                             style="margin-top: -56px;margin-left: 63px;">View</button>
                         <modal title="images" visible="showModal">
-                            <img src="img/{{item.image[0]}}" alt="">
+                    <div ng-repeat="image in item.image">
+                        <img src="img/{{image}}" style="width: 79%;height:40%;margin-left: 60px;margin-top: 4px;"/>
+                            </div>
                         </modal>
                     </div>
                 </td>
