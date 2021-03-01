@@ -338,15 +338,15 @@ app.post('/addItem', function (req, res) {
   var path
 
   if (typeof images === 'string') {
-    path = images.filename
-    fs.writeFile(images.filename, images.base64, { encoding: 'base64' }, function (err) {
+    path = "E:\\work\\POS_dressup\\uploads\\" + images.filename
+    fs.writeFile(path, images.base64, { encoding: 'base64' }, function (err) {
       console.log('File created', images.filename);
     });
   } else {
     path = []
     images.forEach(element => {
-      path.push(element.filename)
-      fs.writeFile(element.filename, element.base64, { encoding: 'base64' }, function (err) {
+      path.push("E:\\work\\POS_dressup\\uploads\\" + element.filename)
+      fs.writeFile("E:\\work\\POS_dressup\\uploads\\" + element.filename, element.base64, { encoding: 'base64' }, function (err) {
         console.log('File created', element.filename);
       });
     });
