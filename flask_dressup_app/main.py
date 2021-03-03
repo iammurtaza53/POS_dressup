@@ -32,7 +32,8 @@ wcapi = API(
     consumer_key="ck_900a6dd8ffabc1a89484a0b1b85582d171114c71", # Your consumer key
     consumer_secret="cs_b1d545f21ff1ca69c7fe9ad93da3a92ac0bd919d", # Your consumer secret
     wp_api=True, # Enable the WP REST API integration
-    version="wc/v3" # WooCommerce WP REST API version
+    version="wc/v3", # WooCommerce WP REST API version
+    timeout=100
 )
 
 path = "D:/Woo_Commerce/POS_dressup/"
