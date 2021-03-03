@@ -38,7 +38,6 @@ var app = angular.module('myApp', ['myApp.controllers', 'base64', 'naif.base64',
         ngModel.$render = function () {
           element.html(ngModel.$viewValue || '');
         };
-
         // Listen for change events to enable binding
         element.on('blur keyup change', function () {
           scope.$apply(read);
