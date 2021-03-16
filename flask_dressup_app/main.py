@@ -179,9 +179,9 @@ def post_mongo_product_in_woo():
 @app.route('/update-woocommerce')
 def update_woocommerce():
     data = json.loads(request.data)
-    # get whole record of this mongo product barcode if condition matched
+    # get barcode whole record of this mongo product if condition matched
     for item in data:
-        resp = wcapi.get("products", params={'sku':item['sku']}).json()
+        resp = wcapi.get("products", params={'sku':item}).json()
         print(resp)
         a_id = str(resp[0]['id'])
         data = {
@@ -192,7 +192,6 @@ def update_woocommerce():
 
     response = {"status": 'Data has been updated Successfully'}
     return jsonify(response)
-
 
 
 

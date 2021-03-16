@@ -1479,6 +1479,9 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
             $scope.slipId = res;
 
             $scope.return = $scope.cash - $scope.mysale;
+            debugger
+            data =[]
+              syncProducts(data)
 
           }
         });
@@ -1491,6 +1494,14 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
     } else {
       alert('inValid amount');
     }
+  }
+
+  $scope.syncProducts = function (data) {
+    $http({
+      url: 'http://localhost:5000/update-woocommerce',
+      data:data,
+      method: "POST"
+    });
   }
 
   $scope.goto = function ($event) {
@@ -2213,7 +2224,7 @@ app.controller("pointOfSale", function ($scope, myService, $routeParams, $locati
 
 });
 
-app.controller("stockInventory", function ($scope, myService, $routeParams, $rootScope, $location, $timeout, $window, $interval, $route) {
+app.controller("stockInventory", function ($scope, $http, myService, $routeParams, $rootScope, $location, $timeout, $window, $interval, $route) {
   $rootScope.loggedOut = true;
   $scope.add = {};
   getAllItem(); // call all catgeory
@@ -2237,6 +2248,13 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   /**Buttons */
   $scope.showSAdd = function () { //show add supplier fields
     $scope.showAddSupplier = true;
+  }
+
+  $scope.syncProducts = function () {
+    $http({
+      url: 'http://localhost:5000/sync',
+      method: "GET"
+    });
   }
 
   $scope.showbill = function () {
@@ -2428,8 +2446,9 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
           $scope.items.push(addObj);
         }
       });
-      // $scope.add.name = ""; $scope.add.decs = ""; $scope.add.additem = ""; $scope.add.WholeRs = ""; $scope.add.MRP = ""; $scope.add.retailRs = "";
-      // $scope.add.type = ""; $scope.add.category = ""; $scope.add.size = ""; $scope.add.code = "";
+
+      $scope.add.image = ""; $scope.add.name = ""; $scope.add.decs = ""; $scope.add.additem = ""; $scope.add.WholeRs = ""; $scope.add.MRP = ""; $scope.add.retailRs = "";
+      $scope.add.type = ""; $scope.add.category = ""; $scope.add.size = ""; $scope.add.code = "";
 
       // $scope.selectedSupplier = $scope.chooseSupplier[$scope._id];
     } else {
@@ -2598,13 +2617,18 @@ app.controller("stockInventory", function ($scope, myService, $routeParams, $roo
   /** call functions END */
 });
 
+
+
 app.controller('MyController', function ($scope) {
-  
+
   $scope.showModal = false;
-  $scope.open = function(){
-  $scope.showModal = !$scope.showModal;
+  $scope.open = function () {
+    $scope.showModal = !$scope.showModal;
   };
 });
+
+
+
 
 app.controller("editItem", function ($scope, myService, $interval, $routeParams, $location, $route, $rootScope) {
   $rootScope.loggedOut = true;

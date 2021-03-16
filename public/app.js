@@ -1,7 +1,7 @@
 'use strict';
 
 
-var app = angular.module('myApp', ['myApp.controllers', 'base64', 'naif.base64', 'myApp.services', 'ngRoute', 'AngularPrint', 'ngSanitize',])
+var app = angular.module('myApp', ['myApp.controllers', 'myApp.services', 'base64', 'naif.base64','ngRoute', 'AngularPrint', 'ngSanitize',])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
       when("/login", { templateUrl: "partials/login.html", controller: "loginUser" }).

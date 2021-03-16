@@ -5,6 +5,7 @@ var express = require('express')
 
 var S = require('string');
 
+
 var dburl = "mongodb://localhost:27017/mynew";
 
 const mongoose = require('mongoose');
@@ -338,15 +339,15 @@ app.post('/addItem', function (req, res) {
   var path
 
   if (typeof images === 'string') {
-    path = "E:\\work\\POS_dressup\\uploads\\" + images.filename
-    fs.writeFile(path, images.base64, { encoding: 'base64' }, function (err) {
+    path = images.filename
+    fs.writeFile(".\\public\\uploads\\" + images.filename, images.base64, { encoding: 'base64' }, function (err) {
       console.log('File created', images.filename);
     });
   } else {
     path = []
     images.forEach(element => {
-      path.push("E:\\work\\POS_dressup\\uploads\\" + element.filename)
-      fs.writeFile("E:\\work\\POS_dressup\\uploads\\" + element.filename, element.base64, { encoding: 'base64' }, function (err) {
+      path.push(element.filename)
+      fs.writeFile(".\\public\\uploads\\" + element.filename, element.base64, { encoding: 'base64' }, function (err) {
         console.log('File created', element.filename);
       });
     });

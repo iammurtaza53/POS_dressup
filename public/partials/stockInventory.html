@@ -9,8 +9,8 @@
         ">Add Supplier</button></h5>
 </div>
 <div class="inner">
-    <h5><button type="button" class="btn btn-lg btn-success col-md-2"
-            style="margin-top: -57px; display: inline-block;float:right;">Sync Products</button>
+    <h5><button ng-click="syncProducts()" type="button" class="btn btn-lg btn-success col-md-2"
+            style="margin-top: -56px; display: inline-block;float:right;">Sync Products</button>
     </h5>
 
     <!--This shows to add new supplier-->
@@ -85,8 +85,9 @@
                         <button ng-click="open()" class="btn btn-primary" ng-hide="item.image.length == 0"
                             style="margin-top: -56px;margin-left: 63px;">View</button>
                         <modal title="images" visible="showModal">
-                    <div ng-repeat="image in item.image">
-                        <img src="img/{{image}}" style="width: 79%;height:40%;margin-left: 60px;margin-top: 4px;"/>
+                            <div ng-repeat="image in item.image">
+                                <img ng-src="{{'uploads/'+image}}"
+                                    style="width: 79%;height:40%;margin-left: 60px;margin-top: 4px;" />
                             </div>
                         </modal>
                     </div>
