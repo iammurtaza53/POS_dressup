@@ -33,7 +33,7 @@ Flask-PyMongo==2.3.0
 idna==2.10
 isort @ file:///tmp/build/80754af9/isort_1602603989581/work
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jmespath==0.10.0
 kombu==4.6.11
 lazy-object-proxy==1.4.3
