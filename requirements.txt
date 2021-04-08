@@ -18,7 +18,7 @@ click-plugins==1.1.1
 click-repl==0.1.6
 cloudinary==1.24.0
 colorama @ file:///tmp/build/80754af9/colorama_1603211150991/work
-Django==3.1.4
+Django==3.1.8
 django-autocomplete-light==3.8.1
 django-extensions==3.1.0
 django-multiselectfield==0.1.12
